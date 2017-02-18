@@ -1,30 +1,29 @@
 package com.example.sandy.budgettracker;
 
-import android.support.v4.content.ContextCompat;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ExpenseActivity extends AppCompatActivity {
 
     private ArrayList<ExpenseItem> items;
-    private int selectedPosition=-1;
+    private int selectedPosition = -1;
     private GridView gridView;
     ExpenseItemAdapter itemsAdapter;
+    String expenseItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expence);
-
         items = new ArrayList<ExpenseItem>();
         items.add(new ExpenseItem("CAR", 0, 0));
         items.add(new ExpenseItem("RENT", 0, 0));
@@ -45,27 +44,46 @@ public class ExpenseActivity extends AppCompatActivity {
 
 
         gridView = (GridView) findViewById(R.id.expense);
-        gridView.setBackgroundColor(0x0000ff);
+
         itemsAdapter = new ExpenseItemAdapter(this, items);
         gridView.setAdapter(itemsAdapter);
-        gridView.setAlpha(0.5f);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                if(selectedPosition!=-1)
-                {
-                   // TextView textView = (TextView) gridView.getChildAt(selectedPosition).findViewById(R.id.expense_name);
-                    gridView.getChildAt(selectedPosition).setAlpha(.5f);
+                if (selectedPosition != -1) {
+                    // TextView textView = (TextView) gridView.getChildAt(selectedPosition).findViewById(R.id.expense_name);
+                    gridView.getChildAt(selectedPosition).setAlpha(1f);
                 }
-                gridView.getChildAt(position).setAlpha(1f);
+                gridView.getChildAt(position).setAlpha(.5f);
 //                TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
 //                int color = ContextCompat.getColor(itemsAdapter.getContext(), R.color.colorPrimary);
 //                textView.setBackgroundColor(color);
-                selectedPosition=position;
+                TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
+                expenseItem = textView.getText().toString();
+                selectedPosition = position;
             }
         });
 
 
+        Button b = (Button) findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Enter expense details", Toast.LENGTH_SHORT).show();
+                TextView amountTextView = (TextView) findViewById(R.id.amount);
+                double amount = Double.parseDouble(amountTextView.getText().toString());
+                openExpenseDetailActivity(v, expenseItem, amount);
+            }
+        });
+
+
+    }
+
+    private void openExpenseDetailActivity(View view, String expenseItem, double amount) {
+        Intent intent = new Intent(this, ExpenseDetailActivity.class);
+        intent.putExtra("amount", amount);
+        intent.putExtra("expenseItem", expenseItem);
+        startActivity(intent);
     }
 }

@@ -2,6 +2,7 @@ package com.example.sandy.budgettracker;
 
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,6 @@ public class ExpenseItemAdapter extends ArrayAdapter<ExpenseItem> {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.expense_list, parent, false);
         }
-
-
         ExpenseItem expenseItem = getItem(position);
 
 
