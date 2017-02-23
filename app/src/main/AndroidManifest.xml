@@ -20,12 +20,12 @@
         </activity>
         <activity
             android:name=".ExpenseActivity"
-            android:label="Expense"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ExpenseDetailActivity"
-            android:label="Expense Detail"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
