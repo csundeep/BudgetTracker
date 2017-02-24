@@ -1,9 +1,8 @@
 package com.example.sandy.budgettracker;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 
 public class ExpenseDetailActivity extends AppCompatActivity {
 
@@ -12,9 +11,12 @@ public class ExpenseDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_detail);
 
-        Intent intent = getIntent();
-        double amount = intent.getDoubleExtra("amount", 0);
-        String expenseItem = intent.getStringExtra("expenseItem");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
     }
 }
