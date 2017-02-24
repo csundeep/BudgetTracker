@@ -25,11 +25,11 @@ public class ExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expence);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager1);
@@ -39,12 +39,12 @@ public class ExpenseActivity extends AppCompatActivity {
 
 
 
-        Fragment f1 = new MonthFragment();
+        Fragment f1 = new ExpenseFragment();
         Bundle b1 = new Bundle();
         b1.putString("type", "Expense");
         f1.setArguments(b1);
 
-        Fragment f2 = new MonthFragment();
+        Fragment f2 = new ExpenseFragment();
         Bundle b2 = new Bundle();
         b2.putString("type", "Income");
         f2.setArguments(b2);

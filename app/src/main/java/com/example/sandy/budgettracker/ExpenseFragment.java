@@ -3,6 +3,7 @@ package com.example.sandy.budgettracker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,12 +54,14 @@ public class ExpenseFragment extends Fragment {
             items.add(new ExpenseItem("BUSINESS", 0, 0));
 
         }
+        View view = inflater.inflate(R.layout.fragment_expense, container, false);
 
 
-        gridView = (GridView) getActivity().findViewById(R.id.expense);
+        gridView = (GridView) view.findViewById(R.id.expense);
 
-        itemsAdapter = new ExpenseItemAdapter(getActivity(), items);
+        itemsAdapter = new ExpenseItemAdapter(this.getActivity(), items);
         gridView.setAdapter(itemsAdapter);
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,9 +71,6 @@ public class ExpenseFragment extends Fragment {
                     gridView.getChildAt(selectedPosition).setAlpha(1f);
                 }
                 gridView.getChildAt(position).setAlpha(.5f);
-//                TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
-//                int color = ContextCompat.getColor(itemsAdapter.getContext(), R.color.colorPrimary);
-//                textView.setBackgroundColor(color);
                 TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
                 expenseItem = textView.getText().toString();
                 selectedPosition = position;
@@ -78,17 +78,17 @@ public class ExpenseFragment extends Fragment {
         });
 
 
-//        Button b = (Button) getActivity().findViewById(R.id.button);
-//        b.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(v.getContext(), "Enter expense details", Toast.LENGTH_SHORT).show();
-//                TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
-//                double amount = Double.parseDouble(amountTextView.getText().toString());
-//                openExpenseDetailActivity(v, expenseItem, amount);
-//            }
-//        });
-        return inflater.inflate(R.layout.fragment_expense, container, false);
+        Button b = (Button) getActivity().findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Enter expense details", Toast.LENGTH_SHORT).show();
+                TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
+                double amount = Double.parseDouble(amountTextView.getText().toString());
+                openExpenseDetailActivity(v, expenseItem, amount);
+            }
+        });
+        return view;
     }
 
     private void openExpenseDetailActivity(View view, String expenseItem, double amount) {
