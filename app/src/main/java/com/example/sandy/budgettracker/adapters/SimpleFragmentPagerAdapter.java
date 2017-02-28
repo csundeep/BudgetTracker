@@ -1,4 +1,4 @@
-package com.example.sandy.budgettracker;
+package com.example.sandy.budgettracker.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

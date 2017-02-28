@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,12 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ExpenseActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.ExpenseActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ExpenseDetailActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.ExpenseDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

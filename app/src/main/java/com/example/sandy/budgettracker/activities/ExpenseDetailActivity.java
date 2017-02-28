@@ -1,8 +1,10 @@
-package com.example.sandy.budgettracker;
+package com.example.sandy.budgettracker.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import com.example.sandy.budgettracker.R;
 
 public class ExpenseDetailActivity extends AppCompatActivity {
 

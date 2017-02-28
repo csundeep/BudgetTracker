@@ -1,14 +1,15 @@
-package com.example.sandy.budgettracker;
+package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.data.ExpenseItem;
 
 import java.util.ArrayList;
 

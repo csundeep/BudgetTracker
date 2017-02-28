@@ -1,4 +1,4 @@
-package com.example.sandy.budgettracker;
+package com.example.sandy.budgettracker.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.sandy.budgettracker.fragments.MonthFragment;
+import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
