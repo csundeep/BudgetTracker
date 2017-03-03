@@ -37,10 +37,10 @@ public class ExpensesDbHelper extends SQLiteOpenHelper {
         // Create a String that contains the SQL statement to create the expenses table
         String SQL_CREATE_EXPENSES_TABLE = "CREATE TABLE " + ExpensesContract.ExpenseEntry.TABLE_NAME + " ("
                 + ExpensesContract.ExpenseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ExpensesContract.ExpenseEntry.COLUMN_PET_NAME + " TEXT NOT NULL, "
-                + ExpensesContract.ExpenseEntry.COLUMN_PET_BREED + " TEXT, "
-                + ExpensesContract.ExpenseEntry.COLUMN_PET_GENDER + " INTEGER NOT NULL, "
-                + ExpensesContract.ExpenseEntry.COLUMN_PET_WEIGHT + " INTEGER NOT NULL DEFAULT 0);";
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME + " TEXT NOT NULL, "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT + " DOUBLE NOT NULL DEFAULT 0, "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES + " TEXT , "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE + " DATE NOT NULL);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_EXPENSES_TABLE);

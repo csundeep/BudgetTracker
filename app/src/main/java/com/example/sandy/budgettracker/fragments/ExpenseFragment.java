@@ -72,7 +72,6 @@ public class ExpenseFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
                 if (selectedPosition != -1) {
-                    // TextView textView = (TextView) gridView.getChildAt(selectedPosition).findViewById(R.id.expense_name);
                     gridView.getChildAt(selectedPosition).setAlpha(1f);
                 }
                 gridView.getChildAt(position).setAlpha(.5f);
@@ -87,7 +86,6 @@ public class ExpenseFragment extends Fragment {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(v.getContext(), "Enter expense details", Toast.LENGTH_SHORT).show();
                 TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
                 double amount = Double.parseDouble(amountTextView.getText().toString());
                 openExpenseDetailActivity(v, expenseItem, amount);

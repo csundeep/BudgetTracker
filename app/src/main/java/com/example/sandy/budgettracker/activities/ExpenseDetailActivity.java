@@ -1,17 +1,22 @@
 package com.example.sandy.budgettracker.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.helper.ExpensesContract;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
@@ -64,8 +69,42 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
                 datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
             }
         });
+        Button b = (Button) findViewById(R.id.submitExpense);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView amountTextView = (TextView) findViewById(R.id.amountFinal);
+                double amount = Double.parseDouble(amountTextView.getText().toString());
+                EditText notesEditText = (EditText) findViewById(R.id.comments);
+                String notes = notesEditText.getText().toString();
+                TextView calenderTextView = (TextView) findViewById(R.id.date);
+                String date = calenderTextView.getText().toString();
+                storeExpense(v, getIntent().getStringExtra("expenseItem"), amount, notes, date);
+            }
+        });
 
+    }
 
+    public void storeExpense(View view, String expenseItem, double amount, String notes, String date) {
+//        Log.v("@@@@@@@@@@@@", expenseItem + " " + amount + " " + notes + " " + date);
+        ContentValues values = new ContentValues();
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME, expenseItem);
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, amount);
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, notes);
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, date);
+
+        Uri uri = getContentResolver().insert(ExpensesContract.ExpenseEntry.CONTENT_URI, values);
+
+        if (uri == null) {
+            Toast.makeText(this, "Unable to add expense",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Expense added successful",
+                    Toast.LENGTH_SHORT).show();
+        }
+        finish();
+        Intent homepage = new Intent(this, MainActivity.class);
+        startActivity(homepage);
     }
 
 

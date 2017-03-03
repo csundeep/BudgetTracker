@@ -26,6 +26,10 @@
             android:name=".activities.ExpenseDetailActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <provider
+            android:name=".helper.ExpensesProvider"
+            android:authorities="com.example.sandy.budgettracker.expenses"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -26,14 +26,11 @@ public final class ExpensesContract {
         public static final String TABLE_NAME = "expenses";
 
         public static final String _Id = BaseColumns._ID;
-        public static final String COLUMN_PET_NAME = "name";
-        public static final String COLUMN_PET_BREED = "breed";
-        public static final String COLUMN_PET_GENDER = "gender";
-        public static final String COLUMN_PET_WEIGHT = "weight";
+        public static final String COLUMN_EXPENSE_NAME = "name";
+        public static final String COLUMN_EXPENSE_AMOUNT= "amount";
+        public static final String COLUMN_EXPENSE_NOTES = "gender";
+        public static final String COLUMN_EXPENSE_CREATED_DATE = "created_date";
 
-        public static final int GENDER_UNKNOWN = 0;
-        public static final int GENDER_MALE = 1;
-        public static final int GENDER_FEMALE = 2;
 
     }
 }
