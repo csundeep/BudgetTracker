@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sandy.budgettracker.activities.MainActivity;
 import com.example.sandy.budgettracker.data.ExpenseItem;
 import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
 import com.example.sandy.budgettracker.R;
@@ -82,11 +83,11 @@ public class ExpenseFragment extends Fragment {
         });
 
 
-        Button b = (Button) getActivity().findViewById(R.id.button);
+        Button b = (Button) getActivity().findViewById(R.id.add);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Enter expense details", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(v.getContext(), "Enter expense details", Toast.LENGTH_SHORT).show();
                 TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
                 double amount = Double.parseDouble(amountTextView.getText().toString());
                 openExpenseDetailActivity(v, expenseItem, amount);
@@ -97,9 +98,17 @@ public class ExpenseFragment extends Fragment {
 
     private void openExpenseDetailActivity(View view, String expenseItem, double amount) {
         Intent intent = new Intent(getActivity(), ExpenseDetailActivity.class);
-        intent.putExtra("amount", amount);
-        intent.putExtra("expenseItem", expenseItem);
-        startActivity(intent);
+        if (amount == 0) {
+            Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
+        } else if (expenseItem == null) {
+            Toast.makeText(getActivity(), "You have to select an expense item", Toast.LENGTH_LONG).show();
+        } else {
+            intent.putExtra("amount", amount);
+            intent.putExtra("expenseItem", expenseItem);
+            startActivity(intent);
+        }
+
+
     }
 
 

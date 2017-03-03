@@ -20,11 +20,11 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/submitExpense"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="right"
-                android:text="SEND"
+                android:background="@drawable/ic_action_done"
                 android:textSize="8dp" />
 
 
@@ -44,7 +44,7 @@
                 android:src="@mipmap/ic_launcher" />
 
             <EditText
-                android:id="@+id/amount"
+                android:id="@+id/amountFinal"
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
