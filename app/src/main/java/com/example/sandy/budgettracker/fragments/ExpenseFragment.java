@@ -3,6 +3,7 @@ package com.example.sandy.budgettracker.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class ExpenseFragment extends Fragment {
     private int selectedPosition = -1;
     private GridView gridView;
     ExpenseItemAdapter itemsAdapter;
-    String expenseItem = null;
+    public static String expenseItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +68,6 @@ public class ExpenseFragment extends Fragment {
         itemsAdapter = new ExpenseItemAdapter(this.getActivity(), items);
         gridView.setAdapter(itemsAdapter);
 
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
@@ -82,12 +82,17 @@ public class ExpenseFragment extends Fragment {
         });
 
 
-        Button b = (Button) getActivity().findViewById(R.id.add);
+        Button b = (Button) getActivity().findViewById(R.id.addExpense);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
-                double amount = Double.parseDouble(amountTextView.getText().toString());
+                double amount = 0;
+                if (amountTextView.getText().toString() != null)
+                    try {
+                        amount = Double.parseDouble(amountTextView.getText().toString());
+                    } catch (NumberFormatException e) {
+                    }
                 openExpenseDetailActivity(v, expenseItem, amount);
             }
         });
@@ -103,6 +108,7 @@ public class ExpenseFragment extends Fragment {
         } else {
             intent.putExtra("amount", amount);
             intent.putExtra("expenseItem", expenseItem);
+            this.expenseItem = null;
             startActivity(intent);
         }
 

@@ -40,7 +40,25 @@ public class ExpensesProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor;
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+            case EXPENSES:
+                cursor = database.query(ExpensesContract.ExpenseEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case EXPENSE_ID:
+                selection = ExpensesContract.ExpenseEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = database.query(ExpensesContract.ExpenseEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+        }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Nullable
@@ -69,12 +87,12 @@ public class ExpensesProvider extends ContentProvider {
         }
 
         Integer gender = values.getAsInteger(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
-        if (gender == null ) {
+        if (gender == null) {
             throw new IllegalArgumentException("Expense requires valid amount");
         }
 
         Integer weight = values.getAsInteger(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
-        if (weight != null ) {
+        if (weight != null) {
             throw new IllegalArgumentException("Expense requires created expense date");
         }
 

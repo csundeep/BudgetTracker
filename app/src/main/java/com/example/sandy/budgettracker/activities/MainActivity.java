@@ -1,11 +1,16 @@
 package com.example.sandy.budgettracker.activities;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,17 +20,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.fragments.MonthFragment;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
+import com.example.sandy.budgettracker.helper.ExpensesContract;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,80 +52,75 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Add your expence", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            openExpenseActivity(view);
+                openExpenseActivity(view);
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        getLoaderManager().initLoader(0, null, this);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+    }
+
+    private void openExpenseActivity(View view) {
+        Intent intent = new Intent(this, ExpenseActivity.class);
+        startActivity(intent);
+    }
+
+    private void displayDatabaseInfo(Cursor cursor) {
+        String result = "";
+        Map<String, List<ExpenseData>> expenses = new HashMap<String, List<ExpenseData>>();
+
+        try {
+
+            int idColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry._ID);
+            int nameColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+            int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+            int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
+            int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(idColumnIndex);
+                String name = cursor.getString(nameColumnIndex);
+                double amount = cursor.getDouble(amountColumnIndex);
+                String note = cursor.getString(noteColumnIndex);
+                String date = cursor.getString(dateColumnIndex);
+                ExpenseData expenseData = new ExpenseData(name, amount, note, date);
+                if (expenses.containsKey(date)) {
+                    expenses.get(date).add(expenseData);
+                } else {
+                    List<ExpenseData> datas = new ArrayList<ExpenseData>();
+                    datas.add(expenseData);
+                    expenses.put(date, datas);
+                }
+
+                // Log.v("@@@@@@@@@ ", id + " - " + name + " - " + amount + " - " + note + " - " + date);
+                result = result + "\n " + (id + " - " + name + " - " + amount + " - " + note + " - " + date);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
         List<String> tabs = new ArrayList<String>();
-        tabs.add("Monday");
-        tabs.add("Tuesday");
-        tabs.add("wednesday");
-        tabs.add("Thursday");
-        tabs.add("Friday");
-        tabs.add("Saturday");
-        tabs.add("Sunday");
-
-        Fragment f1 = new MonthFragment();
-        Bundle b1 = new Bundle();
-        b1.putString("Text", "Monday");
-        f1.setArguments(b1);
-
-        Fragment f2 = new MonthFragment();
-        Bundle b2 = new Bundle();
-        b2.putString("Text", "Tuesday");
-        f2.setArguments(b2);
-
-        Fragment f3 = new MonthFragment();
-        Bundle b3 = new Bundle();
-        b3.putString("Text", "wednesday");
-        f3.setArguments(b3);
-
-        Fragment f4 = new MonthFragment();
-        Bundle b4 = new Bundle();
-        b4.putString("Text", "Thursday");
-        f4.setArguments(b4);
-
-        Fragment f5 = new MonthFragment();
-        Bundle b5 = new Bundle();
-        b5.putString("Text", "Friday");
-        f5.setArguments(b5);
-
-        Fragment f6 = new MonthFragment();
-        Bundle b6 = new Bundle();
-        b6.putString("Text", "Saturday");
-        f6.setArguments(b6);
-
-        Fragment f7 = new MonthFragment();
-        Bundle b7 = new Bundle();
-        b7.putString("Text", "Sunday");
-        f7.setArguments(b7);
-
-
-
-
         ArrayList<Fragment> fragments = new ArrayList<Fragment>();
-        fragments.add(f1);
-        fragments.add(f2);
-        fragments.add(f3);
-        fragments.add(f4);
-        fragments.add(f5);
-        fragments.add(f6);
-        fragments.add(f7);
+        for (Map.Entry<String, List<ExpenseData>> entry : expenses.entrySet()) {
+            tabs.add(entry.getKey());
+            Fragment monthFragment = new MonthFragment();
+            String fragmentData = "";
+            for (ExpenseData data : entry.getValue()) {
+                fragmentData = fragmentData + "\n \n" + data.toString();
+            }
+            Bundle monthBundle = new Bundle();
+            monthBundle.putString("Text", fragmentData);
+            monthFragment.setArguments(monthBundle);
+            fragments.add(monthFragment);
+        }
 
 
         // Create an adapter that knows which fragment should be shown on each page
-        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments,tabs);
+        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments, tabs);
 
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
 
@@ -124,20 +129,29 @@ public class MainActivity extends AppCompatActivity
         tabsStrip.setViewPager(viewPager);
     }
 
-    private void openExpenseActivity(View view) {
-        Intent intent = new Intent(this, ExpenseActivity.class);
-        startActivity(intent);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                ExpensesContract.ExpenseEntry._Id,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
+        return new CursorLoader(this, ExpensesContract.ExpenseEntry.CONTENT_URI, projection, null, null, null);
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+
+        displayDatabaseInfo(cursor);
     }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,28 +175,4 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 }
