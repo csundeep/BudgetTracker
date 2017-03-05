@@ -10,9 +10,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-/**
- * Created by Sundeep.Chilukur on 3/3/2017.
- */
+
 public class ExpensesProvider extends ContentProvider {
 
     public static final String LOG_TAG = ExpensesProvider.class.getSimpleName();

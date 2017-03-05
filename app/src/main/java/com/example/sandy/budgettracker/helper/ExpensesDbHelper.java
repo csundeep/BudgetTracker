@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ExpensesDbHelper extends SQLiteOpenHelper {
 
-    public static final String LOG_TAG = ExpensesDbHelper.class.getSimpleName();
 
     /**
      * Name of the database file

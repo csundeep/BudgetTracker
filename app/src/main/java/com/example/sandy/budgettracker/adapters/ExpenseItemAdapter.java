@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
@@ -13,9 +12,6 @@ import com.example.sandy.budgettracker.data.ExpenseItem;
 
 import java.util.ArrayList;
 
-/**
- * Created by sandy on 15-02-2017.
- */
 public class ExpenseItemAdapter extends ArrayAdapter<ExpenseItem> {
 
     public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> words) {
@@ -39,7 +35,7 @@ public class ExpenseItemAdapter extends ArrayAdapter<ExpenseItem> {
         expenseName.setBackgroundColor(expenseItem.getColorContentId());
 
 
-        ImageView imageView = (ImageView) listItemView.findViewById(R.id.expense_image);
+//        ImageView imageView = (ImageView) listItemView.findViewById(R.id.expense_image);
 //        if (expenseItem.hasImage()) {
 //            imageView.setImageResource(currentWord.getImageResourceId());
 //            imageView.setVisibility(View.VISIBLE);

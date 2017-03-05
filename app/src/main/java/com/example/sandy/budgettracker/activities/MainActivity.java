@@ -10,28 +10,26 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.example.sandy.budgettracker.data.ExpenseData;
-import com.example.sandy.budgettracker.fragments.MonthFragment;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
+import com.example.sandy.budgettracker.data.ExpenseData;
+import com.example.sandy.budgettracker.fragments.MonthFragment;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
@@ -47,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if(fab!=null)
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,59 +60,87 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void openExpenseActivity(View view) {
+    private void openExpenseActivity(@SuppressWarnings("unused") View view) {
         Intent intent = new Intent(this, ExpenseActivity.class);
         startActivity(intent);
     }
 
+    public static Date min(Date a, Date b) {
+        return a == null ? b : (b == null ? a : (a.before(b) ? a : b));
+    }
+
+    public static Date max(Date a, Date b) {
+        return a == null ? b : (b == null ? a : (a.after(b) ? a : b));
+    }
+
+
     private void displayDatabaseInfo(Cursor cursor) {
-        String result = "";
-        Map<String, List<ExpenseData>> expenses = new HashMap<String, List<ExpenseData>>();
+        Map<Date, List<ExpenseData>> expenses = new HashMap<>();
+        List<Date> dates = new ArrayList<>();
+        List<String> tabs = new ArrayList<>();
+        ArrayList<Fragment> fragments = new ArrayList<>();
 
         try {
-
-            int idColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
             int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
             int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
             int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
 
             while (cursor.moveToNext()) {
-                int id = cursor.getInt(idColumnIndex);
                 String name = cursor.getString(nameColumnIndex);
                 double amount = cursor.getDouble(amountColumnIndex);
                 String note = cursor.getString(noteColumnIndex);
                 String date = cursor.getString(dateColumnIndex);
-                ExpenseData expenseData = new ExpenseData(name, amount, note, date);
-                if (expenses.containsKey(date)) {
-                    expenses.get(date).add(expenseData);
+                ExpenseData expenseData = new ExpenseData(name, amount, date, note);
+                new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date);
+                dates.add(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date));
+                if (expenses.containsKey(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
+                    expenses.get(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);
                 } else {
-                    List<ExpenseData> datas = new ArrayList<ExpenseData>();
+                    List<ExpenseData> datas = new ArrayList<>();
                     datas.add(expenseData);
-                    expenses.put(date, datas);
+                    expenses.put(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date), datas);
                 }
-
-                // Log.v("@@@@@@@@@ ", id + " - " + name + " - " + amount + " - " + note + " - " + date);
-                result = result + "\n " + (id + " - " + name + " - " + amount + " - " + note + " - " + date);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             cursor.close();
         }
-        List<String> tabs = new ArrayList<String>();
-        ArrayList<Fragment> fragments = new ArrayList<Fragment>();
-        for (Map.Entry<String, List<ExpenseData>> entry : expenses.entrySet()) {
-            tabs.add(entry.getKey());
-            Fragment monthFragment = new MonthFragment();
-            String fragmentData = "";
-            for (ExpenseData data : entry.getValue()) {
-                fragmentData = fragmentData + "\n \n" + data.toString();
+
+
+        if (dates.size() != 0) {
+            Date minDate = dates.get(0);
+            Date maxDate = dates.get(0);
+            for (Date date : dates) {
+                minDate = min(minDate, date);
+                maxDate = max(maxDate, date);
             }
-            Bundle monthBundle = new Bundle();
-            monthBundle.putString("Text", fragmentData);
-            monthFragment.setArguments(monthBundle);
-            fragments.add(monthFragment);
+            Calendar beginCalendar = Calendar.getInstance();
+            Calendar finishCalendar = Calendar.getInstance();
+            beginCalendar.setTime(minDate);
+            finishCalendar.setTime(maxDate);
+            boolean flag = true;
+            while (beginCalendar.before(finishCalendar) || flag) {
+                String date = new SimpleDateFormat("MMM-yyyy",Locale.US).format(beginCalendar.getTime()).toUpperCase();
+                if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy",Locale.US).format(finishCalendar.getTime()).toUpperCase()))
+                    flag = false;
+                tabs.add(date);
+                Fragment monthFragment = new MonthFragment();
+                String fragmentData = "";
+                for (Map.Entry<Date, List<ExpenseData>> entry : expenses.entrySet()) {
+                    if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy",Locale.US).format(entry.getKey()))) {
+                        for (ExpenseData data : entry.getValue()) {
+                            fragmentData = fragmentData + "\n \n" + data.toString();
+                        }
+                    }
+                }
+                Bundle monthBundle = new Bundle();
+                monthBundle.putString("Text", fragmentData);
+                monthFragment.setArguments(monthBundle);
+                fragments.add(monthFragment);
+                beginCalendar.add(Calendar.MONTH, 1);
+            }
         }
 
 
@@ -122,11 +149,13 @@ public class MainActivity extends AppCompatActivity
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
-        viewPager.setAdapter(adapter);
+        if (viewPager != null)
+            viewPager.setAdapter(adapter);
 
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
-        tabsStrip.setViewPager(viewPager);
+        if (tabsStrip != null && viewPager != null)
+            tabsStrip.setViewPager(viewPager);
     }
 
     @Override

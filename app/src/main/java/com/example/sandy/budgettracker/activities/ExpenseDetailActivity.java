@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,12 +37,12 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         Intent intent = getIntent();
-        String expenseItem = intent.getStringExtra("expenseItem");
         double amount = intent.getDoubleExtra("amount", 0);
         EditText amountEditText = (EditText) findViewById(R.id.amountFinal);
         amountEditText.setText(new Double(amount).toString());
@@ -51,42 +50,42 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
 
         ViewGroup dateViewGroup = (ViewGroup) findViewById(R.id.calender);
+        if (dateViewGroup != null)
+            dateViewGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    String dayOfWeek = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
 
-        dateViewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-                String dayOfWeek = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-
-                datePickerDialog = DatePickerDialog.newInstance(ExpenseDetailActivity.this, year, month, day);
-                datePickerDialog.setThemeDark(false);
-                datePickerDialog.showYearPickerFirst(false);
-                datePickerDialog.setAccentColor(Color.parseColor("#009688"));
-                datePickerDialog.setTitle(dayOfWeek);
-                datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
-            }
-        });
+                    datePickerDialog = DatePickerDialog.newInstance(ExpenseDetailActivity.this, year, month, day);
+                    datePickerDialog.setThemeDark(false);
+                    datePickerDialog.showYearPickerFirst(false);
+                    datePickerDialog.setAccentColor(Color.parseColor("#009688"));
+                    datePickerDialog.setTitle(dayOfWeek);
+                    datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                }
+            });
         Button b = (Button) findViewById(R.id.submitExpense);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView amountTextView = (TextView) findViewById(R.id.amountFinal);
-                double amount = Double.parseDouble(amountTextView.getText().toString());
-                EditText notesEditText = (EditText) findViewById(R.id.comments);
-                String notes = notesEditText.getText().toString();
-                TextView calenderTextView = (TextView) findViewById(R.id.date);
-                String date = calenderTextView.getText().toString();
-                storeExpense(v, getIntent().getStringExtra("expenseItem"), amount, notes, date);
-            }
-        });
+        if (b != null)
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView amountTextView = (TextView) findViewById(R.id.amountFinal);
+                    double amount = Double.parseDouble(amountTextView.getText().toString());
+                    EditText notesEditText = (EditText) findViewById(R.id.comments);
+                    String notes = notesEditText.getText().toString();
+                    TextView calenderTextView = (TextView) findViewById(R.id.date);
+                    String date = calenderTextView.getText().toString();
+                    storeExpense(v, getIntent().getStringExtra("expenseItem"), amount, notes, date);
+                }
+            });
 
     }
 
-    public void storeExpense(View view, String expenseItem, double amount, String notes, String date) {
-//        Log.v("@@@@@@@@@@@@", expenseItem + " " + amount + " " + notes + " " + date);
+    public void storeExpense(@SuppressWarnings("unused") View view, String expenseItem, double amount, String notes, String date) {
         ContentValues values = new ContentValues();
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME, expenseItem);
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, amount);

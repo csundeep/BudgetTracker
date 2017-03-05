@@ -3,7 +3,6 @@ package com.example.sandy.budgettracker.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,16 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.sandy.budgettracker.activities.MainActivity;
-import com.example.sandy.budgettracker.data.ExpenseItem;
-import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseDetailActivity;
+import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
+import com.example.sandy.budgettracker.data.ExpenseItem;
 
 import java.util.ArrayList;
 
 
 public class ExpenseFragment extends Fragment {
 
-    private ArrayList<ExpenseItem> items;
     private int selectedPosition = -1;
     private GridView gridView;
     ExpenseItemAdapter itemsAdapter;
@@ -33,8 +30,8 @@ public class ExpenseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ArrayList<ExpenseItem> items = new ArrayList<>();
         if (getArguments().get("type") == "Expense") {
-            items = new ArrayList<ExpenseItem>();
             items.add(new ExpenseItem("CAR", 0, 0));
             items.add(new ExpenseItem("RENT", 0, 0));
             items.add(new ExpenseItem("FOOD", 0, 0));
@@ -52,7 +49,6 @@ public class ExpenseFragment extends Fragment {
             items.add(new ExpenseItem("HOME", 0, 0));
             items.add(new ExpenseItem("ACCOMMODATION", 0, 0));
         } else {
-            items = new ArrayList<ExpenseItem>();
             items.add(new ExpenseItem("EXTRA INCOME", 0, 0));
             items.add(new ExpenseItem("GIFTS", 0, 0));
             items.add(new ExpenseItem("SALARY", 0, 0));
@@ -88,10 +84,11 @@ public class ExpenseFragment extends Fragment {
             public void onClick(View v) {
                 TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
                 double amount = 0;
-                if (amountTextView.getText().toString() != null)
+                if (amountTextView.getText()!=null)
                     try {
                         amount = Double.parseDouble(amountTextView.getText().toString());
                     } catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
                 openExpenseDetailActivity(v, expenseItem, amount);
             }
@@ -99,7 +96,7 @@ public class ExpenseFragment extends Fragment {
         return view;
     }
 
-    private void openExpenseDetailActivity(View view, String expenseItem, double amount) {
+    private void openExpenseDetailActivity(@SuppressWarnings("unused") View view, String expenseItem, double amount) {
         Intent intent = new Intent(getActivity(), ExpenseDetailActivity.class);
         if (amount == 0) {
             Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
@@ -108,7 +105,7 @@ public class ExpenseFragment extends Fragment {
         } else {
             intent.putExtra("amount", amount);
             intent.putExtra("expenseItem", expenseItem);
-            this.expenseItem = null;
+            expenseItem = null;
             startActivity(intent);
         }
 

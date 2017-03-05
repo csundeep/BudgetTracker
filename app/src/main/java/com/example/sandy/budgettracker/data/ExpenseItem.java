@@ -1,8 +1,6 @@
 package com.example.sandy.budgettracker.data;
 
-/**
- * Created by sandy on 15-02-2017.
- */
+
 public class ExpenseItem {
 
     private String name;
