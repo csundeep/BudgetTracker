@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
                 String date = new SimpleDateFormat("MMM-yyyy",Locale.US).format(beginCalendar.getTime()).toUpperCase();
                 if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy",Locale.US).format(finishCalendar.getTime()).toUpperCase()))
                     flag = false;
-                tabs.add(date);
+                tabs.add(new SimpleDateFormat("MMMM yyyy",Locale.US).format(beginCalendar.getTime()).toUpperCase());
                 Fragment monthFragment = new MonthFragment();
                 String fragmentData = "";
                 for (Map.Entry<Date, List<ExpenseData>> entry : expenses.entrySet()) {
@@ -149,8 +149,10 @@ public class MainActivity extends AppCompatActivity
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
-        if (viewPager != null)
+        if (viewPager != null) {
             viewPager.setAdapter(adapter);
+            viewPager.setCurrentItem(viewPager.getAdapter().getCount());
+        }
 
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
