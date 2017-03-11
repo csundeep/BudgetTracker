@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,7 +69,7 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
                     datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
                 }
             });
-        Button b = (Button) findViewById(R.id.submitExpense);
+        ImageButton b = (ImageButton) findViewById(R.id.submitExpense);
         if (b != null)
             b.setOnClickListener(new View.OnClickListener() {
                 @Override

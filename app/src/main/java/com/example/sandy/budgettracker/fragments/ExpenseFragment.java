@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,7 +79,7 @@ public class ExpenseFragment extends Fragment {
         });
 
 
-        Button b = (Button) getActivity().findViewById(R.id.addExpense);
+        ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

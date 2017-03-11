@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -45,23 +47,54 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if(fab!=null)
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Add your expence", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                openExpenseActivity(view);
-            }
-        });
+        if (fab != null)
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Add your expence", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    openExpenseActivity(view);
+                }
+            });
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         getLoaderManager().initLoader(0, null, this);
 
 
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_overview:
+                    openOverViewActivity();
+                    return true;
+                case R.id.action_budget:
+                    openBudgetActivity();
+                    return true;
+            }
+            return false;
+        }
+
+    };
+
     private void openExpenseActivity(@SuppressWarnings("unused") View view) {
         Intent intent = new Intent(this, ExpenseActivity.class);
+        startActivity(intent);
+    }
+
+    private void openOverViewActivity() {
+        Intent intent = new Intent(this, OverviewActivity.class);
+        startActivity(intent);
+    }
+
+    private void openBudgetActivity() {
+        Intent intent = new Intent(this, BudgetActivity.class);
         startActivity(intent);
     }
 
@@ -122,14 +155,14 @@ public class MainActivity extends AppCompatActivity
             finishCalendar.setTime(maxDate);
             boolean flag = true;
             while (beginCalendar.before(finishCalendar) || flag) {
-                String date = new SimpleDateFormat("MMM-yyyy",Locale.US).format(beginCalendar.getTime()).toUpperCase();
-                if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy",Locale.US).format(finishCalendar.getTime()).toUpperCase()))
+                String date = new SimpleDateFormat("MMM-yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase();
+                if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(finishCalendar.getTime()).toUpperCase()))
                     flag = false;
-                tabs.add(new SimpleDateFormat("MMMM yyyy",Locale.US).format(beginCalendar.getTime()).toUpperCase());
+                tabs.add(new SimpleDateFormat("MMMM yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase());
                 Fragment monthFragment = new MonthFragment();
                 String fragmentData = "";
                 for (Map.Entry<Date, List<ExpenseData>> entry : expenses.entrySet()) {
-                    if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy",Locale.US).format(entry.getKey()))) {
+                    if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
                         for (ExpenseData data : entry.getValue()) {
                             fragmentData = fragmentData + "\n \n" + data.toString();
                         }
