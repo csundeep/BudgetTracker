@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void displayDatabaseInfo(Cursor cursor) {
-        Map<Date, List<ExpenseData>> expenses = new HashMap<>();
+        Map<Date, ArrayList<ExpenseData>> expenses = new HashMap<>();
         List<Date> dates = new ArrayList<>();
         List<String> tabs = new ArrayList<>();
         ArrayList<Fragment> fragments = new ArrayList<>();
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity
                 if (expenses.containsKey(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
                     expenses.get(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);
                 } else {
-                    List<ExpenseData> datas = new ArrayList<>();
+                    ArrayList<ExpenseData> datas = new ArrayList<>();
                     datas.add(expenseData);
                     expenses.put(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date), datas);
                 }
@@ -160,16 +161,15 @@ public class MainActivity extends AppCompatActivity
                     flag = false;
                 tabs.add(new SimpleDateFormat("MMMM yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase());
                 Fragment monthFragment = new MonthFragment();
-                String fragmentData = "";
-                for (Map.Entry<Date, List<ExpenseData>> entry : expenses.entrySet()) {
-                    if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
-                        for (ExpenseData data : entry.getValue()) {
-                            fragmentData = fragmentData + "\n \n" + data.toString();
-                        }
-                    }
-                }
                 Bundle monthBundle = new Bundle();
-                monthBundle.putString("Text", fragmentData);
+                for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
+                    if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
+                        Log.v("@@@@@@@@@@@@@@@ ",date+" "+entry.getValue().size());
+                        monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
+                        break;
+                    }
+
+                }
                 monthFragment.setArguments(monthBundle);
                 fragments.add(monthFragment);
                 beginCalendar.add(Calendar.MONTH, 1);

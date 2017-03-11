@@ -1,20 +1,29 @@
 package com.example.sandy.budgettracker.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
+
 /**
  * Created by sandy on 04-03-2017.
  */
-public class ExpenseData {
+public class ExpenseData implements Parcelable {
 
     private String expenseName;
     private double expenseAmount;
     private String note;
     private String expenseDate;
 
-    public ExpenseData(String expenseName,double expenseAmount, String expenseDate, String note) {
+    public ExpenseData(String expenseName, double expenseAmount, String expenseDate, String note) {
         this.expenseName = expenseName;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
         this.note = note;
+    }
+
+    public ExpenseData(Parcel in) {
+        super();
+        readFromParcel(in);
     }
 
     public String getExpenseName() {
@@ -57,5 +66,39 @@ public class ExpenseData {
                 ", note='" + note + '\'' +
                 ", expenseDate='" + expenseDate + '\'' +
                 '}';
+    }
+
+    public static final Parcelable.Creator<ExpenseData> CREATOR = new Parcelable.Creator<ExpenseData>() {
+        public ExpenseData createFromParcel(Parcel in) {
+            return new ExpenseData(in);
+        }
+
+        public ExpenseData[] newArray(int size) {
+
+            return new ExpenseData[size];
+        }
+
+    };
+
+    public void readFromParcel(Parcel in) {
+
+        expenseName = in.readString();
+        expenseAmount = in.readDouble();
+        note = in.readString();
+        expenseDate = in.readString();
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(expenseName);
+        parcel.writeDouble(expenseAmount);
+        parcel.writeString(note);
+        parcel.writeString(expenseDate);
     }
 }
