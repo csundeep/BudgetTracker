@@ -7,15 +7,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.data.ExpenseItem;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -29,6 +32,7 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
 
     private DatePickerDialog datePickerDialog;
     private TextView dateTextView;
+    ImageView appBarDetailImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,12 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         Intent intent = getIntent();
+        ExpenseItem expenseItem=(ExpenseItem) getIntent().getSerializableExtra("selectedExpenseItem");
+        Log.v("@@@@@@@@@@@@@@@@@@@@@ "," "+getIntent().getSerializableExtra("selectedExpenseItem"));
         double amount = intent.getDoubleExtra("amount", 0);
+
+        appBarDetailImageView = (ImageView)findViewById(R.id.appBarExpenseDetailImage);
+//        appBarDetailImageView.setImageResource(intent.getIntExtra("imageContentId",0));
         EditText amountEditText = (EditText) findViewById(R.id.amountFinal);
         amountEditText.setText(new Double(amount).toString());
         this.dateTextView = (TextView) findViewById(R.id.date);

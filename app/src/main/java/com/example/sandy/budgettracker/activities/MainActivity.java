@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                 Bundle monthBundle = new Bundle();
                 for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
                     if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
-                        Log.v("@@@@@@@@@@@@@@@ ",date+" "+entry.getValue().size());
+//                        Log.v("@@@@@@@@@@@@@@@ ",date+" "+entry.getValue().size());
                         monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
                         break;
                     }

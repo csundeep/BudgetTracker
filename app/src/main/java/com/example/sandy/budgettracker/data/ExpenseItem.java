@@ -1,10 +1,12 @@
 package com.example.sandy.budgettracker.data;
 
 
-public class ExpenseItem {
+import java.io.Serializable;
+
+public class ExpenseItem implements Serializable{
 
     private String name;
-    private int imageContentId;
+    private int imageContentId=-1;
     private int colorContentId;
 
     public ExpenseItem(String name, int imageContentId, int colorContentId) {
@@ -23,5 +25,9 @@ public class ExpenseItem {
 
     public int getColorContentId() {
         return colorContentId;
+    }
+
+    public boolean hasImage() {
+        return imageContentId != -1;
     }
 }

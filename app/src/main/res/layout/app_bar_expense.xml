@@ -7,11 +7,11 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.ExpenseActivity">
 
-    <include layout="@layout/content_expense" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="16dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -40,11 +40,10 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/appBarExpenseImage"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginLeft="36dp"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_marginLeft="36dp" />
 
             <EditText
                 android:id="@+id/amount"
@@ -82,5 +81,7 @@
             app:pstsUnderlineColor="#fff" />
 
     </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_expense" />
 
 </android.support.design.widget.CoordinatorLayout>
