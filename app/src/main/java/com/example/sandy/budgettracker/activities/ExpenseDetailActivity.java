@@ -3,14 +3,13 @@ package com.example.sandy.budgettracker.activities;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseItem;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
+import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
@@ -39,21 +39,26 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_detail);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Intent intent = getIntent();
+        final ExpenseItem expenseItem = (ExpenseItem) getIntent().getSerializableExtra("selectedExpenseItem");
+//        ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(expenseItem.getColorContentId()));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_expense_Detail);
         setSupportActionBar(toolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+          //  getSupportActionBar().setBackgroundDrawable(colorDrawable);
+
         }
-        Intent intent = getIntent();
-        ExpenseItem expenseItem=(ExpenseItem) getIntent().getSerializableExtra("selectedExpenseItem");
-        Log.v("@@@@@@@@@@@@@@@@@@@@@ "," "+getIntent().getSerializableExtra("selectedExpenseItem"));
+
+
         double amount = intent.getDoubleExtra("amount", 0);
 
-        appBarDetailImageView = (ImageView)findViewById(R.id.appBarExpenseDetailImage);
-//        appBarDetailImageView.setImageResource(intent.getIntExtra("imageContentId",0));
+        appBarDetailImageView = (ImageView) findViewById(R.id.appBarExpenseDetailImage);
+        appBarDetailImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(expenseItem.getName()));
+
         EditText amountEditText = (EditText) findViewById(R.id.amountFinal);
         amountEditText.setText(new Double(amount).toString());
         this.dateTextView = (TextView) findViewById(R.id.date);
@@ -89,7 +94,7 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
                     String notes = notesEditText.getText().toString();
                     TextView calenderTextView = (TextView) findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
-                    storeExpense(v, getIntent().getStringExtra("expenseItem"), amount, notes, date);
+                    storeExpense(v, expenseItem.getName(), amount, notes, date);
                 }
             });
 

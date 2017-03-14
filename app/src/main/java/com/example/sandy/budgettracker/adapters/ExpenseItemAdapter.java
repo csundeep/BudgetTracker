@@ -33,7 +33,7 @@ public class ExpenseItemAdapter extends ArrayAdapter<ExpenseItem> {
 
         TextView expenseName = (TextView) listItemView.findViewById(R.id.expense_name);
         expenseName.setText(expenseItem.getName());
-        expenseName.setBackgroundColor(expenseItem.getColorContentId());
+//        expenseName.setBackgroundColor(expenseItem.getColorContentId());
 
 
         ImageView imageView = (ImageView) listItemView.findViewById(R.id.expense_image);

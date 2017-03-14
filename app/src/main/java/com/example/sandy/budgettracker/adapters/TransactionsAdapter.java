@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseData;
+import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,18 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     private Activity activity;
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected ListView transListView;
+       // protected ListView transListView;
+        protected ImageView expenseImage;
+        protected TextView expenseName;
+        protected TextView expenseAmount;
 
         public CustomViewHolder(View view) {
             super(view);
-            this.transListView = (ListView) view.findViewById(R.id.trans);
+            //this.transListView = (ListView) view.findViewById(R.id.trans);
+
+            this.expenseImage=(ImageView)view.findViewById(R.id.expense_image);
+            this.expenseName=(TextView)view.findViewById(R.id.expense_name);
+            this.expenseAmount=(TextView)view.findViewById(R.id.expense_amount);
 
         }
     }
@@ -52,8 +60,12 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        TransactionListAdapter  itemsAdapter = new TransactionListAdapter(activity, expenseDatas);
-        holder.transListView.setAdapter(itemsAdapter);
+//        TransactionListAdapter  itemsAdapter = new TransactionListAdapter(activity, expenseDatas);
+//        holder.transListView.setAdapter(itemsAdapter);
+
+        holder.expenseImage.setImageResource(ImageAndColorUtil.getImageContentId(expenseDatas.get(position).getExpenseName()));
+        holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
+        holder.expenseAmount.setText(new Double(expenseDatas.get(position).getExpenseAmount()).toString());
 
     }
 

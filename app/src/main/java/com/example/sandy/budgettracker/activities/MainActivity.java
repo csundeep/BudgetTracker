@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,14 +98,37 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    public static Date min(Date a, Date b) {
+    private static Date min(Date a, Date b) {
         return a == null ? b : (b == null ? a : (a.before(b) ? a : b));
     }
 
-    public static Date max(Date a, Date b) {
+    private static Date max(Date a, Date b) {
         return a == null ? b : (b == null ? a : (a.after(b) ? a : b));
     }
 
+    private boolean containsDate(Map<Date, ArrayList<ExpenseData>> expenses, Date date) {
+        boolean isThere = false;
+        for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
+            if (entry.getKey().getYear() == date.getYear() && entry.getKey().getMonth() == date.getMonth()) {
+                isThere = true;
+                break;
+            }
+        }
+
+        return isThere;
+    }
+
+    private ArrayList<ExpenseData> getExistentKey(Map<Date, ArrayList<ExpenseData>> expenses, Date date) {
+        ArrayList<ExpenseData> result = null;
+        for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
+            if (entry.getKey().getYear() == date.getYear() && entry.getKey().getMonth() == date.getMonth()) {
+                result = entry.getValue();
+                break;
+            }
+        }
+
+        return result;
+    }
 
     private void displayDatabaseInfo(Cursor cursor) {
         Map<Date, ArrayList<ExpenseData>> expenses = new HashMap<>();
@@ -126,10 +148,10 @@ public class MainActivity extends AppCompatActivity
                 String note = cursor.getString(noteColumnIndex);
                 String date = cursor.getString(dateColumnIndex);
                 ExpenseData expenseData = new ExpenseData(name, amount, date, note);
-                new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date);
                 dates.add(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date));
-                if (expenses.containsKey(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
-                    expenses.get(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);
+
+                if (containsDate(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
+                    getExistentKey(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);
                 } else {
                     ArrayList<ExpenseData> datas = new ArrayList<>();
                     datas.add(expenseData);
@@ -164,7 +186,11 @@ public class MainActivity extends AppCompatActivity
                 Bundle monthBundle = new Bundle();
                 for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
                     if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
-//                        Log.v("@@@@@@@@@@@@@@@ ",date+" "+entry.getValue().size());
+//                        Log.v("@@@@@@@@@@@@@@@ ",date+" "+entry.getKey());
+//                        for(ExpenseData expenseData:entry.getValue())
+//                        {
+//                            Log.v("    !!!!!!!!!!!",expenseData.toString());
+//                        }
                         monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
                         break;
                     }

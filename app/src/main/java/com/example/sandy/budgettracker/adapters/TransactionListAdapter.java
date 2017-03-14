@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseData;
+import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
-
-import static com.example.sandy.budgettracker.fragments.ExpenseFragment.expenseItem;
 
 public class TransactionListAdapter extends ArrayAdapter<ExpenseData> {
 
@@ -33,7 +32,7 @@ public class TransactionListAdapter extends ArrayAdapter<ExpenseData> {
         ExpenseData expenseData = getItem(position);
 
         ImageView imageView = (ImageView) listItemView.findViewById(R.id.expense_image);
-        imageView.setImageResource(R.mipmap.ic_car);
+        imageView.setImageResource(ImageAndColorUtil.getImageContentId(expenseData.getExpenseName()));
         imageView.setVisibility(View.VISIBLE);
 
 

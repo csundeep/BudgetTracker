@@ -2,8 +2,11 @@
 <GridView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/expense"
+    android:layout_marginTop="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:verticalSpacing="16dp"
+    android:horizontalSpacing="16dp"
     android:numColumns="4">
 
 </GridView>

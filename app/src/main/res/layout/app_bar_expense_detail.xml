@@ -13,11 +13,11 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar_expense_Detail"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            app:popupTheme="@style/AppTheme.AppBarOverlay">
 
             <ImageButton
                 android:id="@+id/submitExpense"
