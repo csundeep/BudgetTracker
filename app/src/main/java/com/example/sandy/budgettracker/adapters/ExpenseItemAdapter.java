@@ -1,6 +1,8 @@
 package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,41 +12,58 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseItem;
+import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 
-public class ExpenseItemAdapter extends ArrayAdapter<ExpenseItem> {
+public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.CustomViewHolderList> {
+    private ArrayList<ExpenseItem> expenseItems;
+    private Activity context;
 
-    public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> words) {
-        super(context, 0, words);
+    public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems) {
+        this.expenseItems = expenseItems;
+        this.context = context;
     }
 
+    class CustomViewHolderList extends RecyclerView.ViewHolder {
+        protected ImageView expenseImage;
+        protected TextView expenseName;
+
+        public CustomViewHolderList(View view) {
+            super(view);
+
+            this.expenseImage = (ImageView) view.findViewById(R.id.expense_image);
+            this.expenseName = (TextView) view.findViewById(R.id.expense_name);
+
+        }
+    }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public ExpenseItemAdapter.CustomViewHolderList onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.expense_list, parent, false);
-        }
-        ExpenseItem expenseItem = getItem(position);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.expense_list, null);
+        ExpenseItemAdapter.CustomViewHolderList viewHolder = new ExpenseItemAdapter.CustomViewHolderList(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ExpenseItemAdapter.CustomViewHolderList holder, int position) {
 
 
-        TextView expenseName = (TextView) listItemView.findViewById(R.id.expense_name);
-        expenseName.setText(expenseItem.getName());
+        Log.v("************", position + " ");
+        ExpenseItem expenseItem = expenseItems.get(position);
+
+
+        holder.expenseName.setText(expenseItem.getName());
 //        expenseName.setBackgroundColor(expenseItem.getColorContentId());
 
 
-        ImageView imageView = (ImageView) listItemView.findViewById(R.id.expense_image);
         if (expenseItem.hasImage()) {
-            imageView.setImageResource(expenseItem.getImageContentId());
-            imageView.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            imageView.setImageResource(R.mipmap.ic_launcher);
-            imageView.setVisibility(View.VISIBLE);
+            holder.expenseImage.setImageResource(expenseItem.getImageContentId());
+            holder.expenseImage.setVisibility(View.VISIBLE);
+        } else {
+            holder.expenseImage.setImageResource(R.mipmap.ic_launcher);
+            holder.expenseImage.setVisibility(View.VISIBLE);
         }
 //        else
 //            imageView.setVisibility(View.GONE);
@@ -53,7 +72,18 @@ public class ExpenseItemAdapter extends ArrayAdapter<ExpenseItem> {
 //        int color= ContextCompat.getColor(getContext(), colorResourceId);
 //        textContainer.setBackgroundColor(color);
 
-        return listItemView;
+
+//        holder.expenseImage.setImageResource(ImageAndColorUtil.getImageContentId(expenseDatas.get(position).getExpenseName()));
+//        holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
+//        holder.expenseAmount.setText(new Double(expenseDatas.get(position).getExpenseAmount()).toString());
+
     }
+
+    @Override
+    public int getItemCount() {
+        return expenseItems.size();
+    }
+
+
 
 }

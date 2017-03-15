@@ -3,11 +3,12 @@ package com.example.sandy.budgettracker.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,25 +18,27 @@ import android.widget.Toast;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseDetailActivity;
 import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
+import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.data.ExpenseItem;
-import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 
 
 public class ExpenseFragment extends Fragment {
-
+    private RecyclerView recyclerView;
     private int selectedPosition = -1;
     private GridView gridView;
     ExpenseItemAdapter itemsAdapter;
     private ArrayList<ExpenseItem> items;
     ImageView appBarImageView;
-    public static  ExpenseItem selectedExpenceItem;
+    public static ExpenseItem selectedExpenceItem;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        items = new ArrayList<>();
+        View view = inflater.inflate(R.layout.fragment_expense, container, false);
         if (getArguments().get("type") == "Expense") {
+            items = new ArrayList<>();
             items.add(new ExpenseItem("Car", R.drawable.ic_sports_car, R.color.RebeccaPurple));
             items.add(new ExpenseItem("Travel", R.drawable.ic_aeroplane, R.color.PaleVioletRed));
             items.add(new ExpenseItem("Food", R.drawable.ic_cutlery, R.color.Brown));
@@ -45,7 +48,7 @@ public class ExpenseFragment extends Fragment {
             items.add(new ExpenseItem("Home", R.drawable.ic_house, R.color.Tomato));
             items.add(new ExpenseItem("Utilities", R.drawable.ic_light_bulb, R.color.DarkGray));
             items.add(new ExpenseItem("Shopping", R.drawable.ic_shopping_cart, R.color.LightGreen));
-            items.add(new ExpenseItem("Hotel", R.drawable.ic_rural_hotel_of_three_stars,R.color.LightBlue));
+            items.add(new ExpenseItem("Hotel", R.drawable.ic_rural_hotel_of_three_stars, R.color.LightBlue));
             items.add(new ExpenseItem("Health Care", R.drawable.ic_first_aid_kit, R.color.IndianRed));
             items.add(new ExpenseItem("Other", R.drawable.ic_paper_plane, R.color.MediumPurple));
             items.add(new ExpenseItem("Clothing", R.drawable.ic_shirt, R.color.YellowGreen));
@@ -64,47 +67,58 @@ public class ExpenseFragment extends Fragment {
             items.add(new ExpenseItem("Gifts", R.drawable.ic_gift, R.color.OrangeRed));
 
 
-
         } else {
+            items = new ArrayList<>();
             items.add(new ExpenseItem("Salary", R.drawable.ic_incomes, R.color.Indigo));
             items.add(new ExpenseItem("Business ", R.drawable.ic_briefcase, R.color.Gold));
-            items.add(new ExpenseItem("Gifts",  R.drawable.ic_gift, R.color.OrangeRed));
+            items.add(new ExpenseItem("Gifts", R.drawable.ic_gift, R.color.OrangeRed));
             items.add(new ExpenseItem("Loan", R.drawable.ic_contract, R.color.Kakhi));
             items.add(new ExpenseItem("Extra Income", R.drawable.ic_salary, R.color.DarkSlateBlue));
 
         }
-        View view = inflater.inflate(R.layout.fragment_expense, container, false);
+
 
         appBarImageView = (ImageView) getActivity().findViewById(R.id.appBarExpenseImage);
-        gridView = (GridView) view.findViewById(R.id.expense);
 
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.expense);
+        final GridLayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 4);
+        recyclerView.setLayoutManager(layoutManager);
         itemsAdapter = new ExpenseItemAdapter(this.getActivity(), items);
-        gridView.setAdapter(itemsAdapter);
+        recyclerView.setAdapter(itemsAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                Log.v("@@@@@@@@@@@@ ",position+" ");
-                if (selectedPosition != -1) {
-                    gridView.getChildAt(selectedPosition).setAlpha(1f);
-                }
-
-
-                gridView.getChildAt(position).setAlpha(.5f);
-                TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
-                String expenseItem = textView.getText().toString();
-                selectedPosition = position;
-
-                for (ExpenseItem item : items) {
-                    if (item.getName().equals(expenseItem)) {
-                        ExpenseFragment.selectedExpenceItem=item;
-                        appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
-
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        int accuratePosition =layoutManager.getChildCount()-(itemsAdapter.getItemCount()-position);
+                        Log.v("@@@@@@@@@@@@ ", position + " "+layoutManager.getChildCount()+" "+layoutManager.getChildAt(0)+" "+accuratePosition);
                     }
-                }
-
-            }
-        });
+                })
+        );
+//            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
+//                    Log.v("@@@@@@@@@@@@ ", position + " " + gridView.getChildCount());
+//                    if (selectedPosition != -1) {
+//                        gridView.getChildAt(selectedPosition).setAlpha(1f);
+//                    }
+//
+//                    gridView.getChildAt(position).setAlpha(.5f);
+//                    TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
+//                    String expenseItem = textView.getText().toString();
+//                    selectedPosition = position;
+//
+//                    for (ExpenseItem item : items) {
+//                        if (item.getName().equals(expenseItem)) {
+//                            ExpenseFragment.selectedExpenceItem = item;
+//                            appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
+//
+//                        }
+//                    }
+//
+//                }
+//            });
 
 
         ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
@@ -122,6 +136,7 @@ public class ExpenseFragment extends Fragment {
                 openExpenseDetailActivity(v, amount);
             }
         });
+
         return view;
     }
 
@@ -133,7 +148,7 @@ public class ExpenseFragment extends Fragment {
             Toast.makeText(getActivity(), "You have to select an expense item", Toast.LENGTH_LONG).show();
         } else {
             intent.putExtra("amount", amount);
-            intent.putExtra("selectedExpenseItem",selectedExpenceItem);
+            intent.putExtra("selectedExpenseItem", selectedExpenceItem);
             selectedExpenceItem = null;
             startActivity(intent);
         }
