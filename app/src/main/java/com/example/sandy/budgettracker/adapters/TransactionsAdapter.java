@@ -2,11 +2,13 @@ package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,36 +19,26 @@ import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-/**
- * Created by sandy on 12-03-2017.
- */
+import java.util.Map;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.CustomViewHolder> {
-    private ArrayList<ExpenseData> expenseDatas;
+    private ArrayList<ArrayList<ExpenseData>> expenseDatas;
     private Activity activity;
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-       // protected ListView transListView;
-        protected ImageView expenseImage;
-        protected TextView expenseName;
-        protected TextView expenseAmount;
+        protected RecyclerView transListView;
 
         public CustomViewHolder(View view) {
             super(view);
-            //this.transListView = (ListView) view.findViewById(R.id.trans);
-
-            this.expenseImage=(ImageView)view.findViewById(R.id.expense_image);
-            this.expenseName=(TextView)view.findViewById(R.id.expense_name);
-            this.expenseAmount=(TextView)view.findViewById(R.id.expense_amount);
-
+            this.transListView = (RecyclerView) view.findViewById(R.id.recyclerviewList);
         }
     }
 
-    public TransactionsAdapter(Activity activity, ArrayList<ExpenseData> expenseDatas) {
+    public TransactionsAdapter(Activity activity, ArrayList<ArrayList<ExpenseData>> expenseDatas) {
         this.expenseDatas = expenseDatas;
-        this.activity=activity;
+        this.activity = activity;
     }
 
     @Override
@@ -60,12 +52,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-//        TransactionListAdapter  itemsAdapter = new TransactionListAdapter(activity, expenseDatas);
-//        holder.transListView.setAdapter(itemsAdapter);
-
-        holder.expenseImage.setImageResource(ImageAndColorUtil.getImageContentId(expenseDatas.get(position).getExpenseName()));
-        holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
-        holder.expenseAmount.setText(new Double(expenseDatas.get(position).getExpenseAmount()).toString());
+        holder.transListView.setLayoutManager(new LinearLayoutManager(activity));
+        TransactionListAdapter itemsAdapter = new TransactionListAdapter(activity, expenseDatas.get(position));
+        holder.transListView.setAdapter(itemsAdapter);
 
     }
 

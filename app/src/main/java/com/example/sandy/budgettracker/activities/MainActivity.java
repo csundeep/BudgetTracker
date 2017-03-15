@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.fragments.MonthFragment;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity
             beginCalendar.setTime(minDate);
             finishCalendar.setTime(maxDate);
             boolean flag = true;
-            while (beginCalendar.before(finishCalendar) || flag) {
+            while (beginCalendar.before(finishCalendar) ) {
                 String date = new SimpleDateFormat("MMM-yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase();
                 if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(finishCalendar.getTime()).toUpperCase()))
                     flag = false;
