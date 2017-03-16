@@ -50,9 +50,7 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
     public void onBindViewHolder(ExpenseItemAdapter.CustomViewHolderList holder, int position) {
 
 
-        Log.v("************", position + " ");
         ExpenseItem expenseItem = expenseItems.get(position);
-
 
         holder.expenseName.setText(expenseItem.getName());
 //        expenseName.setBackgroundColor(expenseItem.getColorContentId());

@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.fragments.MonthFragment;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -143,7 +141,6 @@ public class MainActivity extends AppCompatActivity
             int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
             int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
             int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
-
             while (cursor.moveToNext()) {
                 String name = cursor.getString(nameColumnIndex);
                 double amount = cursor.getDouble(amountColumnIndex);
@@ -151,7 +148,6 @@ public class MainActivity extends AppCompatActivity
                 String date = cursor.getString(dateColumnIndex);
                 ExpenseData expenseData = new ExpenseData(name, amount, date, note);
                 dates.add(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date));
-
                 if (containsDate(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
                     getExistentKey(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);
                 } else {
@@ -167,6 +163,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+
         if (dates.size() != 0) {
             Date minDate = dates.get(0);
             Date maxDate = dates.get(0);
@@ -179,7 +176,10 @@ public class MainActivity extends AppCompatActivity
             beginCalendar.setTime(minDate);
             finishCalendar.setTime(maxDate);
             boolean flag = true;
-            while (beginCalendar.before(finishCalendar) ) {
+
+
+
+            while (beginCalendar.before(finishCalendar) || flag) {
                 String date = new SimpleDateFormat("MMM-yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase();
                 if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(finishCalendar.getTime()).toUpperCase()))
                     flag = false;
@@ -188,10 +188,9 @@ public class MainActivity extends AppCompatActivity
                 Bundle monthBundle = new Bundle();
                 for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
                     if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
-//                        Log.v("@@@@@@@@@@@@@@@ ",date+" "+entry.getKey());
-//                        for(ExpenseData expenseData:entry.getValue())
-//                        {
-//                            Log.v("    !!!!!!!!!!!",expenseData.toString());
+//                        Log.v("@@@@@@@@@@@@@@@ ", date + " " + entry.getKey());
+//                        for (ExpenseData expenseData : entry.getValue()) {
+//                            Log.v("    !!!!!!!!!!!", expenseData.toString());
 //                        }
                         monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
                         break;

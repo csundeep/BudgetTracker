@@ -28,11 +28,23 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     private Activity activity;
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected RecyclerView transListView;
+        private RecyclerView transListView;
+        private TextView totalExpenseDateView;
+        private TextView totalExpenseAmountView;
 
         public CustomViewHolder(View view) {
             super(view);
             this.transListView = (RecyclerView) view.findViewById(R.id.recyclerviewList);
+            this.totalExpenseDateView = (TextView) view.findViewById(R.id.totalExpenseDate);
+            this.totalExpenseAmountView = (TextView) view.findViewById(R.id.totalExpenseAmount);
+        }
+
+        public void setTotalExpenseDate(String date) {
+            totalExpenseDateView.setText(date);
+        }
+
+        public void setTotalExpenseAmount(String amount) {
+            totalExpenseAmountView.setText(amount);
         }
     }
 
@@ -51,10 +63,16 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-
+        double totalAmount = 0;
         holder.transListView.setLayoutManager(new LinearLayoutManager(activity));
         TransactionListAdapter itemsAdapter = new TransactionListAdapter(activity, expenseDatas.get(position));
         holder.transListView.setAdapter(itemsAdapter);
+        holder.setTotalExpenseDate(expenseDatas.get(position).get(0).getExpenseDate());
+
+        for (ExpenseData expenseData : expenseDatas.get(position)) {
+            totalAmount += expenseData.getExpenseAmount();
+        }
+        holder.setTotalExpenseAmount("-$ " + Double.valueOf(totalAmount).toString());
 
     }
 

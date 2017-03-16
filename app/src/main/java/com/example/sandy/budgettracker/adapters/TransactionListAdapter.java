@@ -1,9 +1,12 @@
 package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +24,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     private Activity activity;
 
     class CustomViewHolderList extends RecyclerView.ViewHolder {
-        protected ImageView expenseImage;
-        protected TextView expenseName;
-        protected TextView expenseAmount;
+        private ImageView expenseImage;
+        private TextView expenseName;
+        private TextView expenseAmount;
 
         public CustomViewHolderList(View view) {
             super(view);
@@ -53,10 +56,20 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
 
 
         holder.expenseImage.setImageResource(ImageAndColorUtil.getWhiteImageContentId(expenseDatas.get(position).getExpenseName()));
-        holder.expenseImage.setColorFilter(ContextCompat.getColor(activity, ImageAndColorUtil.getColorContentId(expenseDatas.get(position).getExpenseName())));
+
+        Drawable background = holder.expenseImage.getBackground();
+
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(activity.getResources().getColor(ImageAndColorUtil.getColorContentId(expenseDatas.get(position).getExpenseName())));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(activity.getResources().getColor(ImageAndColorUtil.getColorContentId(expenseDatas.get(position).getExpenseName())));
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(activity.getResources().getColor(ImageAndColorUtil.getColorContentId(expenseDatas.get(position).getExpenseName())));
+        }
+
         holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
 
-        holder.expenseAmount.setText("- $ "+new Double(expenseDatas.get(position).getExpenseAmount()).toString());
+        holder.expenseAmount.setText("- $ " + new Double(expenseDatas.get(position).getExpenseAmount()).toString());
 
     }
 
