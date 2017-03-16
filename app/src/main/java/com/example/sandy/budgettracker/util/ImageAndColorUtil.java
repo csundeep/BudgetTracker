@@ -138,7 +138,71 @@ public final class ImageAndColorUtil {
         } else {
             return 0;
         }
+    }
 
-
+    public static int getColorContentId(String expenseName) {
+        if (expenseName.equalsIgnoreCase("Car")) {
+            return R.color.RebeccaPurple;
+        } else if (expenseName.equalsIgnoreCase("Travel")) {
+            return R.color.PaleVioletRed;
+        } else if (expenseName.equalsIgnoreCase("Food")) {
+            return R.color.Brown;
+        } else if (expenseName.equalsIgnoreCase("Family")) {
+            return R.color.DarkRed;
+        } else if (expenseName.equalsIgnoreCase("Bills")) {
+            return R.color.DarkGreen;
+        } else if (expenseName.equalsIgnoreCase("Entertainment")) {
+            return R.color.Yellow;
+        } else if (expenseName.equalsIgnoreCase("Home")) {
+            return R.color.Tomato;
+        } else if (expenseName.equalsIgnoreCase("Utilities")) {
+            return R.color.DarkGray;
+        } else if (expenseName.equalsIgnoreCase("Shopping")) {
+            return R.color.LightGreen;
+        } else if (expenseName.equalsIgnoreCase("Hotel")) {
+            return R.color.LightBlue;
+        }  else if (expenseName.equalsIgnoreCase("Health Care")) {
+            return R.color.IndianRed;
+        } else if (expenseName.equalsIgnoreCase("Other")) {
+            return R.color.MediumPurple;
+        } else if (expenseName.equalsIgnoreCase("Clothing")) {
+            return R.color.YellowGreen;
+        } else if (expenseName.equalsIgnoreCase("Transport")) {
+            return R.color.Lime;
+        } else if (expenseName.equalsIgnoreCase("Groceries")) {
+            return R.color.SandyBrown;
+        } else if (expenseName.equalsIgnoreCase("Drinks")) {
+            return R.color.RosyBrown;
+        } else if (expenseName.equalsIgnoreCase("Hobbies")) {
+            return R.color.PaleTurquoise;
+        } else if (expenseName.equalsIgnoreCase("Pets")) {
+            return R.color.Peru;
+        } else if (expenseName.equalsIgnoreCase("Education")) {
+            return R.color.RoyalBlue;
+        } else if (expenseName.equalsIgnoreCase("Cinema")) {
+            return R.color.PowderBlue;
+        } else if (expenseName.equalsIgnoreCase("Love")) {
+            return R.color.DeepPink;
+        } else if (expenseName.equalsIgnoreCase("Kids")) {
+            return R.color.Chocolate;
+        } else if (expenseName.equalsIgnoreCase("Rent")) {
+            return R.color.LightSlateGray;
+        } else if (expenseName.equalsIgnoreCase("iTunes")) {
+            return R.color.MediumSeaGreen;
+        } else if (expenseName.equalsIgnoreCase("Savings")) {
+            return R.color.Marroon;
+        } else if (expenseName.equalsIgnoreCase("Gifts")) {
+            return R.color.OrangeRed;
+        } else if (expenseName.equalsIgnoreCase("Salary")) {
+            return R.color.Indigo;
+        } else if (expenseName.trim().equalsIgnoreCase("Business")) {
+            return R.color.Gold;
+        } else if (expenseName.equalsIgnoreCase("Loan")) {
+            return R.color.Kakhi;
+        } else if (expenseName.equalsIgnoreCase("Extra Income")) {
+            return R.color.DarkSlateBlue;
+        } else {
+            return 0;
+        }
     }
 }

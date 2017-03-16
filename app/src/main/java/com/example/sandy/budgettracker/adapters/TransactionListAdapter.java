@@ -1,6 +1,7 @@
 package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,9 +52,11 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(TransactionListAdapter.CustomViewHolderList holder, int position) {
 
 
-        holder.expenseImage.setImageResource(ImageAndColorUtil.getImageContentId(expenseDatas.get(position).getExpenseName()));
+        holder.expenseImage.setImageResource(ImageAndColorUtil.getWhiteImageContentId(expenseDatas.get(position).getExpenseName()));
+        holder.expenseImage.setColorFilter(ContextCompat.getColor(activity, ImageAndColorUtil.getColorContentId(expenseDatas.get(position).getExpenseName())));
         holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
-        holder.expenseAmount.setText(new Double(expenseDatas.get(position).getExpenseAmount()).toString());
+
+        holder.expenseAmount.setText("- $ "+new Double(expenseDatas.get(position).getExpenseAmount()).toString());
 
     }
 
