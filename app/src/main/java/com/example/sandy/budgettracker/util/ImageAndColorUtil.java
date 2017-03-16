@@ -29,9 +29,7 @@ public final class ImageAndColorUtil {
             return R.drawable.ic_shopping_cart;
         } else if (expenseName.equalsIgnoreCase("Hotel")) {
             return R.drawable.ic_rural_hotel_of_three_stars;
-        } else if (expenseName.equalsIgnoreCase("HealthCare")) {
-            return R.drawable.ic_first_aid_kit;
-        } else if (expenseName.equalsIgnoreCase("HealthCare")) {
+        } else if (expenseName.equalsIgnoreCase("Health Care")) {
             return R.drawable.ic_first_aid_kit;
         } else if (expenseName.equalsIgnoreCase("Other")) {
             return R.drawable.ic_paper_plane;
@@ -97,9 +95,7 @@ public final class ImageAndColorUtil {
             return R.drawable.ic_shopping_cart_w;
         } else if (expenseName.equalsIgnoreCase("Hotel")) {
             return R.drawable.ic_rural_hotel_of_three_stars_w;
-        } else if (expenseName.equalsIgnoreCase("HealthCare")) {
-            return R.drawable.ic_first_aid_kit_w;
-        } else if (expenseName.equalsIgnoreCase("HealthCare")) {
+        }  else if (expenseName.equalsIgnoreCase("Health Care")) {
             return R.drawable.ic_first_aid_kit_w;
         } else if (expenseName.equalsIgnoreCase("Other")) {
             return R.drawable.ic_paper_plane_w;

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import com.example.sandy.budgettracker.activities.ExpenseDetailActivity;
 import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
 import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.data.ExpenseItem;
+import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class ExpenseFragment extends Fragment {
     private RecyclerView recyclerView;
     private int selectedPosition = -1;
-    private GridView gridView;
     ExpenseItemAdapter itemsAdapter;
     private ArrayList<ExpenseItem> items;
     ImageView appBarImageView;
@@ -91,34 +90,29 @@ public class ExpenseFragment extends Fragment {
                 new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        int accuratePosition =layoutManager.getChildCount()-(itemsAdapter.getItemCount()-position);
-                        Log.v("@@@@@@@@@@@@ ", position + " "+layoutManager.getChildCount()+" "+layoutManager.getChildAt(0)+" "+accuratePosition);
+
+                        View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
+
+                        if (selectedPosition != -1) {
+                            recyclerView.getLayoutManager().findViewByPosition(selectedPosition).setAlpha(1f);
+                        }
+
+                        viewItem.setAlpha(.5f);
+                        TextView textView = (TextView) viewItem.findViewById(R.id.expense_name);
+                        String expenseItem = textView.getText().toString();
+                        selectedPosition = position;
+
+                        for (ExpenseItem item : items) {
+                            if (item.getName().equals(expenseItem)) {
+                                ExpenseFragment.selectedExpenceItem = item;
+                                appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
+
+                            }
+                        }
                     }
                 })
         );
-//            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-//                    Log.v("@@@@@@@@@@@@ ", position + " " + gridView.getChildCount());
-//                    if (selectedPosition != -1) {
-//                        gridView.getChildAt(selectedPosition).setAlpha(1f);
-//                    }
-//
-//                    gridView.getChildAt(position).setAlpha(.5f);
-//                    TextView textView = (TextView) gridView.getChildAt(position).findViewById(R.id.expense_name);
-//                    String expenseItem = textView.getText().toString();
-//                    selectedPosition = position;
-//
-//                    for (ExpenseItem item : items) {
-//                        if (item.getName().equals(expenseItem)) {
-//                            ExpenseFragment.selectedExpenceItem = item;
-//                            appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
-//
-//                        }
-//                    }
-//
-//                }
-//            });
+
 
 
         ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
