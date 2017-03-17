@@ -50,7 +50,7 @@ public class ExpenseSelectionFragment extends Fragment {
         if (viewPager != null)
             viewPager.setAdapter(adapter);
 
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs1);
+        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs1);
         // Attach the view pager to the tab strip
         if (tabsStrip != null && viewPager != null)
             tabsStrip.setViewPager(viewPager);

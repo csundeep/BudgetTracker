@@ -4,16 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseDetailActivity;
 import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
@@ -106,7 +110,13 @@ public class ExpenseFragment extends Fragment {
                             if (item.getName().equals(expenseItem)) {
                                 ExpenseFragment.selectedExpenceItem = item;
                                 appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
-
+                                Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
+                                toolbar.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
+                                ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+                                LinearLayout linearLayout=(LinearLayout)getActivity().findViewById(R.id.expenseInfoLayout);
+                                linearLayout.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
+                                PagerSlidingTabStrip slidingTabStrip=(PagerSlidingTabStrip)getActivity().findViewById(R.id.tabs1);
+                                slidingTabStrip.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
                             }
                         }
                     }
