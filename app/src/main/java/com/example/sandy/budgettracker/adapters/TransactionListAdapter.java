@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         private TextView expenseName;
         private TextView expenseAmount;
 
-        public CustomViewHolderList(View view) {
+        CustomViewHolderList(View view) {
             super(view);
 
             this.expenseImage = (ImageView) view.findViewById(R.id.expense_image);
@@ -38,7 +37,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         }
     }
 
-    public TransactionListAdapter(Activity activity, ArrayList<ExpenseData> expenseDatas) {
+    TransactionListAdapter(Activity activity, ArrayList<ExpenseData> expenseDatas) {
         this.expenseDatas = expenseDatas;
         this.activity = activity;
     }

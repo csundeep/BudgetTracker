@@ -14,39 +14,16 @@
         app:elevation="16dp">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/budgetToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/white"
-            app:pstsIndicatorColor="#fff"
-            app:pstsIndicatorHeight="4dp"
-            app:pstsShouldExpand="true"
-            app:pstsTextAllCaps="true"
-            app:pstsUnderlineColor="#fff" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_action_add_new_expense" />
-
+    <include layout="@layout/content_budget" />
 
 
 </android.support.design.widget.CoordinatorLayout>

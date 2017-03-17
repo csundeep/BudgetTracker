@@ -11,7 +11,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +45,9 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        view.setSupportActionBar(toolbar);
-
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.transactionsToolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.transactions);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         if (fab != null)
@@ -171,13 +174,14 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
 
         // Create an adapter that knows which fragment should be shown on each page
-        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(this.getActivity().getSupportFragmentManager(), fragments, tabs);
+        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(this.getChildFragmentManager(), fragments, tabs);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
         if (viewPager != null) {
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(viewPager.getAdapter().getCount());
+
         }
 
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);

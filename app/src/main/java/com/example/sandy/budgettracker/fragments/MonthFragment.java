@@ -4,18 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
-import com.example.sandy.budgettracker.adapters.TransactionListAdapter;
 import com.example.sandy.budgettracker.adapters.TransactionsAdapter;
 import com.example.sandy.budgettracker.data.ExpenseData;
 
@@ -30,12 +23,13 @@ import java.util.Map;
 
 public class MonthFragment extends Fragment {
 
-    private TransactionsAdapter itemsAdapter;
-    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        TransactionsAdapter itemsAdapter;
+        RecyclerView recyclerView;
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         ArrayList<ExpenseData> expenseDatas = getArguments().getParcelableArrayList("expensedatas");
@@ -43,7 +37,7 @@ public class MonthFragment extends Fragment {
 
         if (expenseDatas != null && expenseDatas.size() != 0) {
 
-            ArrayList<ArrayList<ExpenseData>> exp = new ArrayList<ArrayList<ExpenseData>>();
+            ArrayList<ArrayList<ExpenseData>> exp = new ArrayList<>();
 
             Map<Date, ArrayList<ExpenseData>> expenses = new HashMap<>();
             try {
