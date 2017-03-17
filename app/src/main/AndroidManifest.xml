@@ -32,12 +32,6 @@
             android:authorities="com.example.sandy.budgettracker.expenses"
             android:exported="false" />
 
-        <activity
-            android:name=".activities.OverviewActivity"
-            android:label="@string/title_activity_overview" />
-        <activity
-            android:name=".activities.BudgetActivity"
-            android:label="@string/title_activity_budget"></activity>
     </application>
 
 </manifest>
