@@ -61,6 +61,9 @@ public class ExpenseDetailActivity extends AppCompatActivity implements DatePick
 
         EditText amountEditText = (EditText) findViewById(R.id.amountFinal);
         amountEditText.setText(new Double(amount).toString());
+
+
+
         this.dateTextView = (TextView) findViewById(R.id.date);
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
 

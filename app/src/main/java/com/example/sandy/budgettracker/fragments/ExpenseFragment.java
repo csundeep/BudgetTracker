@@ -3,12 +3,12 @@ package com.example.sandy.budgettracker.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -114,7 +114,6 @@ public class ExpenseFragment extends Fragment {
         );
 
 
-
         ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +143,11 @@ public class ExpenseFragment extends Fragment {
             intent.putExtra("amount", amount);
             intent.putExtra("selectedExpenseItem", selectedExpenceItem);
             selectedExpenceItem = null;
-            startActivity(intent);
+
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.contentExpense, new ExpenseDetailFragment());
+            transaction.commit();
+            //startActivity(intent);
         }
 
 
