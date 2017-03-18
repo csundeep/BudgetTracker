@@ -1,6 +1,5 @@
 package com.example.sandy.budgettracker.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.activities.ExpenseDetailActivity;
 import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
 import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.data.ExpenseItem;
@@ -35,6 +33,7 @@ public class ExpenseFragment extends Fragment {
     private ArrayList<ExpenseItem> items;
     ImageView appBarImageView;
     public static ExpenseItem selectedExpenceItem;
+    private ImageButton b;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,9 +112,9 @@ public class ExpenseFragment extends Fragment {
                                 Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
                                 toolbar.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
                                 ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-                                LinearLayout linearLayout=(LinearLayout)getActivity().findViewById(R.id.expenseInfoLayout);
+                                LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.expenseInfoLayout);
                                 linearLayout.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
-                                PagerSlidingTabStrip slidingTabStrip=(PagerSlidingTabStrip)getActivity().findViewById(R.id.tabs1);
+                                PagerSlidingTabStrip slidingTabStrip = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs1);
                                 slidingTabStrip.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
                             }
                         }
@@ -124,10 +123,11 @@ public class ExpenseFragment extends Fragment {
         );
 
 
-        ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
+        b = (ImageButton) getActivity().findViewById(R.id.addExpense);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                b.setImageResource(R.drawable.ic_action_done);
                 TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
                 double amount = 0;
                 if (amountTextView.getText() != null)
@@ -144,20 +144,19 @@ public class ExpenseFragment extends Fragment {
     }
 
     private void openExpenseDetailActivity(@SuppressWarnings("unused") View view, double amount) {
-        Intent intent = new Intent(getActivity(), ExpenseDetailActivity.class);
         if (amount == 0) {
             Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
         } else if (selectedExpenceItem == null) {
             Toast.makeText(getActivity(), "You have to select an expense item", Toast.LENGTH_LONG).show();
         } else {
-            intent.putExtra("amount", amount);
-            intent.putExtra("selectedExpenseItem", selectedExpenceItem);
-            selectedExpenceItem = null;
-
+            Bundle args = new Bundle();
+            args.putSerializable("selectedExpenseItem", selectedExpenceItem);
+            ExpenseDetailFragment expenseDetailFragment = new ExpenseDetailFragment();
+            expenseDetailFragment.setArguments(args);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.contentExpense, new ExpenseDetailFragment());
+            transaction.replace(R.id.contentExpense, expenseDetailFragment);
             transaction.commit();
-            //startActivity(intent);
+            selectedExpenceItem = null;
         }
 
 
