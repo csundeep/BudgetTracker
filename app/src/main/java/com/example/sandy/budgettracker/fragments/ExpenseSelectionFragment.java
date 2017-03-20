@@ -1,15 +1,13 @@
 package com.example.sandy.budgettracker.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
 
@@ -49,11 +47,11 @@ public class ExpenseSelectionFragment extends Fragment {
         SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getChildFragmentManager(), fragments, tabs);
         if (viewPager != null)
             viewPager.setAdapter(adapter);
-
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs1);
+        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
+        
         // Attach the view pager to the tab strip
-        if (tabsStrip != null && viewPager != null)
-            tabsStrip.setViewPager(viewPager);
+        if (tabLayout != null && viewPager != null)
+            tabLayout.setupWithViewPager(viewPager);
         return view;
     }
 

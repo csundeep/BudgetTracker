@@ -2,17 +2,14 @@ package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseItem;
-import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 
@@ -42,8 +39,7 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
     public ExpenseItemAdapter.CustomViewHolderList onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.expense_list, null);
-        ExpenseItemAdapter.CustomViewHolderList viewHolder = new ExpenseItemAdapter.CustomViewHolderList(view);
-        return viewHolder;
+        return new ExpenseItemAdapter.CustomViewHolderList(view);
     }
 
     @Override
@@ -53,7 +49,6 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
         ExpenseItem expenseItem = expenseItems.get(position);
 
         holder.expenseName.setText(expenseItem.getName());
-//        expenseName.setBackgroundColor(expenseItem.getColorContentId());
 
 
         if (expenseItem.hasImage()) {
@@ -63,17 +58,7 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
             holder.expenseImage.setImageResource(R.mipmap.ic_launcher);
             holder.expenseImage.setVisibility(View.VISIBLE);
         }
-//        else
-//            imageView.setVisibility(View.GONE);
 
-//        View textContainer=listItemView.findViewById(R.id.text_container);
-//        int color= ContextCompat.getColor(getContext(), colorResourceId);
-//        textContainer.setBackgroundColor(color);
-
-
-//        holder.expenseImage.setImageResource(ImageAndColorUtil.getImageContentId(expenseDatas.get(position).getExpenseName()));
-//        holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
-//        holder.expenseAmount.setText(new Double(expenseDatas.get(position).getExpenseAmount()).toString());
 
     }
 
@@ -81,7 +66,6 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
     public int getItemCount() {
         return expenseItems.size();
     }
-
 
 
 }

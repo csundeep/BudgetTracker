@@ -11,6 +11,7 @@
     <string name="text_transactions">Transactions</string>
     <string name="text_overview">Overview</string>
     <string name="text_budget">Budgets</string>
+    <string name="text_wallet">wallet</string>
     <string name="title_activity_overview">OverviewActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

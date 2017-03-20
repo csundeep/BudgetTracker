@@ -1,6 +1,7 @@
 package com.example.sandy.budgettracker.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.ExpenseItemAdapter;
 import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
@@ -114,8 +114,8 @@ public class ExpenseFragment extends Fragment {
                                 ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
                                 LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.expenseInfoLayout);
                                 linearLayout.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
-                                PagerSlidingTabStrip slidingTabStrip = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs1);
-                                slidingTabStrip.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
+                                TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
+                                tabLayout.setBackgroundColor(getActivity().getResources().getColor(item.getColorContentId()));
                             }
                         }
                     }

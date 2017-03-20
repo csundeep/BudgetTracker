@@ -12,6 +12,7 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.fragments.BudgetFragment;
 import com.example.sandy.budgettracker.fragments.OverviewFragment;
 import com.example.sandy.budgettracker.fragments.TransactionsFragment;
+import com.example.sandy.budgettracker.fragments.WalletFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.action_budget:
                     selectedFragment = new BudgetFragment();
+                    break;
+                case R.id.action_wallet:
+                    selectedFragment = new WalletFragment();
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

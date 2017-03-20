@@ -6,20 +6,18 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseActivity;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
@@ -46,8 +44,9 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.transactionsToolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.transactions);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.transactions);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         if (fab != null)
@@ -184,10 +183,14 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
         }
 
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+
+        // PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
-        if (tabsStrip != null && viewPager != null)
-            tabsStrip.setViewPager(viewPager);
+        if (tabLayout != null && viewPager != null) {
+            tabLayout.setupWithViewPager(viewPager);
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        }
     }
 
     @Override
