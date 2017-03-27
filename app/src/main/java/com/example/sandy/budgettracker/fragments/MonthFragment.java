@@ -38,6 +38,7 @@ public class MonthFragment extends Fragment {
         if (expenseDatas != null && expenseDatas.size() != 0) {
 
             ArrayList<ArrayList<ExpenseData>> exp = new ArrayList<>();
+            exp.add(new ArrayList<ExpenseData>());
 
             Map<Date, ArrayList<ExpenseData>> expenses = new HashMap<>();
             try {

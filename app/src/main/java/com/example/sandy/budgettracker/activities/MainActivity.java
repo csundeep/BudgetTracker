@@ -13,6 +13,7 @@ import com.example.sandy.budgettracker.fragments.BudgetFragment;
 import com.example.sandy.budgettracker.fragments.OverviewFragment;
 import com.example.sandy.budgettracker.fragments.TransactionsFragment;
 import com.example.sandy.budgettracker.fragments.WalletFragment;
+import com.example.sandy.budgettracker.helper.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

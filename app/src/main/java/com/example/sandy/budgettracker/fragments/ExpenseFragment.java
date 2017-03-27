@@ -8,9 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +38,7 @@ public class ExpenseFragment extends Fragment {
     ImageView appBarImageView;
     public static ExpenseItem selectedExpenceItem;
     private ImageButton b;
+    TextWatcher tt = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +93,33 @@ public class ExpenseFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         itemsAdapter = new ExpenseItemAdapter(this.getActivity(), items);
         recyclerView.setAdapter(itemsAdapter);
+
+        final EditText editText = (EditText) getActivity().findViewById(R.id.amount);
+        editText.addTextChangedListener(new TextWatcher() {
+            int len = 0;
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = editText.getText().toString();
+                if (str.length()== 1 && len < str.length()) {//len check for backspace
+                    editText.setText("-"+str);
+                    editText.setSelection(str.length()+1);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+                String str = editText.getText().toString();
+                len = str.length();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+
+        });
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
