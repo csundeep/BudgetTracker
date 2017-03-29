@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
@@ -48,10 +50,39 @@ public class ExpenseSelectionFragment extends Fragment {
         if (viewPager != null)
             viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
-        
+
         // Attach the view pager to the tab strip
-        if (tabLayout != null && viewPager != null)
+        if (tabLayout != null && viewPager != null) {
             tabLayout.setupWithViewPager(viewPager);
+
+            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                public void onPageScrollStateChanged(int state) {
+                }
+
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+                }
+
+                public void onPageSelected(int position) {
+                    double d = 0d;
+                    EditText editText = (EditText) getActivity().findViewById(R.id.amount);
+                    if (!editText.getText().toString().equals(""))
+                        d = Double.parseDouble(editText.getText().toString());
+                    Log.v("@@@@", "" + position);
+                    if (position == 0) {
+                        if (d > 0) {
+                            d = d * -1;
+                        }
+                    } else {
+                        if (d < 0) {
+                            d = d * -1;
+                        }
+                    }
+                    editText.setText(Double.valueOf(d).toString());
+                }
+            });
+        }
         return view;
     }
 

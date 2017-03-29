@@ -1,5 +1,6 @@
 package com.example.sandy.budgettracker.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,6 +15,7 @@ import com.example.sandy.budgettracker.fragments.OverviewFragment;
 import com.example.sandy.budgettracker.fragments.TransactionsFragment;
 import com.example.sandy.budgettracker.fragments.WalletFragment;
 import com.example.sandy.budgettracker.helper.BottomNavigationViewHelper;
+import com.example.sandy.budgettracker.helper.Session;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Session session = new Session(getBaseContext());
+//        Log.v("@@@@@@@@@@@@@", "  " + session.getuserId());
+//        session.logout();
+//        Log.v("@@@@@@@@@@@@@", "  " + session.getuserId());
+        if (session.getuserId() == 0) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);

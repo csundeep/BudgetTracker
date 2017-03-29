@@ -7,23 +7,36 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.MainActivity">
 
+
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:elevation="16dp">
+        android:layout_marginBottom="16dp"
+        android:elevation="6dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/overviewToolbar"
+            android:id="@+id/walletToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="60dp"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_wallet" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabWallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_action_add_new_expense"  />
 
 
 </android.support.design.widget.CoordinatorLayout>

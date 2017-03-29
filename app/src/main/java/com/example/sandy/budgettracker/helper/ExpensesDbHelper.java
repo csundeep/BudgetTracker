@@ -33,6 +33,21 @@ public class ExpensesDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        // Create a String that contains the SQL statement to create the users table
+        String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + UserContract.UserEntry.TABLE_NAME + " ("
+                + UserContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + UserContract.UserEntry.COLUMN_USER_EMAIL + " TEXT NOT NULL unique, "
+                + UserContract.UserEntry.COLUMN_USER_PASSWORD + " TEXT NOT NULL, "
+                + UserContract.UserEntry.COLUMN_USER_FIRST_NAME + " TEXT , "
+                + UserContract.UserEntry.COLUMN_USER_LAST_NAME + " TEXT , "
+                + UserContract.UserEntry.COLUMN_USER_MOBILE + " TEXT , "
+                + UserContract.UserEntry.COLUMN_USER_WALLET_AMOUNT + " DOUBLE NOT NULL DEFAULT 0 , "
+                + UserContract.UserEntry.COLUMN_USER_CREATED_DATE + " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+
+        // Execute the SQL statement
+        db.execSQL(SQL_CREATE_USERS_TABLE);
+
         // Create a String that contains the SQL statement to create the expenses table
         String SQL_CREATE_EXPENSES_TABLE = "CREATE TABLE " + ExpensesContract.ExpenseEntry.TABLE_NAME + " ("
                 + ExpensesContract.ExpenseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

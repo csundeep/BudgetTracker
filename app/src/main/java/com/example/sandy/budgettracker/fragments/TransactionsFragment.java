@@ -66,6 +66,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     private void openExpenseActivity(@SuppressWarnings("unused") View view) {
         Intent intent = new Intent(this.getActivity(), ExpenseActivity.class);
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     private static Date min(Date a, Date b) {
