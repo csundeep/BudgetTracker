@@ -23,6 +23,7 @@ import com.example.sandy.budgettracker.activities.ExpenseActivity;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
 import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
+import com.example.sandy.budgettracker.helper.Session;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -190,7 +191,8 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         // Attach the view pager to the tab strip
         if (tabLayout != null && viewPager != null) {
             tabLayout.setupWithViewPager(viewPager);
-            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+            if (viewPager.getAdapter().getCount() > 3)
+                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
     }
 
@@ -202,7 +204,19 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
-        return new CursorLoader(this.getActivity(), ExpensesContract.ExpenseEntry.CONTENT_URI, projection, null, null, null);
+
+        String selection = ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + "=?";
+
+        String[] selectionArgs = {
+                String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
+        };
+
+        return new CursorLoader(this.getActivity(),
+                ExpensesContract.ExpenseEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
     }
 
     @Override

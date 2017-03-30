@@ -54,7 +54,10 @@ public class ExpensesDbHelper extends SQLiteOpenHelper {
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME + " TEXT NOT NULL, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT + " DOUBLE NOT NULL DEFAULT 0, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES + " TEXT , "
-                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE + " DATE NOT NULL);";
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + " INTEGER NOT NULL , "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE + " DATE NOT NULL ,  "+
+                "FOREIGN KEY("+ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID+") REFERENCES "
+                +UserContract.UserEntry.TABLE_NAME+"("+UserContract.UserEntry._ID+"));";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_EXPENSES_TABLE);

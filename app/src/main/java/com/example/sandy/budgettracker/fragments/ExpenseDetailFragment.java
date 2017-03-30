@@ -18,6 +18,7 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.MainActivity;
 import com.example.sandy.budgettracker.data.ExpenseItem;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
+import com.example.sandy.budgettracker.helper.Session;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
@@ -87,6 +88,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, amount);
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, notes);
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, date);
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID, new Session(getActivity().getBaseContext()).getuserId());
 
         Uri uri = getActivity().getContentResolver().insert(ExpensesContract.ExpenseEntry.CONTENT_URI, values);
 
