@@ -66,7 +66,7 @@ public class MonthFragment extends Fragment {
                 exp.add(datas);
             }
 
-            recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+            recyclerView = (RecyclerView) view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             itemsAdapter = new TransactionsAdapter(this.getActivity(), exp);
             recyclerView.setAdapter(itemsAdapter);

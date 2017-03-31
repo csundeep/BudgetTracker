@@ -20,7 +20,7 @@
     <string name="title_activity_budget">BudgetActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_budget">Add New Budget</string>
     <string name="title_activity_wallet">WalletActivity</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
