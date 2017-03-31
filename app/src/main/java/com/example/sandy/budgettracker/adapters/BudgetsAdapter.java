@@ -27,7 +27,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.CustomVi
             budgetNameTextView = (TextView) view.findViewById(R.id.budgetName);
 
             customProgressShowProgress = (CustomProgress) view.findViewById(R.id.customProgressShowProgress);
-            customProgressShowProgress.setMaximumPercentage(0.59f);
+            customProgressShowProgress.setMaximumPercentage(0.5f);
            // customProgressShowProgress.useRoundedRectangleShape(30.0f);
             customProgressShowProgress.setProgressColor(view.getResources().getColor(R.color.green_500));
             customProgressShowProgress.setProgressBackgroundColor(view.getResources().getColor(R.color.green_200));
