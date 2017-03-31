@@ -28,13 +28,20 @@
                 android:gravity="start"
                 android:textStyle="bold" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+            <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar"-->
+            <!--style="@android:style/Widget.Holo.ProgressBar.Horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:max="100"-->
+            <!--android:progress="20" />-->
+
+            <com.example.sandy.budgettracker.helper.CustomProgress
+                android:id="@+id/customProgressShowProgress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="100"
-                android:progress="20" />
+                android:layout_height="@dimen/custom_progress_height"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="16dp" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

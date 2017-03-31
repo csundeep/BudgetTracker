@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.BudgetData;
+import com.example.sandy.budgettracker.helper.CustomProgress;
 
 import java.util.ArrayList;
 
@@ -19,9 +20,18 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.CustomVi
     class CustomViewHolder extends RecyclerView.ViewHolder {
         TextView budgetNameTextView;
 
+        CustomProgress customProgressShowProgress;
+
         CustomViewHolder(View view) {
             super(view);
             budgetNameTextView = (TextView) view.findViewById(R.id.budgetName);
+
+            customProgressShowProgress = (CustomProgress) view.findViewById(R.id.customProgressShowProgress);
+            customProgressShowProgress.setMaximumPercentage(0.59f);
+           // customProgressShowProgress.useRoundedRectangleShape(30.0f);
+            customProgressShowProgress.setProgressColor(view.getResources().getColor(R.color.green_500));
+            customProgressShowProgress.setProgressBackgroundColor(view.getResources().getColor(R.color.green_200));
+            customProgressShowProgress.setShowingPercentage(true);
 
         }
 
