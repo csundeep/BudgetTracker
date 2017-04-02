@@ -14,7 +14,6 @@
         cardview:cardElevation="4dp"
         cardview:cardUseCompatPadding="true">
 
-
         <RelativeLayout
             android:id="@+id/budget"
             android:layout_width="match_parent"
@@ -35,7 +34,6 @@
                 android:layout_below="@+id/budgetName"
                 android:layout_margin="16dp"
                 android:gravity="start"
-                android:text="$500 out of $1000"
                 android:textStyle="bold" />
 
 
@@ -53,7 +51,6 @@
                 android:layout_below="@+id/customProgressShowProgress"
                 android:layout_margin="16dp"
                 android:gravity="start"
-                android:text="Mar, 2017"
                 android:textStyle="bold" />
 
             <TextView
@@ -63,16 +60,7 @@
                 android:layout_below="@+id/customProgressShowProgress"
                 android:layout_margin="16dp"
                 android:gravity="end"
-                android:text="Apr, 2017"
                 android:textStyle="bold" />
-
-            <!--<ProgressBar-->
-            <!--android:id="@+id/progressBar"-->
-            <!--style="@android:style/Widget.Holo.ProgressBar.Horizontal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:max="100"-->
-            <!--android:progress="20" />-->
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

@@ -21,7 +21,6 @@
             android:name=".activities.ExpenseActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.Dark" />
@@ -30,17 +29,18 @@
             android:theme="@style/AppTheme.Dark" />
 
         <provider
-        android:name=".helper.ExpensesProvider"
-        android:authorities="com.example.sandy.budgettracker.expenses"
-        android:exported="false" />
-
+            android:name=".helper.ExpensesProvider"
+            android:authorities="com.example.sandy.budgettracker.expenses"
+            android:exported="false" />
         <provider
             android:name=".helper.UserProvider"
             android:authorities="com.example.sandy.budgettracker.users"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.AddBudgetActivity"
+            android:label="@string/title_activity_add_budget"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
-
 
 </manifest>

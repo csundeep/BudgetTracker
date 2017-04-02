@@ -13,6 +13,7 @@
         cardview:cardElevation="4dp"
         cardview:cardUseCompatPadding="true">
 
+
         <RelativeLayout
             android:id="@+id/walletDetails"
             android:layout_width="match_parent"
