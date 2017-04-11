@@ -1,7 +1,5 @@
 package com.example.sandy.budgettracker.util;
 
-import android.util.Log;
-
 import com.example.sandy.budgettracker.R;
 
 
@@ -141,7 +139,6 @@ public final class ImageAndColorUtil {
 
     public static int getColorContentId(String expenseName) {
         if (expenseName.equalsIgnoreCase("Car")) {
-            Log.v("@@@@@@@@@@@@@ ","@@@");
             return R.color.RebeccaPurple;
         } else if (expenseName.equalsIgnoreCase("Travel")) {
             return R.color.PaleVioletRed;

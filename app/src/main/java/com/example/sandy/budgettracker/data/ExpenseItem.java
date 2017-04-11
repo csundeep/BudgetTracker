@@ -3,16 +3,26 @@ package com.example.sandy.budgettracker.data;
 
 import java.io.Serializable;
 
-public class ExpenseItem implements Serializable{
+public class ExpenseItem implements Serializable {
 
     private String name;
-    private int imageContentId=-1;
+    private String type;
+    private int imageContentId = -1;
     private int colorContentId;
 
-    public ExpenseItem(String name, int imageContentId, int colorContentId) {
+    public ExpenseItem(String name, String type, int imageContentId, int colorContentId) {
         this.name = name;
+        this.type = type;
         this.imageContentId = imageContentId;
         this.colorContentId = colorContentId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {
@@ -29,5 +39,15 @@ public class ExpenseItem implements Serializable{
 
     public boolean hasImage() {
         return imageContentId != -1;
+    }
+
+    @Override
+    public String toString() {
+        return "ExpenseItem{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", imageContentId=" + imageContentId +
+                ", colorContentId=" + colorContentId +
+                '}';
     }
 }

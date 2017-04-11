@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +40,15 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
         view = inflater.inflate(R.layout.fragment_expense_detail, container, false);
         TabLayout tabsStrip = (TabLayout) getActivity().findViewById(R.id.tabs1);
-        tabsStrip.setVisibility(View.GONE);
+
         expenseItem = (ExpenseItem) getArguments().getSerializable("selectedExpenseItem");
+        tabsStrip.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), expenseItem.getColorContentId()));
+        tabsStrip.setTabTextColors(
+                ContextCompat.getColor(getContext(), expenseItem.getColorContentId()),
+                ContextCompat.getColor(getContext(), expenseItem.getColorContentId())
+        );
+
+//        tabsStrip.setTabTextColors(getActivity().getResources().getColor(expenseItem.getColorContentId()));
         this.dateTextView = (TextView) view.findViewById(R.id.date);
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
 
@@ -57,7 +66,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     datePickerDialog = DatePickerDialog.newInstance(ExpenseDetailFragment.this, year, month, day);
                     datePickerDialog.setThemeDark(false);
                     datePickerDialog.showYearPickerFirst(false);
-                    datePickerDialog.setAccentColor(getActivity().getResources().getColor(expenseItem.getColorContentId()));
+                    datePickerDialog.setAccentColor(ContextCompat.getColor(getContext(), expenseItem.getColorContentId()));
                     datePickerDialog.setTitle(dayOfWeek);
                     datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
                 }
@@ -73,18 +82,37 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     String notes = notesEditText.getText().toString();
                     TextView calenderTextView = (TextView) view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
-                    storeExpense(v, expenseItem.getName(), amount, notes, date);
+                    storeExpense(v, expenseItem.getName(), expenseItem.getType(), amount, notes, date);
                 }
             });
+
+        ImageButton b1 = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
+
+        if (b1 != null)
+            b1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle args = new Bundle();
+                    args.putSerializable("selectedExpenseItem", expenseItem);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    ExpenseSelectionFragment expenseSelectionFragment = new ExpenseSelectionFragment();
+                    expenseSelectionFragment.setArguments(args);
+                    transaction.replace(R.id.contentExpense, expenseSelectionFragment);
+                    transaction.commit();
+                    getActivity().overridePendingTransition(R.anim.push_left_out, R.anim.push_left_in);
+                }
+            });
+
         return view;
     }
 
-    public void storeExpense(@SuppressWarnings("unused") View view, String expenseItem, double amount, String notes, String date) {
+    public void storeExpense(@SuppressWarnings("unused") View view, String expenseItem, String expenseType, double amount, String notes, String date) {
 
 //        Log.v("@@@@@@@@@@@@@@", expenseItem + " " + amount + " " + notes + " " + date);
 
         ContentValues values = new ContentValues();
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME, expenseItem);
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE, expenseType);
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, amount);
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, notes);
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, date);

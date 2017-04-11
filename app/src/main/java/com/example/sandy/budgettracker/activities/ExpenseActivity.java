@@ -24,7 +24,10 @@ public class ExpenseActivity extends AppCompatActivity {
         }
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.contentExpense, new ExpenseSelectionFragment());
+        Bundle args = new Bundle();
+        ExpenseSelectionFragment expenseSelectionFragment = new ExpenseSelectionFragment();
+        expenseSelectionFragment.setArguments(args);
+        transaction.replace(R.id.contentExpense, expenseSelectionFragment);
         transaction.commit();
 
 

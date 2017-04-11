@@ -42,10 +42,11 @@
             android:id="@+id/expenseInfoLayout"
             android:orientation="horizontal">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/appBarExpenseImage"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_marginLeft="36dp" />
 
             <EditText

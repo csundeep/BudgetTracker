@@ -52,6 +52,7 @@ public class ExpensesDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_EXPENSES_TABLE = "CREATE TABLE " + ExpensesContract.ExpenseEntry.TABLE_NAME + " ("
                 + ExpensesContract.ExpenseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME + " TEXT NOT NULL, "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE + " TEXT NOT NULL, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT + " DOUBLE NOT NULL DEFAULT 0, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES + " TEXT , "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + " INTEGER NOT NULL , "

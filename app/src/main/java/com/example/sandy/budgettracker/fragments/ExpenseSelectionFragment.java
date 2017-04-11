@@ -3,15 +3,16 @@ package com.example.sandy.budgettracker.fragments;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
+import com.example.sandy.budgettracker.data.ExpenseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,24 @@ public class ExpenseSelectionFragment extends Fragment {
         tabs.add("EXPENSES");
         tabs.add("INCOME");
 
+        ExpenseItem selectedExpenceItem = null;
+
+        if (getArguments().getSerializable("selectedExpenseItem") != null)
+            selectedExpenceItem = (ExpenseItem) getArguments().getSerializable("selectedExpenseItem");
+
+        ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
+        b.setImageResource(R.drawable.ic_action_forward);
 
         Fragment f1 = new ExpenseFragment();
         Bundle b1 = new Bundle();
         b1.putString("type", "Expense");
+        b1.putSerializable("selectedExpenseItem", selectedExpenceItem);
         f1.setArguments(b1);
 
         Fragment f2 = new ExpenseFragment();
         Bundle b2 = new Bundle();
         b2.putString("type", "Income");
+        b2.putSerializable("selectedExpenseItem", selectedExpenceItem);
         f2.setArguments(b2);
 
 
@@ -50,38 +60,42 @@ public class ExpenseSelectionFragment extends Fragment {
         if (viewPager != null)
             viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        tabLayout.setTabTextColors(
+                ContextCompat.getColor(getContext(), R.color.grey_200),
+                ContextCompat.getColor(getContext(), R.color.white)
+        );
 
         // Attach the view pager to the tab strip
-        if (tabLayout != null && viewPager != null) {
+        if (viewPager != null) {
             tabLayout.setupWithViewPager(viewPager);
 
-            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                public void onPageScrollStateChanged(int state) {
-                }
-
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
-                }
-
-                public void onPageSelected(int position) {
-                    double d = 0d;
-                    EditText editText = (EditText) getActivity().findViewById(R.id.amount);
-                    if (!editText.getText().toString().equals(""))
-                        d = Double.parseDouble(editText.getText().toString());
-                    Log.v("@@@@", "" + position);
-                    if (position == 0) {
-                        if (d > 0) {
-                            d = d * -1;
-                        }
-                    } else {
-                        if (d < 0) {
-                            d = d * -1;
-                        }
-                    }
-                    editText.setText(Double.valueOf(d).toString());
-                }
-            });
+//            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//                public void onPageScrollStateChanged(int state) {
+//                }
+//
+//                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//
+//                }
+//
+//                public void onPageSelected(int position) {
+//                    double d = 0d;
+//                    EditText editText = (EditText) getActivity().findViewById(R.id.amount);
+//                    if (!editText.getText().toString().equals(""))
+//                        d = Double.parseDouble(editText.getText().toString());
+//                    if (position == 0) {
+//                        if (d > 0) {
+//                            d = d * -1;
+//                        }
+//                    } else {
+//                        if (d < 0) {
+//                            d = d * -1;
+//                        }
+//                    }
+//                    editText.setText(Double.valueOf(d).toString());
+//                }
+//            });
         }
         return view;
     }

@@ -16,10 +16,12 @@ import java.util.ArrayList;
 public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.CustomViewHolderList> {
     private ArrayList<ExpenseItem> expenseItems;
     private Activity context;
+    private ExpenseItem selectExpenseItem;
 
-    public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems) {
+    public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems, ExpenseItem selectExpenseItem) {
         this.expenseItems = expenseItems;
         this.context = context;
+        this.selectExpenseItem = selectExpenseItem;
     }
 
     class CustomViewHolderList extends RecyclerView.ViewHolder {
@@ -49,6 +51,12 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
         ExpenseItem expenseItem = expenseItems.get(position);
 
         holder.expenseName.setText(expenseItem.getName());
+        if (selectExpenseItem != null) {
+            if (expenseItems.get(position).getName().equals(selectExpenseItem.getName())) {
+                holder.expenseName.setAlpha(.5f);
+                holder.expenseImage.setAlpha(.5f);
+            }
+        }
 
 
         if (expenseItem.hasImage()) {
