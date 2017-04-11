@@ -1,8 +1,10 @@
 package com.example.sandy.budgettracker.fragments;
 
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,8 @@ import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
 import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
 import com.example.sandy.budgettracker.helper.Session;
+import com.example.sandy.budgettracker.helper.UserContract;
+import com.example.sandy.budgettracker.helper.WalletAmount;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -133,7 +137,26 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         } finally {
             cursor.close();
         }
+        String[] projection = {
+                UserContract.UserEntry.COLUMN_USER_WALLET_AMOUNT};
 
+        Uri currentUserUri = ContentUris.withAppendedId(UserContract.UserEntry.CONTENT_URI, new Session(getActivity().getBaseContext()).getuserId());
+        Cursor userCursor = getActivity().getContentResolver().query(currentUserUri, projection, null, null, null);
+        double amount = 0;
+        if (userCursor != null) {
+            try {
+                int walletAmountIndex = userCursor.getColumnIndex(UserContract.UserEntry.COLUMN_USER_WALLET_AMOUNT);
+
+                while (userCursor.moveToNext()) {
+                    amount = userCursor.getDouble(walletAmountIndex);
+
+                }
+            } finally {
+                userCursor.close();
+            }
+        }
+        WalletAmount walletAmount = new WalletAmount(getActivity().getBaseContext());
+        walletAmount.setTransWalletAmount(amount);
 
         if (dates.size() != 0) {
             Date minDate = dates.get(0);
@@ -162,6 +185,13 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 //                        for (ExpenseData expenseData : entry.getValue()) {
 //                            Log.v("    !!!!!!!!!!!", expenseData.toString());
 //                        }
+                        double totalExpenseAmount = 0;
+                        for (ExpenseData expenseData : entry.getValue()) {
+                            totalExpenseAmount += expenseData.getExpenseAmount();
+                        }
+                        amount = amount - totalExpenseAmount;
+                        monthBundle.putDouble("totalExpenseAmount", totalExpenseAmount);
+                        monthBundle.putDouble("walletBalance", amount);
                         monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
                         break;
                     }

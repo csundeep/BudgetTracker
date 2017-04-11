@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,9 @@ public class MonthFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         ArrayList<ExpenseData> expenseDatas = getArguments().getParcelableArrayList("expensedatas");
+
+        double walletBalance = getArguments().getDouble("walletBalance");
+        double totalExpenseAmount = getArguments().getDouble("totalExpenseAmount");
 
 
         if (expenseDatas != null && expenseDatas.size() != 0) {
@@ -65,10 +69,9 @@ public class MonthFragment extends Fragment {
                 }
                 exp.add(datas);
             }
-
             recyclerView = (RecyclerView) view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            itemsAdapter = new TransactionsAdapter(this.getActivity(), exp);
+            itemsAdapter = new TransactionsAdapter(this.getActivity(), exp,walletBalance,totalExpenseAmount);
             recyclerView.setAdapter(itemsAdapter);
 
 

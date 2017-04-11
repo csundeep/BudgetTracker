@@ -16,6 +16,9 @@ import java.util.ArrayList;
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.CustomViewHolder> {
     private ArrayList<ArrayList<ExpenseData>> expenseDatas;
     private Activity activity;
+    private double walletBalance;
+    private double totalExpenseAmount;
+
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView transListView;
@@ -23,21 +26,16 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         private TextView totalExpenseAmountView;
         private TextView walletAmountView;
         private TextView totalExpensesPerMonth;
-        private double totalPrize;
+
 
         CustomViewHolder(View view) {
             super(view);
-            for (ArrayList<ExpenseData> expenseDataList : expenseDatas) {
-                for (ExpenseData expenseData : expenseDataList) {
-                    totalPrize += expenseData.getExpenseAmount();
-                }
-            }
 
             this.transListView = (RecyclerView) view.findViewById(R.id.recyclerviewList);
             this.totalExpenseDateView = (TextView) view.findViewById(R.id.totalExpenseDate);
             this.totalExpenseAmountView = (TextView) view.findViewById(R.id.totalExpenseAmount);
             this.walletAmountView = (TextView) view.findViewById(R.id.walletAmount);
-            this.totalExpenseAmountView = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
+            this.totalExpensesPerMonth = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
         }
 
         void setTotalExpenseDate(String date) {
@@ -53,13 +51,15 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         }
 
         void setTotalExpensesPerMonth(String amount) {
-            totalExpenseAmountView.setText(amount);
+            totalExpensesPerMonth.setText(amount);
         }
     }
 
-    public TransactionsAdapter(Activity activity, ArrayList<ArrayList<ExpenseData>> expenseDatas) {
+    public TransactionsAdapter(Activity activity, ArrayList<ArrayList<ExpenseData>> expenseDatas, double walletBalance, double totalExpenseAmount) {
         this.expenseDatas = expenseDatas;
         this.activity = activity;
+        this.walletBalance = walletBalance;
+        this.totalExpenseAmount = totalExpenseAmount;
     }
 
     @Override
@@ -72,8 +72,8 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         if (position == 0) {
-            holder.setWalletAmountView("$3698");
-            holder.setTotalExpensesPerMonth(Double.valueOf(holder.totalPrize).toString());
+            holder.setWalletAmountView(Double.valueOf(walletBalance).toString());
+            holder.setTotalExpensesPerMonth(Double.valueOf(totalExpenseAmount).toString());
         } else {
             double totalAmount = 0;
             holder.transListView.setLayoutManager(new LinearLayoutManager(activity));
