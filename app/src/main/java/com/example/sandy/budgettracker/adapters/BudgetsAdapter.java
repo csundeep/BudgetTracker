@@ -88,7 +88,6 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
 
     @Override
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
-        Log.v("@@@@@@@@@@@@", position + "  ");
         if (getItemViewType(position) == -1) {
             AddBudgetViewHolder holder1 = (AddBudgetViewHolder) holder;
         } else {

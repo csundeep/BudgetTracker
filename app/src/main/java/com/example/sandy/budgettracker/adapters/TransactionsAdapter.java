@@ -13,19 +13,31 @@ import com.example.sandy.budgettracker.data.ExpenseData;
 
 import java.util.ArrayList;
 
-public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.CustomViewHolder> {
+public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.GeneralViewHolder> {
     private ArrayList<ArrayList<ExpenseData>> expenseDatas;
     private Activity activity;
     private double walletBalance;
     private double totalExpenseAmount;
 
+    public TransactionsAdapter(Activity activity, ArrayList<ArrayList<ExpenseData>> expenseDatas, double walletBalance, double totalExpenseAmount) {
+        this.expenseDatas = expenseDatas;
+        this.activity = activity;
+        this.walletBalance = walletBalance;
+        this.totalExpenseAmount = totalExpenseAmount;
+    }
 
-    class CustomViewHolder extends RecyclerView.ViewHolder {
+
+    class GeneralViewHolder extends RecyclerView.ViewHolder {
+        GeneralViewHolder(View view) {
+            super(view);
+        }
+    }
+
+
+    class CustomViewHolder extends GeneralViewHolder {
         private RecyclerView transListView;
         private TextView totalExpenseDateView;
         private TextView totalExpenseAmountView;
-        private TextView walletAmountView;
-        private TextView totalExpensesPerMonth;
 
 
         CustomViewHolder(View view) {
@@ -34,8 +46,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             this.transListView = (RecyclerView) view.findViewById(R.id.recyclerviewList);
             this.totalExpenseDateView = (TextView) view.findViewById(R.id.totalExpenseDate);
             this.totalExpenseAmountView = (TextView) view.findViewById(R.id.totalExpenseAmount);
-            this.walletAmountView = (TextView) view.findViewById(R.id.walletAmount);
-            this.totalExpensesPerMonth = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
+
         }
 
         void setTotalExpenseDate(String date) {
@@ -44,6 +55,21 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
         void setTotalExpenseAmount(String amount) {
             totalExpenseAmountView.setText(amount);
+        }
+
+
+    }
+
+
+    class MonthSummaryCard extends GeneralViewHolder {
+
+        private TextView walletAmountView;
+        private TextView totalExpensesPerMonth;
+
+        MonthSummaryCard(View view) {
+            super(view);
+            this.walletAmountView = (TextView) view.findViewById(R.id.walletAmount);
+            this.totalExpensesPerMonth = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
         }
 
         void setWalletAmountView(String date) {
@@ -55,36 +81,49 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         }
     }
 
-    public TransactionsAdapter(Activity activity, ArrayList<ArrayList<ExpenseData>> expenseDatas, double walletBalance, double totalExpenseAmount) {
-        this.expenseDatas = expenseDatas;
-        this.activity = activity;
-        this.walletBalance = walletBalance;
-        this.totalExpenseAmount = totalExpenseAmount;
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? -1 : position;
     }
 
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public GeneralViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.transactions_list, null);
-        return new CustomViewHolder(view);
-    }
 
-    @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        if (position == 0) {
-            holder.setWalletAmountView(Double.valueOf(walletBalance).toString());
-            holder.setTotalExpensesPerMonth(Double.valueOf(totalExpenseAmount).toString());
+        GeneralViewHolder holder;
+        View view;
+        if (viewType == -1) {
+            view = LayoutInflater.from(activity)
+                    .inflate(R.layout.month_summary_card, viewGroup, false);
+            holder = new MonthSummaryCard(view);
         } else {
+            view = LayoutInflater.from(activity)
+                    .inflate(R.layout.transactions_list, viewGroup, false);
+            holder = new CustomViewHolder(view);
+        }
+        return holder;
+
+    }
+
+    @Override
+    public void onBindViewHolder(GeneralViewHolder holder, int position) {
+        if (getItemViewType(position) == -1) {
+            MonthSummaryCard holder1 = (MonthSummaryCard) holder;
+            holder1.setWalletAmountView(Double.valueOf(walletBalance).toString());
+            holder1.setTotalExpensesPerMonth(Double.valueOf(totalExpenseAmount).toString());
+        } else {
+            CustomViewHolder holder1 = (CustomViewHolder) holder;
             double totalAmount = 0;
-            holder.transListView.setLayoutManager(new LinearLayoutManager(activity));
+            holder1.transListView.setLayoutManager(new LinearLayoutManager(activity));
             TransactionListAdapter itemsAdapter = new TransactionListAdapter(activity, expenseDatas.get(position));
-            holder.transListView.setAdapter(itemsAdapter);
-            holder.setTotalExpenseDate(expenseDatas.get(position).get(0).getExpenseDate());
+            holder1.transListView.setAdapter(itemsAdapter);
+            holder1.setTotalExpenseDate(expenseDatas.get(position).get(0).getExpenseDate());
 
             for (ExpenseData expenseData : expenseDatas.get(position)) {
                 totalAmount += expenseData.getExpenseAmount();
             }
-            holder.setTotalExpenseAmount("-$ " + Double.valueOf(totalAmount).toString());
+            holder1.setTotalExpenseAmount("-$ " + Double.valueOf(totalAmount).toString());
         }
 
 
