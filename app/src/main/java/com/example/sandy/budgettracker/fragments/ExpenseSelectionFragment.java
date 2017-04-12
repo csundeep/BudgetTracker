@@ -1,10 +1,14 @@
 package com.example.sandy.budgettracker.fragments;
 
+import android.content.ContentUris;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,9 @@ import android.widget.ImageButton;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
 import com.example.sandy.budgettracker.data.ExpenseItem;
+import com.example.sandy.budgettracker.helper.ExpensesContract;
+import com.example.sandy.budgettracker.helper.Session;
+import com.example.sandy.budgettracker.helper.UserContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,39 @@ public class ExpenseSelectionFragment extends Fragment {
         tabs.add("INCOME");
 
         ExpenseItem selectedExpenceItem = null;
+        Uri currentExpenseUri = null;
+        if (getArguments().getParcelable("currentExpenseUri") != null)
+            currentExpenseUri = getArguments().getParcelable("currentExpenseUri");
+
+
+        String[] projection = {
+                ExpensesContract.ExpenseEntry._Id,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
+
+        Cursor expenseCursor = getActivity().getContentResolver().query(currentExpenseUri, projection, null, null, null);
+        double amount = 0;
+        if (expenseCursor != null) {
+            try {
+                int expenseIdIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry._Id);
+                int expenseNameIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+                int expenseTypeIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
+                int expenseAmountIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+                int expenseNoteIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
+                int expenseDateIden = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+
+                while (expenseCursor.moveToNext()) {
+
+
+                }
+            } finally {
+                expenseCursor.close();
+            }
+        }
+
 
         if (getArguments().getSerializable("selectedExpenseItem") != null)
             selectedExpenceItem = (ExpenseItem) getArguments().getSerializable("selectedExpenseItem");

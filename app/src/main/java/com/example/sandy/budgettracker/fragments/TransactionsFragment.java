@@ -113,16 +113,18 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         ArrayList<Fragment> fragments = new ArrayList<>();
 
         try {
+            int expenseId = cursor.getColumnIndex(ExpensesContract.ExpenseEntry._Id);
             int nameColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
             int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
             int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
             int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
             while (cursor.moveToNext()) {
+                int id = cursor.getInt(expenseId);
                 String name = cursor.getString(nameColumnIndex);
                 double amount = cursor.getDouble(amountColumnIndex);
                 String note = cursor.getString(noteColumnIndex);
                 String date = cursor.getString(dateColumnIndex);
-                ExpenseData expenseData = new ExpenseData(name, amount, date, note);
+                ExpenseData expenseData = new ExpenseData(id, name, amount, date, note);
                 dates.add(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date));
                 if (containsDate(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
                     getExistentKey(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);

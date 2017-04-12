@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.CustomViewHolderList> {
     private ArrayList<ExpenseData> expenseDatas;
     private Activity activity;
+    private View.OnClickListener mOnClickListener;
 
     class CustomViewHolderList extends RecyclerView.ViewHolder {
         private ImageView expenseImage;
@@ -29,7 +31,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
 
         CustomViewHolderList(View view) {
             super(view);
+            mOnClickListener = new ExpenseItemOnClickListener(activity);
 
+            view.setOnClickListener(mOnClickListener);
             this.expenseImage = (ImageView) view.findViewById(R.id.trans_expense_image);
             this.expenseName = (TextView) view.findViewById(R.id.trans_expense_name);
             this.expenseAmount = (TextView) view.findViewById(R.id.trans_expense_amount);
@@ -67,6 +71,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         }
 
         holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
+        holder.expenseName.setTag(expenseDatas.get(position).getId());
+
+//        Log.v("&(*#$*(#$#(*^$#", expenseDatas.get(position).getId() + "   ");
 
         holder.expenseAmount.setText("- $ " + new Double(expenseDatas.get(position).getExpenseAmount()).toString());
 

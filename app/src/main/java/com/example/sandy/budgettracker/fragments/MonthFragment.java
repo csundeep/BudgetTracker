@@ -77,32 +77,6 @@ public class MonthFragment extends Fragment {
             recyclerView.setAdapter(itemsAdapter);
 
 
-            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
-
-                    {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
-                            RecyclerView r1 = (RecyclerView) viewItem.findViewById(R.id.recyclerviewList);
-                            Log.v("@@@@@@@@@@@@ ", r1 + " ");
-//                            r1.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener()
-//
-//                                    {
-//                                        @Override
-//                                        public void onItemClick(View view, int position) {
-//                                            View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
-//                                            TextView expenseNameTextView = (TextView) viewItem.findViewById(R.id.trans_expense_name);
-//                                            Log.v("@@@@@@@@@@@@ ", expenseNameTextView.getText().toString());
-//                                        }
-//                                    })
-//                            );
-
-
-                        }
-                    })
-            );
-
-
         }
         return view;
     }

@@ -9,12 +9,14 @@ import android.os.PersistableBundle;
  */
 public class ExpenseData implements Parcelable {
 
+    private int id;
     private String expenseName;
     private double expenseAmount;
     private String note;
     private String expenseDate;
 
-    public ExpenseData(String expenseName, double expenseAmount, String expenseDate, String note) {
+    public ExpenseData(int id, String expenseName, double expenseAmount, String expenseDate, String note) {
+        this.id = id;
         this.expenseName = expenseName;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
@@ -24,6 +26,14 @@ public class ExpenseData implements Parcelable {
     public ExpenseData(Parcel in) {
         super();
         readFromParcel(in);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getExpenseName() {
