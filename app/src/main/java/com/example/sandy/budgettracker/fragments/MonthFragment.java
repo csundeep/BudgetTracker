@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.adapters.TransactionsAdapter;
 import com.example.sandy.budgettracker.data.ExpenseData;
 
@@ -30,7 +32,7 @@ public class MonthFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         TransactionsAdapter itemsAdapter;
-        RecyclerView recyclerView;
+        final RecyclerView recyclerView;
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         ArrayList<ExpenseData> expenseDatas = getArguments().getParcelableArrayList("expensedatas");
@@ -71,8 +73,34 @@ public class MonthFragment extends Fragment {
             }
             recyclerView = (RecyclerView) view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            itemsAdapter = new TransactionsAdapter(this.getActivity(), exp,walletBalance,totalExpenseAmount);
+            itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, walletBalance, totalExpenseAmount);
             recyclerView.setAdapter(itemsAdapter);
+
+
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
+
+                    {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
+                            RecyclerView r1 = (RecyclerView) viewItem.findViewById(R.id.recyclerviewList);
+                            Log.v("@@@@@@@@@@@@ ", r1 + " ");
+//                            r1.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener()
+//
+//                                    {
+//                                        @Override
+//                                        public void onItemClick(View view, int position) {
+//                                            View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
+//                                            TextView expenseNameTextView = (TextView) viewItem.findViewById(R.id.trans_expense_name);
+//                                            Log.v("@@@@@@@@@@@@ ", expenseNameTextView.getText().toString());
+//                                        }
+//                                    })
+//                            );
+
+
+                        }
+                    })
+            );
 
 
         }

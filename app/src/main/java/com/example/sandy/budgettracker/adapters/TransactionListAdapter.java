@@ -30,9 +30,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         CustomViewHolderList(View view) {
             super(view);
 
-            this.expenseImage = (ImageView) view.findViewById(R.id.expense_image);
-            this.expenseName = (TextView) view.findViewById(R.id.expense_name);
-            this.expenseAmount = (TextView) view.findViewById(R.id.expense_amount);
+            this.expenseImage = (ImageView) view.findViewById(R.id.trans_expense_image);
+            this.expenseName = (TextView) view.findViewById(R.id.trans_expense_name);
+            this.expenseAmount = (TextView) view.findViewById(R.id.trans_expense_amount);
 
         }
     }

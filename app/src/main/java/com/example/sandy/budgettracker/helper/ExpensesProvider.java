@@ -7,6 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -37,7 +38,7 @@ public class ExpensesProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor;
         int match = sUriMatcher.match(uri);
@@ -67,7 +68,7 @@ public class ExpensesProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case EXPENSES:
@@ -84,14 +85,9 @@ public class ExpensesProvider extends ContentProvider {
             throw new IllegalArgumentException("Expense requires a name");
         }
 
-        Integer gender = values.getAsInteger(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
-        if (gender == null) {
+        Integer amount = values.getAsInteger(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+        if (amount == null) {
             throw new IllegalArgumentException("Expense requires valid amount");
-        }
-
-        Integer weight = values.getAsInteger(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
-        if (weight != null) {
-            throw new IllegalArgumentException("Expense requires created expense date");
         }
 
 
@@ -108,11 +104,68 @@ public class ExpensesProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = helper.getWritableDatabase();
+        int rowsDeleted = 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case EXPENSES:
+                rowsDeleted = database.delete(ExpensesContract.ExpenseEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case EXPENSE_ID:
+                selection = ExpensesContract.ExpenseEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(ExpensesContract.ExpenseEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case EXPENSES:
+                return updateExpense(uri, values, selection, selectionArgs);
+            case EXPENSE_ID:
+                selection = ExpensesContract.ExpenseEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateExpense(uri, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
     }
+
+    private int updateExpense(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        String name = values.getAsString(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Expense requires a name");
+        }
+
+        Integer amount = values.getAsInteger(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+        if (amount == null) {
+            throw new IllegalArgumentException("Expense requires valid amount");
+        }
+
+
+        SQLiteDatabase database = helper.getWritableDatabase();
+        int rowsUpdated = database.update(ExpensesContract.ExpenseEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
+    }
+
+
 }
