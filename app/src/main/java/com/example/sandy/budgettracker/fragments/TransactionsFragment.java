@@ -115,16 +115,18 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         try {
             int expenseId = cursor.getColumnIndex(ExpensesContract.ExpenseEntry._Id);
             int nameColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+            int typeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
             int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
             int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
             int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(expenseId);
                 String name = cursor.getString(nameColumnIndex);
+                String type = cursor.getString(typeColumnIndex);
                 double amount = cursor.getDouble(amountColumnIndex);
                 String note = cursor.getString(noteColumnIndex);
                 String date = cursor.getString(dateColumnIndex);
-                ExpenseData expenseData = new ExpenseData(id, name, amount, date, note);
+                ExpenseData expenseData = new ExpenseData(id, name, type, amount, date, note);
                 dates.add(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date));
                 if (containsDate(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
                     getExistentKey(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);
@@ -194,6 +196,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                         amount = amount - totalExpenseAmount;
                         monthBundle.putDouble("totalExpenseAmount", totalExpenseAmount);
                         monthBundle.putDouble("walletBalance", amount);
+
                         monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
                         break;
                     }
@@ -233,6 +236,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         String[] projection = {
                 ExpensesContract.ExpenseEntry._Id,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};

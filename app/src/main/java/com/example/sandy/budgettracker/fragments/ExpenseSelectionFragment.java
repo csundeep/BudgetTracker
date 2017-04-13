@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
+import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.data.ExpenseItem;
 import com.example.sandy.budgettracker.helper.ExpensesContract;
 import com.example.sandy.budgettracker.helper.Session;
@@ -36,43 +37,48 @@ public class ExpenseSelectionFragment extends Fragment {
         tabs.add("EXPENSES");
         tabs.add("INCOME");
 
-        ExpenseItem selectedExpenceItem = null;
+        ExpenseData selectedExpenceData = null;
         Uri currentExpenseUri = null;
-        if (getArguments().getParcelable("currentExpenseUri") != null)
+        if (getArguments().getParcelable("currentExpenseUri") != null) {
             currentExpenseUri = getArguments().getParcelable("currentExpenseUri");
 
 
-        String[] projection = {
-                ExpensesContract.ExpenseEntry._Id,
-                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
-                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
-                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
-                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
-                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
+            String[] projection = {
+                    ExpensesContract.ExpenseEntry._Id,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
 
-        Cursor expenseCursor = getActivity().getContentResolver().query(currentExpenseUri, projection, null, null, null);
-        double amount = 0;
-        if (expenseCursor != null) {
-            try {
-                int expenseIdIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry._Id);
-                int expenseNameIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
-                int expenseTypeIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
-                int expenseAmountIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
-                int expenseNoteIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
-                int expenseDateIden = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+            Cursor expenseCursor = getActivity().getContentResolver().query(currentExpenseUri, projection, null, null, null);
+            if (expenseCursor != null) {
+                try {
+                    int expenseIdIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry._Id);
+                    int expenseNameIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+                    int expenseTypeIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
+                    int expenseAmountIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+                    int expenseNoteIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
+                    int expenseDateIden = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
 
-                while (expenseCursor.moveToNext()) {
+                    while (expenseCursor.moveToNext()) {
+                        int id = expenseCursor.getInt(expenseIdIndex);
+                        String name = expenseCursor.getString(expenseNameIndex);
+                        String type = expenseCursor.getString(expenseTypeIndex);
+                        double amount = expenseCursor.getDouble(expenseAmountIndex);
+                        String note = expenseCursor.getString(expenseNoteIndex);
+                        String date = expenseCursor.getString(expenseDateIden);
+                        selectedExpenceData = new ExpenseData(id, name, type, amount, date, note);
 
-
+                    }
+                } finally {
+                    expenseCursor.close();
                 }
-            } finally {
-                expenseCursor.close();
             }
         }
 
-
-        if (getArguments().getSerializable("selectedExpenseItem") != null)
-            selectedExpenceItem = (ExpenseItem) getArguments().getSerializable("selectedExpenseItem");
+        if (getArguments().getSerializable("selectedExpenseData") != null)
+            selectedExpenceData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
 
         ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
         b.setImageResource(R.drawable.ic_action_forward);
@@ -80,13 +86,13 @@ public class ExpenseSelectionFragment extends Fragment {
         Fragment f1 = new ExpenseFragment();
         Bundle b1 = new Bundle();
         b1.putString("type", "Expense");
-        b1.putSerializable("selectedExpenseItem", selectedExpenceItem);
+        b1.putSerializable("selectedExpenseData", selectedExpenceData);
         f1.setArguments(b1);
 
         Fragment f2 = new ExpenseFragment();
         Bundle b2 = new Bundle();
         b2.putString("type", "Income");
-        b2.putSerializable("selectedExpenseItem", selectedExpenceItem);
+        b2.putSerializable("selectedExpenseData", selectedExpenceData);
         f2.setArguments(b2);
 
 

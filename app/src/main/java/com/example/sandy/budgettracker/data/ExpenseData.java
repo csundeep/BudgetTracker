@@ -2,22 +2,27 @@ package com.example.sandy.budgettracker.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
 
-/**
- * Created by sandy on 04-03-2017.
- */
-public class ExpenseData implements Parcelable {
+import java.io.Serializable;
+
+
+public class ExpenseData implements Parcelable, Serializable {
 
     private int id;
     private String expenseName;
+    private String expenseType;
     private double expenseAmount;
     private String note;
     private String expenseDate;
 
-    public ExpenseData(int id, String expenseName, double expenseAmount, String expenseDate, String note) {
+    public ExpenseData() {
+
+    }
+
+    public ExpenseData(int id, String expenseName, String expenseType, double expenseAmount, String expenseDate, String note) {
         this.id = id;
         this.expenseName = expenseName;
+        this.expenseType = expenseType;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
         this.note = note;
@@ -42,6 +47,14 @@ public class ExpenseData implements Parcelable {
 
     public void setExpenseName(String expenseName) {
         this.expenseName = expenseName;
+    }
+
+    public String getExpenseType() {
+        return expenseType;
+    }
+
+    public void setExpenseType(String expenseType) {
+        this.expenseType = expenseType;
     }
 
     public double getExpenseAmount() {
@@ -71,7 +84,9 @@ public class ExpenseData implements Parcelable {
     @Override
     public String toString() {
         return "ExpenseData{" +
-                "expenseName='" + expenseName + '\'' +
+                "id=" + id +
+                ", expenseName='" + expenseName + '\'' +
+                ", expenseType='" + expenseType + '\'' +
                 ", expenseAmount=" + expenseAmount +
                 ", note='" + note + '\'' +
                 ", expenseDate='" + expenseDate + '\'' +

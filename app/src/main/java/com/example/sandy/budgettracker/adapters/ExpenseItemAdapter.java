@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.data.ExpenseItem;
 
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ import java.util.ArrayList;
 public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.CustomViewHolderList> {
     private ArrayList<ExpenseItem> expenseItems;
     private Activity context;
-    private ExpenseItem selectExpenseItem;
+    private ExpenseData selectExpenseData;
 
-    public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems, ExpenseItem selectExpenseItem) {
+    public ExpenseItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems, ExpenseData selectExpenseData) {
         this.expenseItems = expenseItems;
         this.context = context;
-        this.selectExpenseItem = selectExpenseItem;
+        this.selectExpenseData = selectExpenseData;
     }
 
     class CustomViewHolderList extends RecyclerView.ViewHolder {
@@ -51,8 +52,8 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
         ExpenseItem expenseItem = expenseItems.get(position);
 
         holder.expenseName.setText(expenseItem.getName());
-        if (selectExpenseItem != null) {
-            if (expenseItems.get(position).getName().equals(selectExpenseItem.getName())) {
+        if (selectExpenseData != null) {
+            if (expenseItems.get(position).getName().equals(selectExpenseData.getExpenseName())) {
                 holder.expenseName.setAlpha(.5f);
                 holder.expenseImage.setAlpha(.5f);
             }
