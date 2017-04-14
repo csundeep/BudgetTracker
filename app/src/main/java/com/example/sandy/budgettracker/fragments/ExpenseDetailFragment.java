@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 deleteButton.setVisibility(View.VISIBLE);
             else
                 deleteButton.setVisibility(View.GONE);
-
             amountTextView.setText(Double.valueOf(selectedExpenseData.getExpenseAmount()).toString());
 
             backButton.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));

@@ -178,8 +178,10 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
             while (beginCalendar.before(finishCalendar) || flag) {
                 String date = new SimpleDateFormat("MMM-yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase();
+
                 if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(finishCalendar.getTime()).toUpperCase()))
                     flag = false;
+
                 tabs.add(new SimpleDateFormat("MMMM yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase());
                 Fragment monthFragment = new MonthFragment();
                 Bundle monthBundle = new Bundle();
@@ -206,6 +208,13 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                 fragments.add(monthFragment);
                 beginCalendar.add(Calendar.MONTH, 1);
             }
+        } else {
+            Bundle monthBundle = new Bundle();
+            tabs.add(new SimpleDateFormat("MMMM yyyy", Locale.US).format(new Date().getTime()).toUpperCase());
+            Fragment monthFragment = new MonthFragment();
+            monthFragment.setArguments(monthBundle);
+            fragments.add(monthFragment);
+
         }
 
 

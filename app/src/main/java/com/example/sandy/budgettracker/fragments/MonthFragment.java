@@ -35,6 +35,8 @@ public class MonthFragment extends Fragment {
         final RecyclerView recyclerView;
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
+
+
         ArrayList<ExpenseData> expenseDatas = getArguments().getParcelableArrayList("expensedatas");
 
         double walletBalance = getArguments().getDouble("walletBalance");

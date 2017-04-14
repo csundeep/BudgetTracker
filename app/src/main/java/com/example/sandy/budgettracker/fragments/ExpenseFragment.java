@@ -202,11 +202,9 @@ public class ExpenseFragment extends Fragment {
         if (selectedExpenseData.getExpenseName() == null) {
             Toast.makeText(getActivity(), "You have to select an expense item", Toast.LENGTH_LONG).show();
         } else if (amount == 0) {
-            {
-                selectedExpenseData.setExpenseAmount(amount);
-                Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
         } else {
+            selectedExpenseData.setExpenseAmount(amount);
             b.setImageResource(R.drawable.ic_action_done);
             Bundle args = new Bundle();
             args.putSerializable("selectedExpenseData", selectedExpenseData);
