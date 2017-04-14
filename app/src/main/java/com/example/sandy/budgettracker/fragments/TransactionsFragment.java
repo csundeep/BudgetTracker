@@ -192,10 +192,16 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 //                            Log.v("    !!!!!!!!!!!", expenseData.toString());
 //                        }
                         double totalExpenseAmount = 0;
+                        double totalIncomeAmount = 0;
                         for (ExpenseData expenseData : entry.getValue()) {
-                            totalExpenseAmount += expenseData.getExpenseAmount();
+                            if (expenseData.getExpenseType().equals("Expense"))
+                                totalExpenseAmount += expenseData.getExpenseAmount();
+                            else
+                                totalIncomeAmount += expenseData.getExpenseAmount();
                         }
                         amount = amount - totalExpenseAmount;
+                        amount = amount + totalIncomeAmount;
+
                         monthBundle.putDouble("totalExpenseAmount", totalExpenseAmount);
                         monthBundle.putDouble("walletBalance", amount);
 

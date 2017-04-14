@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.adapters.TransactionsAdapter;
 import com.example.sandy.budgettracker.data.ExpenseData;
 
@@ -22,6 +19,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 public class MonthFragment extends Fragment {
@@ -46,9 +45,9 @@ public class MonthFragment extends Fragment {
         if (expenseDatas != null && expenseDatas.size() != 0) {
 
             ArrayList<ArrayList<ExpenseData>> exp = new ArrayList<>();
-            exp.add(new ArrayList<ExpenseData>());
 
             Map<Date, ArrayList<ExpenseData>> expenses = new HashMap<>();
+
             try {
                 for (ExpenseData expenseData : expenseDatas) {
 
@@ -65,14 +64,21 @@ public class MonthFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            SortedSet<Date> keys = new TreeSet<>(expenses.keySet());
+            int x = expenses.size();
+            ArrayList<ExpenseData>[] exxx = new ArrayList[expenses.size() + 1];
+            exxx[0] = new ArrayList<>();
+            for (Date key : keys) {
+                ArrayList<ExpenseData> value = expenses.get(key);
+                exxx[x] = value;
+                x--;
 
-            for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
-                ArrayList<ExpenseData> datas = new ArrayList<>();
-                for (ExpenseData expenseData : entry.getValue()) {
-                    datas.add(expenseData);
-                }
-                exp.add(datas);
             }
+            for (int i = 0; i < exxx.length; i++) {
+                exp.add(exxx[i]);
+            }
+
+
             recyclerView = (RecyclerView) view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, walletBalance, totalExpenseAmount);

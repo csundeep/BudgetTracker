@@ -1,6 +1,7 @@
 package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -69,7 +70,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         MonthSummaryCard(View view) {
             super(view);
             this.walletAmountView = (TextView) view.findViewById(R.id.walletAmount);
+            this.walletAmountView.setTextColor(ContextCompat.getColor(activity, R.color.green_500));
             this.totalExpensesPerMonth = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
+            this.walletAmountView.setTextColor(ContextCompat.getColor(activity, R.color.red_500));
         }
 
         void setWalletAmountView(String date) {
@@ -110,8 +113,8 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
         if (getItemViewType(position) == -1) {
             MonthSummaryCard holder1 = (MonthSummaryCard) holder;
-            holder1.setWalletAmountView(Double.valueOf(walletBalance).toString());
-            holder1.setTotalExpensesPerMonth(Double.valueOf(totalExpenseAmount).toString());
+            holder1.setWalletAmountView("$" + Double.valueOf(walletBalance).toString());
+            holder1.setTotalExpensesPerMonth("$" + Double.valueOf(totalExpenseAmount).toString());
         } else {
             CustomViewHolder holder1 = (CustomViewHolder) holder;
             double totalAmount = 0;
