@@ -1,5 +1,6 @@
 package com.example.sandy.budgettracker.fragments;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
@@ -93,8 +94,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         }
 
 
-
-
         if (dateViewGroup != null)
             dateViewGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -115,7 +114,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             });
 
 
-
         if (storeExpenceButton != null)
             storeExpenceButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,9 +125,16 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     TextView calenderTextView = (TextView) view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
 
+                    TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
+                    double amount = Double.valueOf(amountTextView.getText().toString());
+
+                    selectedExpenseData.setExpenseAmount(amount);
                     selectedExpenseData.setNote(notes);
                     selectedExpenseData.setExpenseDate(date);
-                    storeExpense(v, selectedExpenseData);
+                    if (selectedExpenseData.getId() != 0)
+                        updateExpense(v, selectedExpenseData);
+                    else
+                        storeExpense(v, selectedExpenseData);
                 }
             });
 
@@ -157,6 +162,16 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 }
             });
 
+
+        if (deleteButton != null)
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteExpense(v, selectedExpenseData);
+                }
+            });
+
+
         return view;
     }
 
@@ -174,12 +189,53 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         Uri uri = getActivity().getContentResolver().insert(ExpensesContract.ExpenseEntry.CONTENT_URI, values);
 
         if (uri == null) {
-            Toast.makeText(this.getActivity(), "Unable to add expense",
+            Toast.makeText(this.getActivity(), R.string.editor_save_expense_failed,
                     Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this.getActivity(), "Expense added successful",
+            Toast.makeText(this.getActivity(), R.string.editor_save_expense_successful,
                     Toast.LENGTH_SHORT).show();
         }
+        getActivity().finish();
+        Intent homepage = new Intent(this.getActivity(), MainActivity.class);
+        startActivity(homepage);
+    }
+
+    public void updateExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
+        Uri currentExpenseURI = ContentUris.withAppendedId(ExpensesContract.ExpenseEntry.CONTENT_URI, expenseData.getId());
+
+
+        ContentValues values = new ContentValues();
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME, expenseData.getExpenseName());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE, expenseData.getExpenseType());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, expenseData.getNote());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, expenseData.getExpenseDate());
+        int rowsAffected = getActivity().getContentResolver().update(currentExpenseURI, values, null, null);
+
+        if (rowsAffected == 0) {
+            Toast.makeText(this.getActivity(), getString(R.string.editor_update_expense_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this.getContext(), getString(R.string.editor_update_expense_successful),
+                    Toast.LENGTH_SHORT).show();
+        }
+        getActivity().finish();
+        Intent homepage = new Intent(this.getActivity(), MainActivity.class);
+        startActivity(homepage);
+    }
+
+    public void deleteExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
+
+        Uri currentExpenseURI = ContentUris.withAppendedId(ExpensesContract.ExpenseEntry.CONTENT_URI, expenseData.getId());
+
+
+        int rowsDeleted = getActivity().getContentResolver().delete(currentExpenseURI, null, null);
+        if (rowsDeleted == 0) {
+            Toast.makeText(this.getActivity(), getString(R.string.editor_delete_expense_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this.getActivity(), getString(R.string.editor_delete_expense_successful), Toast.LENGTH_SHORT).show();
+        }
+
         getActivity().finish();
         Intent homepage = new Intent(this.getActivity(), MainActivity.class);
         startActivity(homepage);

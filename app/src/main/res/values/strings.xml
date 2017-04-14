@@ -19,6 +19,18 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_budget">BudgetActivity</string>
 
+
+    <string name="editor_save_expense_failed">Error with creating Expense</string>
+    <string name="editor_save_expense_successful">Expense createed</string>
+
+    <string name="editor_update_expense_failed">Error with updating Expense</string>
+    <string name="editor_update_expense_successful">Expense updated</string>
+
+
+    <string name="editor_delete_expense_failed">Error with deleting Expense</string>
+    <string name="editor_delete_expense_successful">Expense deleted</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="add_budget">Add New Budget</string>
     <string name="title_activity_wallet">WalletActivity</string>
