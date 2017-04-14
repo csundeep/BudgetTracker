@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,21 +46,6 @@ public class ExpenseFragment extends Fragment {
 
         if (getArguments().getSerializable("selectedExpenseData") != null) {
             selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
-            if (selectedExpenseData != null && selectedExpenseData.getExpenseName() != null) {
-
-                TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
-                amountTextView.setText(Double.valueOf(selectedExpenseData.getExpenseAmount()).toString());
-
-                appBarImageView = (ImageView) getActivity().findViewById(R.id.appBarExpenseImage);
-                appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));
-                Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
-                toolbar.setBackgroundColor(ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName()));
-                ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-                LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.expenseInfoLayout);
-                linearLayout.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
-                TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
-                tabLayout.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
-            }
         }
 
         if (getArguments().getString("type").equals("Expense")) {

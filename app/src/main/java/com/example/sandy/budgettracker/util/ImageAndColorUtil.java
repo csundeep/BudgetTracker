@@ -1,5 +1,7 @@
 package com.example.sandy.budgettracker.util;
 
+import android.util.Log;
+
 import com.example.sandy.budgettracker.R;
 
 
@@ -92,7 +94,7 @@ public final class ImageAndColorUtil {
             return R.drawable.ic_shopping_cart_w;
         } else if (expenseName.equalsIgnoreCase("Hotel")) {
             return R.drawable.ic_rural_hotel_of_three_stars_w;
-        }  else if (expenseName.equalsIgnoreCase("Health Care")) {
+        } else if (expenseName.equalsIgnoreCase("Health Care")) {
             return R.drawable.ic_first_aid_kit_w;
         } else if (expenseName.equalsIgnoreCase("Other")) {
             return R.drawable.ic_paper_plane_w;
@@ -158,7 +160,7 @@ public final class ImageAndColorUtil {
             return R.color.LightGreen;
         } else if (expenseName.equalsIgnoreCase("Hotel")) {
             return R.color.LightBlue;
-        }  else if (expenseName.equalsIgnoreCase("Health Care")) {
+        } else if (expenseName.equalsIgnoreCase("Health Care")) {
             return R.color.IndianRed;
         } else if (expenseName.equalsIgnoreCase("Other")) {
             return R.color.MediumPurple;

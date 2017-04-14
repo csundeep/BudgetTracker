@@ -8,11 +8,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,35 +37,64 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
     private DatePickerDialog datePickerDialog;
     private TextView dateTextView;
     private View view;
-    private ExpenseData expenseData;
+    private ExpenseData selectedExpenseData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_expense_detail, container, false);
-        TabLayout tabsStrip = (TabLayout) getActivity().findViewById(R.id.tabs1);
 
-        expenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
-        tabsStrip.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(expenseData.getExpenseName())));
-        tabsStrip.setTabTextColors(
-                ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(expenseData.getExpenseName())),
-                ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(expenseData.getExpenseName()))
-        );
+        selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
 
-        this.dateTextView = (TextView) view.findViewById(R.id.date);
-
-        if (expenseData.getExpenseDate() != null && this.dateTextView != null)
-            this.dateTextView.setText(expenseData.getExpenseDate());
-        else
-            this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
-
+        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
+        TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
+        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.expenseInfoLayout);
+        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
         EditText notesEditText = (EditText) view.findViewById(R.id.comments);
-
-        if (expenseData.getNote() != null && notesEditText != null)
-            notesEditText.setText(expenseData.getNote());
-
         ViewGroup dateViewGroup = (ViewGroup) view.findViewById(R.id.calender);
+        ImageButton storeExpenceButton = (ImageButton) getActivity().findViewById(R.id.addExpense);
+        ImageButton backButton = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
+
+        if (selectedExpenseData != null && selectedExpenseData.getExpenseName() != null) {
+            if (selectedExpenseData.getId() != 0)
+                deleteButton.setVisibility(View.VISIBLE);
+            else
+                deleteButton.setVisibility(View.GONE);
+
+            amountTextView.setText(Double.valueOf(selectedExpenseData.getExpenseAmount()).toString());
+
+            backButton.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));
+
+            toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
+            linearLayout.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
+
+
+            tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
+            tabLayout.setTabTextColors(
+                    ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())),
+                    ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName()))
+            );
+
+            tabLayout.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
+
+            this.dateTextView = (TextView) view.findViewById(R.id.date);
+
+            if (selectedExpenseData.getExpenseDate() != null && this.dateTextView != null)
+                this.dateTextView.setText(selectedExpenseData.getExpenseDate());
+            else
+                this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
+
+            if (selectedExpenseData.getNote() != null)
+                notesEditText.setText(selectedExpenseData.getNote());
+        }
+
+
+
+
         if (dateViewGroup != null)
             dateViewGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -75,35 +108,34 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     datePickerDialog = DatePickerDialog.newInstance(ExpenseDetailFragment.this, year, month, day);
                     datePickerDialog.setThemeDark(false);
                     datePickerDialog.showYearPickerFirst(false);
-                    datePickerDialog.setAccentColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(expenseData.getExpenseName())));
+                    datePickerDialog.setAccentColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
                     datePickerDialog.setTitle(dayOfWeek);
                     datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
                 }
             });
 
 
-        ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
-        if (b != null)
-            b.setOnClickListener(new View.OnClickListener() {
+
+        if (storeExpenceButton != null)
+            storeExpenceButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     EditText notesEditText = (EditText) view.findViewById(R.id.comments);
                     String notes = notesEditText.getText().toString();
+
                     TextView calenderTextView = (TextView) view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
 
-                    expenseData.setNote(notes);
-                    expenseData.setExpenseDate(date);
-                    storeExpense(v, expenseData);
+                    selectedExpenseData.setNote(notes);
+                    selectedExpenseData.setExpenseDate(date);
+                    storeExpense(v, selectedExpenseData);
                 }
             });
 
 
-        ImageButton b1 = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
-
-        if (b1 != null)
-            b1.setOnClickListener(new View.OnClickListener() {
+        if (backButton != null)
+            backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle args = new Bundle();
@@ -112,10 +144,10 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     TextView calenderTextView = (TextView) view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
 
-                    expenseData.setNote(notes);
-                    expenseData.setExpenseDate(date);
+                    selectedExpenseData.setNote(notes);
+                    selectedExpenseData.setExpenseDate(date);
 
-                    args.putSerializable("selectedExpenseData", expenseData);
+                    args.putSerializable("selectedExpenseData", selectedExpenseData);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     ExpenseSelectionFragment expenseSelectionFragment = new ExpenseSelectionFragment();
                     expenseSelectionFragment.setArguments(args);
