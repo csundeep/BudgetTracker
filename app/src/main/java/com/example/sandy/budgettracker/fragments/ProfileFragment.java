@@ -23,7 +23,7 @@ import com.example.sandy.budgettracker.helper.Session;
 import com.example.sandy.budgettracker.helper.UserContract;
 
 
-public class WalletFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ProfileFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private View view;
     private Uri currentUserUri;
@@ -31,7 +31,7 @@ public class WalletFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_wallet, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.walletToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -89,8 +89,19 @@ public class WalletFragment extends Fragment implements LoaderManager.LoaderCall
             String mobile = cursor.getString(mobileColumnIndex);
             String walletAmount = cursor.getString(walletAmountIndex);
 
-            TextView profileTV = (TextView) view.findViewById(R.id.profile);
-            profileTV.setText(email+ " \n" + firstName + " \n" + lastName + " \n" + mobile + " \n" + walletAmount);
+            TextView profileFirstName = (TextView) view.findViewById(R.id.profileFirstName);
+            TextView profileLastName = (TextView) view.findViewById(R.id.profilelastName);
+            TextView profileEmail = (TextView) view.findViewById(R.id.profileEmail);
+            TextView profilePhone = (TextView) view.findViewById(R.id.profilePhone);
+            TextView profileWallet = (TextView) view.findViewById(R.id.profileInitalWalletAmount);
+
+
+            profileFirstName.setText(firstName);
+            profileLastName.setText(lastName);
+            profileEmail.setText(email);
+            profilePhone.setText(mobile);
+            profileWallet.setText(walletAmount);
+
 
 
         }

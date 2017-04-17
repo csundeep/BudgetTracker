@@ -22,7 +22,7 @@
     <item
         android:id="@+id/action_wallet"
         android:enabled="true"
-        android:icon="@drawable/ic_action_budget"
-        android:title="@string/text_wallet"
+        android:icon="@drawable/ic_action_profile"
+        android:title="@string/text_profile"
         app:showAsAction="ifRoom" />
 </menu>

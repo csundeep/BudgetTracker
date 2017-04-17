@@ -138,7 +138,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             }
             double amount = totalIncome - totalExpense;
             if (amount < 0)
-                holder1.setTotalExpenseAmount("-$ " + Double.valueOf(amount).toString());
+                holder1.setTotalExpenseAmount("-$ " + Double.valueOf(amount * (-1)).toString());
             else
                 holder1.setTotalExpenseAmount("$ " + Double.valueOf(amount).toString());
         }
