@@ -208,13 +208,13 @@ public class ExpenseFragment extends Fragment {
             b.setImageResource(R.drawable.ic_action_done);
             Bundle args = new Bundle();
             args.putSerializable("selectedExpenseData", selectedExpenseData);
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_left_in,R.anim.push_left_out);
             ExpenseDetailFragment expenseDetailFragment = new ExpenseDetailFragment();
             expenseDetailFragment.setArguments(args);
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.contentExpense, expenseDetailFragment);
             transaction.commit();
             selectedExpenseData = null;
-            getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         }
 
 

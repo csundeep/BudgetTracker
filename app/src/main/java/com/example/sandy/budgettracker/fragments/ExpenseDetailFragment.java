@@ -154,11 +154,11 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
                     args.putSerializable("selectedExpenseData", selectedExpenseData);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right);
                     ExpenseSelectionFragment expenseSelectionFragment = new ExpenseSelectionFragment();
                     expenseSelectionFragment.setArguments(args);
                     transaction.replace(R.id.contentExpense, expenseSelectionFragment);
                     transaction.commit();
-                    getActivity().overridePendingTransition(R.anim.push_left_out, R.anim.push_left_in);
                 }
             });
 

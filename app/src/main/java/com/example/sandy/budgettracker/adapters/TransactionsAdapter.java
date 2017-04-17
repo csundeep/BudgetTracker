@@ -12,7 +12,10 @@ import android.widget.TextView;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.GeneralViewHolder> {
     private ArrayList<ArrayList<ExpenseData>> expenseDatas;
@@ -122,7 +125,10 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             holder1.transListView.setLayoutManager(new LinearLayoutManager(activity));
             TransactionListAdapter itemsAdapter = new TransactionListAdapter(activity, expenseDatas.get(position));
             holder1.transListView.setAdapter(itemsAdapter);
-            holder1.setTotalExpenseDate(expenseDatas.get(position).get(0).getExpenseDate());
+            if (expenseDatas.get(position).get(0).getExpenseDate().equals(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date())))
+                holder1.setTotalExpenseDate("Today");
+            else
+                holder1.setTotalExpenseDate(expenseDatas.get(position).get(0).getExpenseDate());
 
             for (ExpenseData expenseData : expenseDatas.get(position)) {
                 if (expenseData.getExpenseType().equals("Expense"))
