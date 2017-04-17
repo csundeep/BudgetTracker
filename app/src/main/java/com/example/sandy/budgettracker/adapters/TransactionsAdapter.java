@@ -72,7 +72,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             this.walletAmountView = (TextView) view.findViewById(R.id.walletAmount);
             this.walletAmountView.setTextColor(ContextCompat.getColor(activity, R.color.green_500));
             this.totalExpensesPerMonth = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
-            this.walletAmountView.setTextColor(ContextCompat.getColor(activity, R.color.red_500));
+            this.totalExpensesPerMonth.setTextColor(ContextCompat.getColor(activity, R.color.red_500));
         }
 
         void setWalletAmountView(String date) {
@@ -113,20 +113,28 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
         if (getItemViewType(position) == -1) {
             MonthSummaryCard holder1 = (MonthSummaryCard) holder;
-            holder1.setWalletAmountView("$" + Double.valueOf(walletBalance).toString());
-            holder1.setTotalExpensesPerMonth("$" + Double.valueOf(totalExpenseAmount).toString());
+            holder1.setWalletAmountView("$ " + Double.valueOf(walletBalance).toString());
+            holder1.setTotalExpensesPerMonth("$ " + Double.valueOf(totalExpenseAmount).toString());
         } else {
             CustomViewHolder holder1 = (CustomViewHolder) holder;
-            double totalAmount = 0;
+            double totalExpense = 0;
+            double totalIncome = 0;
             holder1.transListView.setLayoutManager(new LinearLayoutManager(activity));
             TransactionListAdapter itemsAdapter = new TransactionListAdapter(activity, expenseDatas.get(position));
             holder1.transListView.setAdapter(itemsAdapter);
             holder1.setTotalExpenseDate(expenseDatas.get(position).get(0).getExpenseDate());
 
             for (ExpenseData expenseData : expenseDatas.get(position)) {
-                totalAmount += expenseData.getExpenseAmount();
+                if (expenseData.getExpenseType().equals("Expense"))
+                    totalExpense += expenseData.getExpenseAmount();
+                else
+                    totalIncome += expenseData.getExpenseAmount();
             }
-            holder1.setTotalExpenseAmount("-$ " + Double.valueOf(totalAmount).toString());
+            double amount = totalIncome - totalExpense;
+            if (amount < 0)
+                holder1.setTotalExpenseAmount("-$ " + Double.valueOf(amount).toString());
+            else
+                holder1.setTotalExpenseAmount("$ " + Double.valueOf(amount).toString());
         }
 
 
