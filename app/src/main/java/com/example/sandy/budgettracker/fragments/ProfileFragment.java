@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.LoginActivity;
-import com.example.sandy.budgettracker.helper.Session;
-import com.example.sandy.budgettracker.helper.UserContract;
+import com.example.sandy.budgettracker.util.Session;
+import com.example.sandy.budgettracker.contracts.UserContract;
 
 
 public class ProfileFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {

@@ -1,32 +1,18 @@
 package com.example.sandy.budgettracker.fragments;
 
-import android.content.ContentUris;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
 import com.example.sandy.budgettracker.data.ExpenseData;
-import com.example.sandy.budgettracker.data.ExpenseItem;
-import com.example.sandy.budgettracker.helper.ExpensesContract;
-import com.example.sandy.budgettracker.helper.Session;
-import com.example.sandy.budgettracker.helper.UserContract;
-import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 import java.util.List;

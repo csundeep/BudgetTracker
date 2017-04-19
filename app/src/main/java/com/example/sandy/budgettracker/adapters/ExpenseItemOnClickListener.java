@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseActivity;
-import com.example.sandy.budgettracker.helper.ExpensesContract;
+import com.example.sandy.budgettracker.contracts.ExpensesContract;
 
 public class ExpenseItemOnClickListener implements View.OnClickListener {
     private Activity activity;

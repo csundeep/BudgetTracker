@@ -2,7 +2,6 @@ package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.BudgetData;
-import com.example.sandy.budgettracker.helper.CustomProgress;
+import com.example.sandy.budgettracker.util.CustomProgress;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

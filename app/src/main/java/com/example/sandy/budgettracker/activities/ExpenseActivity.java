@@ -7,13 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.fragments.ExpenseDetailFragment;
 import com.example.sandy.budgettracker.fragments.ExpenseSelectionFragment;
-import com.example.sandy.budgettracker.helper.ExpensesContract;
+import com.example.sandy.budgettracker.contracts.ExpensesContract;
 
 public class ExpenseActivity extends AppCompatActivity {
 

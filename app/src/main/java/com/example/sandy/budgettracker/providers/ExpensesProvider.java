@@ -1,4 +1,4 @@
-package com.example.sandy.budgettracker.helper;
+package com.example.sandy.budgettracker.providers;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -11,12 +11,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.sandy.budgettracker.contracts.ExpensesContract;
+import com.example.sandy.budgettracker.helper.BudgetTrackerDbHelper;
+
 
 public class ExpensesProvider extends ContentProvider {
 
     public static final String LOG_TAG = ExpensesProvider.class.getSimpleName();
 
-    private ExpensesDbHelper helper;
+    private BudgetTrackerDbHelper helper;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static final int EXPENSES = 100;
@@ -32,7 +35,7 @@ public class ExpensesProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        helper = new ExpensesDbHelper(getContext());
+        helper = new BudgetTrackerDbHelper(getContext());
         return true;
     }
 
@@ -56,13 +59,14 @@ public class ExpensesProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (getContext() != null && getContext().getContentResolver() != null)
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return null;
     }
 
@@ -98,14 +102,15 @@ public class ExpensesProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (getContext() != null && getContext().getContentResolver() != null)
+            getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase database = helper.getWritableDatabase();
-        int rowsDeleted = 0;
+        int rowsDeleted;
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case EXPENSES:
@@ -121,13 +126,14 @@ public class ExpensesProvider extends ContentProvider {
         }
 
         if (rowsDeleted != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            if (getContext() != null && getContext().getContentResolver() != null)
+                getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case EXPENSES:
@@ -161,7 +167,8 @@ public class ExpensesProvider extends ContentProvider {
         SQLiteDatabase database = helper.getWritableDatabase();
         int rowsUpdated = database.update(ExpensesContract.ExpenseEntry.TABLE_NAME, values, selection, selectionArgs);
         if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            if (getContext() != null && getContext().getContentResolver() != null)
+                getContext().getContentResolver().notifyChange(uri, null);
         }
 
         return rowsUpdated;

@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.helper.Session;
-import com.example.sandy.budgettracker.helper.UserContract;
+import com.example.sandy.budgettracker.util.Session;
+import com.example.sandy.budgettracker.contracts.UserContract;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

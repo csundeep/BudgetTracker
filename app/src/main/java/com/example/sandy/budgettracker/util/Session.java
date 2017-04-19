@@ -1,9 +1,8 @@
-package com.example.sandy.budgettracker.helper;
+package com.example.sandy.budgettracker.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class Session {
 

@@ -37,7 +37,7 @@
                 android:textStyle="bold" />
 
 
-            <com.example.sandy.budgettracker.helper.CustomProgress
+            <com.example.sandy.budgettracker.util.CustomProgress
                 android:id="@+id/customProgressShowProgress"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/custom_progress_height"

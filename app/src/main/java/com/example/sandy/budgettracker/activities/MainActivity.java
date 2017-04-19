@@ -14,8 +14,8 @@ import com.example.sandy.budgettracker.fragments.BudgetFragment;
 import com.example.sandy.budgettracker.fragments.OverviewFragment;
 import com.example.sandy.budgettracker.fragments.TransactionsFragment;
 import com.example.sandy.budgettracker.fragments.ProfileFragment;
-import com.example.sandy.budgettracker.helper.BottomNavigationViewHelper;
-import com.example.sandy.budgettracker.helper.Session;
+import com.example.sandy.budgettracker.util.BottomNavigationViewHelper;
+import com.example.sandy.budgettracker.util.Session;
 
 public class MainActivity extends AppCompatActivity {
 

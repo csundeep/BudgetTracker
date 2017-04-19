@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +24,8 @@ import android.widget.Toast;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.MainActivity;
 import com.example.sandy.budgettracker.data.ExpenseData;
-import com.example.sandy.budgettracker.helper.ExpensesContract;
-import com.example.sandy.budgettracker.helper.Session;
+import com.example.sandy.budgettracker.contracts.ExpensesContract;
+import com.example.sandy.budgettracker.util.Session;
 import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 

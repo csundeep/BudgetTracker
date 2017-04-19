@@ -29,18 +29,18 @@
             android:theme="@style/AppTheme.Dark" />
 
         <provider
-            android:name=".helper.ExpensesProvider"
+            android:name=".providers.ExpensesProvider"
             android:authorities="com.example.sandy.budgettracker.expenses"
             android:exported="false" />
         <provider
-            android:name=".helper.UserProvider"
+            android:name=".providers.UserProvider"
             android:authorities="com.example.sandy.budgettracker.users"
             android:exported="false" />
 
         <activity
             android:name=".activities.AddBudgetActivity"
             android:label="@string/title_activity_add_budget"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

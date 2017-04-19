@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -23,11 +22,10 @@ import android.view.ViewGroup;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseActivity;
 import com.example.sandy.budgettracker.adapters.SimpleFragmentPagerAdapter;
+import com.example.sandy.budgettracker.contracts.ExpensesContract;
+import com.example.sandy.budgettracker.contracts.UserContract;
 import com.example.sandy.budgettracker.data.ExpenseData;
-import com.example.sandy.budgettracker.helper.ExpensesContract;
-import com.example.sandy.budgettracker.helper.Session;
-import com.example.sandy.budgettracker.helper.UserContract;
-import com.example.sandy.budgettracker.helper.WalletAmount;
+import com.example.sandy.budgettracker.util.Session;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -157,8 +155,6 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                 userCursor.close();
             }
         }
-        WalletAmount walletAmount = new WalletAmount(getActivity().getBaseContext());
-        walletAmount.setTransWalletAmount(amount);
 
         if (dates.size() != 0) {
             Date minDate = dates.get(0);

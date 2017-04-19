@@ -1,4 +1,4 @@
-package com.example.sandy.budgettracker.helper;
+package com.example.sandy.budgettracker.util;
 
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;

@@ -1,4 +1,4 @@
-package com.example.sandy.budgettracker.helper;
+package com.example.sandy.budgettracker.contracts;
 
 import android.content.ContentResolver;
 import android.net.Uri;

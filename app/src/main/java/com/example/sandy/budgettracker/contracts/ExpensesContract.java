@@ -1,4 +1,4 @@
-package com.example.sandy.budgettracker.helper;
+package com.example.sandy.budgettracker.contracts;
 
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 
 public final class ExpensesContract {
     public static final String CONTENT_AUTHORITY = "com.example.sandy.budgettracker.expenses";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_EXPENSES = "expenses";
 
 
@@ -26,7 +26,7 @@ public final class ExpensesContract {
         public static final String _Id = BaseColumns._ID;
         public static final String COLUMN_EXPENSE_NAME = "name";
         public static final String COLUMN_EXPENSE_TYPE = "type";
-        public static final String COLUMN_EXPENSE_AMOUNT= "amount";
+        public static final String COLUMN_EXPENSE_AMOUNT = "amount";
         public static final String COLUMN_EXPENSE_NOTES = "notes";
         public static final String COLUMN_EXPENSE_USER_ID = "user_id";
         public static final String COLUMN_EXPENSE_CREATED_DATE = "created_date";
