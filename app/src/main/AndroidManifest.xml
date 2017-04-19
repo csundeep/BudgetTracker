@@ -36,6 +36,10 @@
             android:name=".providers.UserProvider"
             android:authorities="com.example.sandy.budgettracker.users"
             android:exported="false" />
+        <provider
+            android:name=".providers.ItemsProvider"
+            android:authorities="com.example.sandy.budgettracker.items"
+            android:exported="false" />
 
         <activity
             android:name=".activities.AddBudgetActivity"
