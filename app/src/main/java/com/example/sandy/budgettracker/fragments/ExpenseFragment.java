@@ -239,13 +239,21 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
                 ItemsContract.ItemsEntry.CONTENT_ITEM_TYPE,
                 ItemsContract.ItemsEntry.COLUMN_ITEM_LOGO,
                 ItemsContract.ItemsEntry.COLUMN_ITEM_COLOR,
-                ItemsContract.ItemsEntry.COLUMN_ITEM_CREATED_DATE,};
+                ItemsContract.ItemsEntry.COLUMN_ITEM_CREATED_DATE};
 
         String selection = ItemsContract.ItemsEntry.CONTENT_ITEM_TYPE + "=?";
 
         String[] selectionArgs = {
                 getArguments().getString("type")
         };
+
+        Loader<Cursor> loader = new CursorLoader(this.getActivity(),
+                ItemsContract.ItemsEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
+        Log.v("********","&&&&&&&& "+loader);
 
         return new CursorLoader(this.getActivity(),
                 ItemsContract.ItemsEntry.CONTENT_URI,
@@ -261,10 +269,10 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         items = new ArrayList<>();
 
         try {
-            int nameColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
-            int typeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
-            int logoColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
-            int colorColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
+            int nameColumnIndex = cursor.getColumnIndex(ItemsContract.ItemsEntry.COLUMN_ITEM_NAME);
+            int typeColumnIndex = cursor.getColumnIndex(ItemsContract.ItemsEntry.COLUMN_ITEM_TYPE);
+            int logoColumnIndex = cursor.getColumnIndex(ItemsContract.ItemsEntry.COLUMN_ITEM_LOGO);
+            int colorColumnIndex = cursor.getColumnIndex(ItemsContract.ItemsEntry.COLUMN_ITEM_COLOR);
             while (cursor.moveToNext()) {
                 String name = cursor.getString(nameColumnIndex);
                 String type = cursor.getString(typeColumnIndex);
