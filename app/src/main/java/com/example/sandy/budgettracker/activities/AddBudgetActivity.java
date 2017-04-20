@@ -17,8 +17,14 @@ public class AddBudgetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_budget);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.add_budget);
+        }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addBudget);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
