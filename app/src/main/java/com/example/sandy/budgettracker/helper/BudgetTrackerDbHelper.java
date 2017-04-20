@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.contracts.BudgetsContract;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
 import com.example.sandy.budgettracker.contracts.ItemsContract;
 import com.example.sandy.budgettracker.contracts.UserContract;
@@ -45,7 +46,7 @@ public class BudgetTrackerDbHelper extends SQLiteOpenHelper {
 
         // Create a String that contains the SQL statement to create the items table
         String SQL_CREATE_ITEMS_TABLE = "CREATE TABLE " + ItemsContract.ItemsEntry.TABLE_NAME + " ("
-                + ItemsContract.ItemsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ItemsContract.ItemsEntry._Id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ItemsContract.ItemsEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
                 + ItemsContract.ItemsEntry.COLUMN_ITEM_TYPE + " TEXT NOT NULL, "
                 + ItemsContract.ItemsEntry.COLUMN_ITEM_LOGO + " INTEGER NOT NULL DEFAULT 0, "
@@ -57,7 +58,7 @@ public class BudgetTrackerDbHelper extends SQLiteOpenHelper {
 
         // Create a String that contains the SQL statement to create the users table
         String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + UserContract.UserEntry.TABLE_NAME + " ("
-                + UserContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + UserContract.UserEntry._Id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + UserContract.UserEntry.COLUMN_USER_EMAIL + " TEXT NOT NULL unique, "
                 + UserContract.UserEntry.COLUMN_USER_PASSWORD + " TEXT NOT NULL, "
                 + UserContract.UserEntry.COLUMN_USER_FIRST_NAME + " TEXT , "
@@ -69,9 +70,24 @@ public class BudgetTrackerDbHelper extends SQLiteOpenHelper {
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_USERS_TABLE);
 
+        // Create a String that contains the SQL statement to create the items table
+        String SQL_CREATE_BUDGETS_TABLE = "CREATE TABLE " + BudgetsContract.BudgetsEntry.TABLE_NAME + " ("
+                + BudgetsContract.BudgetsEntry._Id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME + " TEXT NOT NULL, "
+                + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT + " DOUBLE NOT NULL DEFAULT 0, "
+                + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE + "DATE, "
+                + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE + " DATE, "
+                + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS + " NUMERIC NOT NULL, "
+                + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_CREATED_DATE + " DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,  " +
+                "FOREIGN KEY(" + BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID + ") REFERENCES "
+                + UserContract.UserEntry.TABLE_NAME + "(" + UserContract.UserEntry._ID + "));";
+
+        // Execute the SQL statement
+        db.execSQL(SQL_CREATE_BUDGETS_TABLE);
+
         // Create a String that contains the SQL statement to create the expenses table
         String SQL_CREATE_EXPENSES_TABLE = "CREATE TABLE " + ExpensesContract.ExpenseEntry.TABLE_NAME + " ("
-                + ExpensesContract.ExpenseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ExpensesContract.ExpenseEntry._Id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME + " TEXT NOT NULL, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE + " TEXT NOT NULL, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT + " DOUBLE NOT NULL DEFAULT 0, "

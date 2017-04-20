@@ -33,6 +33,7 @@
                 android:paddingBottom="8dp">
 
                 <ImageView
+                    android:contentDescription="@string/add_budget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -43,7 +44,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/budgetImage"
+                        android:id="@+id/addbudgetName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
@@ -63,6 +64,7 @@
                 android:paddingTop="8dp">
 
                 <ImageView
+                    android:contentDescription="@string/add_budget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -73,7 +75,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/budgetAmount"
+                        android:id="@+id/addbudgetAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:cursorVisible="false"

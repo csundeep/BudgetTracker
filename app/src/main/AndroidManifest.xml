@@ -31,6 +31,7 @@
             android:name=".activities.AddBudgetActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <provider
             android:name=".providers.ExpensesProvider"
             android:authorities="com.example.sandy.budgettracker.expenses"
@@ -42,6 +43,10 @@
         <provider
             android:name=".providers.ItemsProvider"
             android:authorities="com.example.sandy.budgettracker.items"
+            android:exported="false" />
+        <provider
+            android:name=".providers.BudgetsProvider"
+            android:authorities="com.example.sandy.budgettracker.budgets"
             android:exported="false" />
     </application>
 
