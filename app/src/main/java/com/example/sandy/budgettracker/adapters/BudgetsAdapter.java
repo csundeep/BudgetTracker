@@ -58,6 +58,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
     }
 
     public BudgetsAdapter(Activity activity, ArrayList<BudgetData> budgetDatas) {
+        budgetDatas.add(new BudgetData());
         this.budgetDatas = budgetDatas;
         this.activity = activity;
     }

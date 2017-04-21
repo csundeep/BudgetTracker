@@ -1,8 +1,12 @@
 package com.example.sandy.budgettracker.fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,43 +17,30 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.AddBudgetActivity;
 import com.example.sandy.budgettracker.adapters.BudgetsAdapter;
 import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
+import com.example.sandy.budgettracker.contracts.BudgetsContract;
 import com.example.sandy.budgettracker.data.BudgetData;
+import com.example.sandy.budgettracker.util.Session;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
-public class BudgetFragment extends Fragment {
-
+public class BudgetFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private ArrayList<BudgetData> budgetDatas = null;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view;
-        final RecyclerView recyclerView;
-        BudgetsAdapter itemsAdapter;
+        View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
-        final ArrayList<BudgetData> budgetDatas = new ArrayList<>();
-        view = inflater.inflate(R.layout.fragment_budget, container, false);
+
+
         recyclerView = (RecyclerView) view.findViewById(R.id.budgets);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        budgetDatas.add(new BudgetData("sandy 0", 1000, new Date(), new Date()));
-        budgetDatas.add(new BudgetData("sandy 1", 1000, new Date(), new Date()));
-
-        //TODO : Query the database for budgets list
-        budgetDatas.add(new BudgetData());
-
-        itemsAdapter = new BudgetsAdapter(this.getActivity(), budgetDatas);
-        recyclerView.setAdapter(itemsAdapter);
-
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-
-//                        View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
                         if (position == budgetDatas.size() - 1) {
                             openExpenseActivity();
                         }
@@ -57,7 +48,7 @@ public class BudgetFragment extends Fragment {
                     }
                 })
         );
-
+        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
@@ -67,4 +58,63 @@ public class BudgetFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                BudgetsContract.BudgetsEntry._Id,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS};
+
+        String selection = BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID + "=?";
+
+        String[] selectionArgs = {
+                String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
+        };
+
+        return new CursorLoader(this.getActivity(),
+                BudgetsContract.BudgetsEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        budgetDatas = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        try {
+            int budgetId = cursor.getColumnIndex(BudgetsContract.BudgetsEntry._Id);
+            int nameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
+            int amountColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
+            int startDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE);
+            int endDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE);
+            int notificationColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS);
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(budgetId);
+                String name = cursor.getString(nameColumnIndex);
+                double amount = cursor.getDouble(amountColumnIndex);
+                String startDate = cursor.getString(startDateColumnIndex);
+                String endDate = cursor.getString(endDateColumnIndex);
+                int isNotify = cursor.getInt(notificationColumnIndex);
+                budgetDatas.add(new BudgetData(id, name, amount, startDate, endDate, isNotify));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+
+        BudgetsAdapter itemsAdapter = new BudgetsAdapter(this.getActivity(), budgetDatas);
+        recyclerView.setAdapter(itemsAdapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }

@@ -33,10 +33,10 @@
                 android:paddingBottom="8dp">
 
                 <ImageView
-                    android:contentDescription="@string/add_budget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
+                    android:contentDescription="@string/add_budget"
                     android:src="@drawable/ic_money_bag" />
 
                 <android.support.design.widget.TextInputLayout
@@ -64,10 +64,10 @@
                 android:paddingTop="8dp">
 
                 <ImageView
-                    android:contentDescription="@string/add_budget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
+                    android:contentDescription="@string/add_budget"
                     android:src="@drawable/ic_money_bag" />
 
                 <android.support.design.widget.TextInputLayout

@@ -4,22 +4,32 @@ import java.util.Date;
 
 
 public class BudgetData {
-
+    private int id;
     private String budgetName;
     private double budgetAmount;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
+    private int notify;
 
     public BudgetData() {
 
     }
 
-    public BudgetData(String budgetName, double budgetAmount, Date startDate, Date endDate) {
-        super();
+    public BudgetData(int id, String budgetName, double budgetAmount, String startDate, String endDate, int notify) {
+        this.id = id;
         this.budgetName = budgetName;
         this.budgetAmount = budgetAmount;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.notify = notify;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getBudgetName() {
@@ -38,19 +48,27 @@ public class BudgetData {
         this.budgetAmount = budgetAmount;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public int getNotify() {
+        return notify;
+    }
+
+    public void setNotify(int notify) {
+        this.notify = notify;
     }
 }

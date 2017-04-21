@@ -11,26 +11,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.sandy.budgettracker.contracts.BudgetsContract;
+import com.example.sandy.budgettracker.contracts.BudgetItemContract;
 import com.example.sandy.budgettracker.helper.BudgetTrackerDbHelper;
 
 
-public class BudgetsProvider extends ContentProvider {
+public class BudgetItemProvider extends ContentProvider {
 
-    public static final String LOG_TAG = BudgetsProvider.class.getSimpleName();
+    public static final String LOG_TAG = BudgetItemProvider.class.getSimpleName();
 
     private BudgetTrackerDbHelper helper;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static final int BUDGETS = 100;
-    private static final int BUDGETS_ID = 101;
+    private static final int BUDGET_ITEM = 100;
+    private static final int BUDGET_ITEM_ID = 101;
 
     // Static initializer. This is run the first time anything is called from this class.
     static {
 
-        sUriMatcher.addURI(BudgetsContract.CONTENT_AUTHORITY, BudgetsContract.PATH_BUDGETS, BUDGETS);
+        sUriMatcher.addURI(BudgetItemContract.CONTENT_AUTHORITY, BudgetItemContract.PATH_BUDGET_ITEMS, BUDGET_ITEM);
 
-        sUriMatcher.addURI(BudgetsContract.CONTENT_AUTHORITY, BudgetsContract.PATH_BUDGETS + "/#", BUDGETS_ID);
+        sUriMatcher.addURI(BudgetItemContract.CONTENT_AUTHORITY, BudgetItemContract.PATH_BUDGET_ITEMS + "/#", BUDGET_ITEM_ID);
     }
 
     @Override
@@ -46,14 +46,14 @@ public class BudgetsProvider extends ContentProvider {
         Cursor cursor;
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case BUDGETS:
-                cursor = database.query(BudgetsContract.BudgetsEntry.TABLE_NAME, projection, selection, selectionArgs,
+            case BUDGET_ITEM:
+                cursor = database.query(BudgetItemContract.BudgetItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
-            case BUDGETS_ID:
-                selection = BudgetsContract.BudgetsEntry._ID + "=?";
+            case BUDGET_ITEM_ID:
+                selection = BudgetItemContract.BudgetItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                cursor = database.query(BudgetsContract.BudgetsEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(BudgetItemContract.BudgetItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -75,29 +75,19 @@ public class BudgetsProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case BUDGETS:
-                return insertBudget(uri, values);
+            case BUDGET_ITEM:
+                return insertBudgetItem(uri, values);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
 
-    private Uri insertBudget(Uri uri, ContentValues values) {
+    private Uri insertBudgetItem(Uri uri, ContentValues values) {
         // Check that the name is not null
-        String name = values.getAsString(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
-        if (name == null || name.equals("")) {
-            throw new IllegalArgumentException("Budget requires a name");
-        }
-
-        double amount = values.getAsDouble(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
-        if (amount == 0) {
-            throw new IllegalArgumentException("Budget requires valid amount");
-        }
-
 
         SQLiteDatabase database = helper.getWritableDatabase();
 
-        long id = database.insert(BudgetsContract.BudgetsEntry.TABLE_NAME, null, values);
+        long id = database.insert(BudgetItemContract.BudgetItemEntry.TABLE_NAME, null, values);
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
@@ -113,13 +103,13 @@ public class BudgetsProvider extends ContentProvider {
         int rowsDeleted;
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case BUDGETS:
-                rowsDeleted = database.delete(BudgetsContract.BudgetsEntry.TABLE_NAME, selection, selectionArgs);
+            case BUDGET_ITEM:
+                rowsDeleted = database.delete(BudgetItemContract.BudgetItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case BUDGETS_ID:
-                selection = BudgetsContract.BudgetsEntry._ID + "=?";
+            case BUDGET_ITEM_ID:
+                selection = BudgetItemContract.BudgetItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                rowsDeleted = database.delete(BudgetsContract.BudgetsEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(BudgetItemContract.BudgetItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -136,36 +126,26 @@ public class BudgetsProvider extends ContentProvider {
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case BUDGETS:
-                return updateBudget(uri, values, selection, selectionArgs);
-            case BUDGETS_ID:
-                selection = BudgetsContract.BudgetsEntry._ID + "=?";
+            case BUDGET_ITEM:
+                return updateBudgetItem(uri, values, selection, selectionArgs);
+            case BUDGET_ITEM_ID:
+                selection = BudgetItemContract.BudgetItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return updateBudget(uri, values, selection, selectionArgs);
+                return updateBudgetItem(uri, values, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
-    private int updateBudget(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateBudgetItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         if (values.size() == 0) {
             return 0;
         }
 
-        String name = values.getAsString(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
-        if (name == null) {
-            throw new IllegalArgumentException("Budget requires a name");
-        }
-
-        double amount = values.getAsDouble(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
-        if (amount == 0) {
-            throw new IllegalArgumentException("Budget requires valid amount");
-        }
-
 
         SQLiteDatabase database = helper.getWritableDatabase();
-        int rowsUpdated = database.update(BudgetsContract.BudgetsEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowsUpdated = database.update(BudgetItemContract.BudgetItemEntry.TABLE_NAME, values, selection, selectionArgs);
         if (rowsUpdated != 0) {
             if (getContext() != null && getContext().getContentResolver() != null)
                 getContext().getContentResolver().notifyChange(uri, null);

@@ -1,6 +1,7 @@
 package com.example.sandy.budgettracker.activities;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,13 +10,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.contracts.BudgetItemContract;
 import com.example.sandy.budgettracker.contracts.BudgetsContract;
+import com.example.sandy.budgettracker.contracts.ItemsContract;
 import com.example.sandy.budgettracker.util.Session;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -29,7 +33,9 @@ import java.util.Locale;
 public class AddBudgetActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TextView dateTextView;
     private DatePickerDialog datePickerDialog;
-    private String period = null;
+    private String period = "Month";
+    private double amount;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,22 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
 
         ViewGroup dateViewGroup = (ViewGroup) findViewById(R.id.selectDate);
+
+
+        TextView budgetExpensesTextView = (TextView) findViewById(R.id.budgetExpenses);
+        EditText budgetNameEditText = (EditText) findViewById(R.id.addbudgetName);
+        EditText budgetAmountEditText = (EditText) findViewById(R.id.addbudgetAmount);
+        SwitchCompat notificationsSwitch = (SwitchCompat) findViewById(R.id.notificationsSwitch);
+
+
+        name = budgetNameEditText.getText().toString();
+        if (!budgetAmountEditText.getText().toString().equals(""))
+            amount = Double.parseDouble(budgetAmountEditText.getText().toString());
+        name = "sandy";
+        amount = 560;
+        final String expenses = budgetExpensesTextView.getText().toString();
+        final String date = this.dateTextView.getText().toString();
+        final boolean isNotificationRequired = notificationsSwitch.isChecked();
 
         if (dateViewGroup != null)
             dateViewGroup.setOnClickListener(new View.OnClickListener() {
@@ -65,19 +87,6 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
                     datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
                 }
             });
-
-
-        TextView budgetExpensesTextView = (TextView) findViewById(R.id.budgetExpenses);
-        EditText budgetNameEditText = (EditText) findViewById(R.id.addbudgetName);
-        EditText budgetAmountEditText = (EditText) findViewById(R.id.addbudgetAmount);
-        SwitchCompat notificationsSwitch = (SwitchCompat) findViewById(R.id.notificationsSwitch);
-
-
-        final String name = budgetNameEditText.getText().toString();
-        final Double amount = Double.parseDouble(budgetAmountEditText.getText().toString());
-        final String expenses = budgetExpensesTextView.getText().toString();
-        final String date = this.dateTextView.getText().toString();
-        final boolean isNotificationRequired = notificationsSwitch.isChecked();
 
 
         MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.spinnerPeriod);
@@ -110,7 +119,7 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        Log.v("@@@@@@@@@@@@@@@ ", name + " " + amount + " " + expenses + " " + period + " " + startDate + " " + isNotificationRequired);
         switch (period) {
             case "Month": {
                 beginCalendar.add(Calendar.MONTH, 1);
@@ -133,20 +142,48 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
 
         ContentValues values = new ContentValues();
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, name);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, amount);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, startDate);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, endDate);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, isNotificationRequired);
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT, amount);
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE, startDate);
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE, endDate);
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS, isNotificationRequired);
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID, new Session(getBaseContext()).getuserId());
         Uri uri = getContentResolver().insert(BudgetsContract.BudgetsEntry.CONTENT_URI, values);
+        int budgetId = 0;
+        if (uri != null)
+            budgetId = Integer.parseInt(uri.getLastPathSegment());
 
-        int budgetId = Integer.parseInt(uri.getLastPathSegment());
+
+        Cursor itemsCursor;
+        String[] projection = {
+                ItemsContract.ItemsEntry._Id};
         if (budgetId != 0) {
             if (expenses.equals("All Expenses")) {
-
+                itemsCursor = getContentResolver().query(ItemsContract.ItemsEntry.CONTENT_URI, projection, null, null, null);
             } else {
-                
+                itemsCursor = getContentResolver().query(ItemsContract.ItemsEntry.CONTENT_URI, projection, null, null, null);
             }
+
+
+            if (itemsCursor != null) {
+                try {
+                    int itemIdIndex = itemsCursor.getColumnIndex(ItemsContract.ItemsEntry._Id);
+                    while (itemsCursor.moveToNext()) {
+                        int itemId = itemsCursor.getInt(itemIdIndex);
+                        ContentValues BudgetItemValues = new ContentValues();
+                        values.put(BudgetItemContract.BudgetItemEntry.COLUMN_BUDGET_ITEMS_BUDGET_ID, budgetId);
+                        values.put(BudgetItemContract.BudgetItemEntry.COLUMN_BUDGET_ITEMS_ITEM_ID, itemId);
+                        values.put(BudgetItemContract.BudgetItemEntry.COLUMN_BUDGET_ITEMS_USER_ID, new Session(getBaseContext()).getuserId());
+                        Uri budgetItemUri = getContentResolver().insert(BudgetItemContract.BudgetItemEntry.CONTENT_URI, BudgetItemValues);
+                        if (budgetItemUri == null)
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    itemsCursor.close();
+                }
+            }
+
         }
 
 
