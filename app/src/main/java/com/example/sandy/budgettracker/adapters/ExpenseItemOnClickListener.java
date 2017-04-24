@@ -11,10 +11,10 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseActivity;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
 
-public class ExpenseItemOnClickListener implements View.OnClickListener {
+class ExpenseItemOnClickListener implements View.OnClickListener {
     private Activity activity;
 
-    public ExpenseItemOnClickListener(Activity activity) {
+    ExpenseItemOnClickListener(Activity activity) {
         this.activity = activity;
     }
 

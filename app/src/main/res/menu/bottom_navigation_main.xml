@@ -5,24 +5,24 @@
         android:id="@+id/action_transactions"
         android:enabled="true"
         android:icon="@drawable/ic_action_transactions"
-        android:title="@string/text_transactions"
+        android:title="@string/transactions"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_overview"
         android:enabled="true"
         android:icon="@drawable/ic_action_overview"
-        android:title="@string/text_overview"
+        android:title="@string/overview"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_budget"
         android:enabled="true"
         android:icon="@drawable/ic_action_budget"
-        android:title="@string/text_budget"
+        android:title="@string/budgets"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_wallet"
+        android:id="@+id/action_profile"
         android:enabled="true"
         android:icon="@drawable/ic_action_profile"
-        android:title="@string/text_profile"
+        android:title="@string/profile"
         app:showAsAction="ifRoom" />
 </menu>

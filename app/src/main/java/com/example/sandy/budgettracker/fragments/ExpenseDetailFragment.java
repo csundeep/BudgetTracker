@@ -1,5 +1,6 @@
 package com.example.sandy.budgettracker.fragments;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -23,10 +24,12 @@ import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.MainActivity;
-import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
-import com.example.sandy.budgettracker.util.Session;
+import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.util.ImageAndColorUtil;
+import com.example.sandy.budgettracker.util.Session;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
@@ -34,17 +37,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     private DatePickerDialog datePickerDialog;
     private TextView dateTextView;
+    private TextView locationTextView;
     private View view;
     private ExpenseData selectedExpenseData;
+    private int PLCA_PICKER_REQUEST = 1;
+    Activity activity = null;
+    private double latitude;
+    private double longitude;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_expense_detail, container, false);
+        activity = this.getActivity();
 
         selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
 
@@ -82,6 +93,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             tabLayout.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
 
             this.dateTextView = (TextView) view.findViewById(R.id.date);
+            locationTextView = (TextView) view.findViewById(R.id.location);
 
             if (selectedExpenseData.getExpenseDate() != null && this.dateTextView != null)
                 this.dateTextView.setText(selectedExpenseData.getExpenseDate());
@@ -112,6 +124,22 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 }
             });
 
+        if (locationTextView != null)
+            locationTextView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+                    try {
+                        Intent intent = intentBuilder.build(activity);
+                        startActivityForResult(intent, PLCA_PICKER_REQUEST);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
 
         if (storeExpenceButton != null)
             storeExpenceButton.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +158,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     selectedExpenseData.setExpenseAmount(amount);
                     selectedExpenseData.setNote(notes);
                     selectedExpenseData.setExpenseDate(date);
+
                     if (selectedExpenseData.getId() != 0)
                         updateExpense(v, selectedExpenseData);
                     else
@@ -153,7 +182,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
                     args.putSerializable("selectedExpenseData", selectedExpenseData);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right);
+                    transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
                     ExpenseSelectionFragment expenseSelectionFragment = new ExpenseSelectionFragment();
                     expenseSelectionFragment.setArguments(args);
                     transaction.replace(R.id.contentExpense, expenseSelectionFragment);
@@ -174,6 +203,21 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLCA_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this.getActivity());
+                String address = place.getAddress().toString();
+                locationTextView.setText(address);
+                latitude = place.getLatLng().latitude;
+                longitude = place.getLatLng().longitude;
+                selectedExpenseData.setLatitude(latitude);
+                selectedExpenseData.setLatitude(longitude);
+            }
+        }
+    }
+
     public void storeExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
 
 
@@ -182,6 +226,8 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE, expenseData.getExpenseType());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, expenseData.getNote());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE, expenseData.getLatitude());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE, expenseData.getLongitude());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, expenseData.getExpenseDate());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID, new Session(getActivity().getBaseContext()).getuserId());
 

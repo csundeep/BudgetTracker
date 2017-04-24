@@ -53,7 +53,9 @@ public class ExpenseActivity extends AppCompatActivity {
                     int expenseTypeIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
                     int expenseAmountIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
                     int expenseNoteIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
-                    int expenseDateIden = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+                    int expenseDateIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+                    int latitudeIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE);
+                    int longitudeIndex = expenseCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE);
 
                     while (expenseCursor.moveToNext()) {
                         int id = expenseCursor.getInt(expenseIdIndex);
@@ -61,8 +63,10 @@ public class ExpenseActivity extends AppCompatActivity {
                         String type = expenseCursor.getString(expenseTypeIndex);
                         double amount = expenseCursor.getDouble(expenseAmountIndex);
                         String note = expenseCursor.getString(expenseNoteIndex);
-                        String date = expenseCursor.getString(expenseDateIden);
-                        selectedExpenceData = new ExpenseData(id, name, type, amount, date, note);
+                        String date = expenseCursor.getString(expenseDateIndex);
+                        double latitude = expenseCursor.getDouble(expenseAmountIndex);
+                        double longitude = expenseCursor.getDouble(expenseAmountIndex);
+                        selectedExpenceData = new ExpenseData(id, name, type, amount, date, note, latitude, longitude);
 
                     }
                 } catch (Exception e) {

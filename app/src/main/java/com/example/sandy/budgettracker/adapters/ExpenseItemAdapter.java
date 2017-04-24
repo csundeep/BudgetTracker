@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.data.ExpenseItem;
+import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 
@@ -26,10 +27,10 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
     }
 
     class CustomViewHolderList extends RecyclerView.ViewHolder {
-        protected ImageView expenseImage;
-        protected TextView expenseName;
+        private ImageView expenseImage;
+        private TextView expenseName;
 
-        public CustomViewHolderList(View view) {
+        CustomViewHolderList(View view) {
             super(view);
 
             this.expenseImage = (ImageView) view.findViewById(R.id.expense_image);
@@ -41,7 +42,7 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
     @Override
     public ExpenseItemAdapter.CustomViewHolderList onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.expense_list, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.expense_list, null);
         return new ExpenseItemAdapter.CustomViewHolderList(view);
     }
 
@@ -61,7 +62,7 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
 
 
         if (expenseItem.hasImage()) {
-            holder.expenseImage.setImageResource(expenseItem.getImageContentId());
+            holder.expenseImage.setImageResource(ImageAndColorUtil.getImageContentId(expenseItem.getName()));
             holder.expenseImage.setVisibility(View.VISIBLE);
         } else {
             holder.expenseImage.setImageResource(R.mipmap.ic_launcher);

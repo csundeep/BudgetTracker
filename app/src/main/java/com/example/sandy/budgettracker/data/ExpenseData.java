@@ -14,18 +14,22 @@ public class ExpenseData implements Parcelable, Serializable {
     private double expenseAmount;
     private String note;
     private String expenseDate;
+    private double latitude;
+    private double longitude;
 
     public ExpenseData() {
 
     }
 
-    public ExpenseData(int id, String expenseName, String expenseType, double expenseAmount, String expenseDate, String note) {
+    public ExpenseData(int id, String expenseName, String expenseType, double expenseAmount, String expenseDate, String note, double latitude, double longitude) {
         this.id = id;
         this.expenseName = expenseName;
         this.expenseType = expenseType;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
         this.note = note;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public ExpenseData(Parcel in) {
@@ -81,16 +85,20 @@ public class ExpenseData implements Parcelable, Serializable {
         this.expenseDate = expenseDate;
     }
 
-    @Override
-    public String toString() {
-        return "ExpenseData{" +
-                "id=" + id +
-                ", expenseName='" + expenseName + '\'' +
-                ", expenseType='" + expenseType + '\'' +
-                ", expenseAmount=" + expenseAmount +
-                ", note='" + note + '\'' +
-                ", expenseDate='" + expenseDate + '\'' +
-                '}';
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public static final Parcelable.Creator<ExpenseData> CREATOR = new Parcelable.Creator<ExpenseData>() {
@@ -105,12 +113,29 @@ public class ExpenseData implements Parcelable, Serializable {
 
     };
 
-    public void readFromParcel(Parcel in) {
+    @Override
+    public String toString() {
+        return "ExpenseData{" +
+                "id=" + id +
+                ", expenseName='" + expenseName + '\'' +
+                ", expenseType='" + expenseType + '\'' +
+                ", expenseAmount=" + expenseAmount +
+                ", note='" + note + '\'' +
+                ", expenseDate='" + expenseDate + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 
+    public void readFromParcel(Parcel in) {
+        id = in.readInt();
         expenseName = in.readString();
+        expenseType = in.readString();
         expenseAmount = in.readDouble();
         note = in.readString();
         expenseDate = in.readString();
+        latitude = in.readDouble();
+        latitude = in.readDouble();
 
     }
 
@@ -121,9 +146,13 @@ public class ExpenseData implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(expenseName);
+        parcel.writeString(expenseType);
         parcel.writeDouble(expenseAmount);
         parcel.writeString(note);
         parcel.writeString(expenseDate);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
     }
 }

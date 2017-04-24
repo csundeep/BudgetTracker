@@ -75,11 +75,10 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
         if (viewType == -1) {
             view = LayoutInflater.from(activity)
                     .inflate(R.layout.add_budget_card, viewGroup, false);
-
-            holder = new AddBudgetViewHolder(view); //Of type GeneralViewHolder
+            holder = new AddBudgetViewHolder(view);
         } else {
             view = LayoutInflater.from(activity)
-                    .inflate(R.layout.budgets_list, viewGroup, false);
+                    .inflate(R.layout.budgets_list, null);
             holder = new CustomViewHolder(view);
         }
         return holder;
@@ -90,7 +89,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
         if (getItemViewType(position) >= 0) {
             CustomViewHolder holder1 = (CustomViewHolder) holder;
             holder1.budgetNameTextView.setText(budgetDatas.get(position).getBudgetName());
-            holder1.totalBudgetExpenseTextView.setText("$" + budgetDatas.get(position).getTotalExpenses() + " out of $" + budgetDatas.get(position).getBudgetAmount());
+            holder1.totalBudgetExpenseTextView.setText("Spent $" + budgetDatas.get(position).getTotalExpenses() + " out of $" + budgetDatas.get(position).getBudgetAmount());
             float per = (float) budgetDatas.get(position).getTotalExpenses() / (float) budgetDatas.get(position).getBudgetAmount();
             holder1.customProgressShowProgress.setMaximumPercentage(per);
             // customProgressShowProgress.useRoundedRectangleShape(30.0f);

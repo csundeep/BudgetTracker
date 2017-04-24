@@ -38,7 +38,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     }
 
 
-    class CustomViewHolder extends GeneralViewHolder {
+    private class CustomViewHolder extends GeneralViewHolder {
         private RecyclerView transListView;
         private TextView totalExpenseDateView;
         private TextView totalExpenseAmountView;
@@ -65,7 +65,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     }
 
 
-    class MonthSummaryCard extends GeneralViewHolder {
+    private class MonthSummaryCard extends GeneralViewHolder {
 
         private TextView walletAmountView;
         private TextView totalExpensesPerMonth;

@@ -7,9 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,11 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.budgetToolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.budgets);
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.budgets);
@@ -65,6 +71,7 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                 BudgetsContract.BudgetsEntry._Id,
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME,
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES,
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE,
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE,
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS};
@@ -97,7 +104,6 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
             int endDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE);
             int notificationColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS);
             while (cursor.moveToNext()) {
-                Log.v("@@@@@@@@@@", " " + cursor.getCount() + " " + cursor.getColumnCount());
                 int id = cursor.getInt(budgetId);
                 String name = cursor.getString(nameColumnIndex);
                 double amount = cursor.getDouble(amountColumnIndex);
@@ -107,7 +113,6 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                 int isNotify = cursor.getInt(notificationColumnIndex);
                 BudgetData budgetData = new BudgetData(id, name, amount, expenses, startDate, endDate, isNotify);
                 double totalExpense = calcualteTotalExpenses(expenses);
-                Log.v("@@@@@@@@", totalExpense + " ");
                 budgetData.setTotalExpenses(totalExpense);
                 budgetDatas.add(budgetData);
 

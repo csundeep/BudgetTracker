@@ -115,6 +115,8 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
             int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
             int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
             int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+            int latitudeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+            int longitudeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(expenseId);
                 String name = cursor.getString(nameColumnIndex);
@@ -122,7 +124,9 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                 double amount = cursor.getDouble(amountColumnIndex);
                 String note = cursor.getString(noteColumnIndex);
                 String date = cursor.getString(dateColumnIndex);
-                ExpenseData expenseData = new ExpenseData(id, name, type, amount, date, note);
+                double latitude = cursor.getDouble(latitudeColumnIndex);
+                double longitude = cursor.getDouble(longitudeColumnIndex);
+                ExpenseData expenseData = new ExpenseData(id, name, type, amount, date, note, latitude, longitude);
                 dates.add(new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date));
                 if (containsDate(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date))) {
                     getExistentKey(expenses, new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date)).add(expenseData);

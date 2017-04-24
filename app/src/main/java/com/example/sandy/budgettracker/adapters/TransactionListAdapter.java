@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
 
-public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.CustomViewHolderList> {
+class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.CustomViewHolderList> {
     private ArrayList<ExpenseData> expenseDatas;
     private Activity activity;
 
@@ -47,7 +48,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     @Override
     public TransactionListAdapter.CustomViewHolderList onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.trans_list, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.trans_list, viewGroup, false);
         return new TransactionListAdapter.CustomViewHolderList(view);
     }
 
@@ -66,14 +67,14 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         } else if (background instanceof ColorDrawable) {
             ((ColorDrawable) background).setColor(ContextCompat.getColor(activity, ImageAndColorUtil.getColorContentId(expenseDatas.get(position).getExpenseName())));
         }
-
+        Log.v("@@@@@@@@!!!!!!! ", expenseDatas.get(position).getLatitude() + " " + expenseDatas.get(position).getLongitude());
         holder.expenseName.setText(expenseDatas.get(position).getExpenseName());
         holder.expenseName.setTag(expenseDatas.get(position).getId());
         if (expenseDatas.get(position).getExpenseType().equals("Expense")) {
-            holder.expenseAmount.setText("- $ " + new Double(expenseDatas.get(position).getExpenseAmount()).toString());
+            holder.expenseAmount.setText("- $ " + Double.valueOf(expenseDatas.get(position).getExpenseAmount()).toString());
             holder.expenseAmount.setTextColor(ContextCompat.getColor(activity, R.color.red_500));
         } else {
-            holder.expenseAmount.setText("$ " + new Double(expenseDatas.get(position).getExpenseAmount()).toString());
+            holder.expenseAmount.setText("$ " + Double.valueOf(expenseDatas.get(position).getExpenseAmount()).toString());
             holder.expenseAmount.setTextColor(ContextCompat.getColor(activity, R.color.green_500));
         }
     }

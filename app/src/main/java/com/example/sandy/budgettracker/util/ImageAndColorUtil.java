@@ -1,7 +1,5 @@
 package com.example.sandy.budgettracker.util;
 
-import android.util.Log;
-
 import com.example.sandy.budgettracker.R;
 
 

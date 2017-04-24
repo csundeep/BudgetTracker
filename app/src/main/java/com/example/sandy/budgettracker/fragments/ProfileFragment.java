@@ -36,7 +36,7 @@ public class ProfileFragment extends Fragment implements LoaderManager.LoaderCal
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.walletToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.wallet);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.profile);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabWallet);
 

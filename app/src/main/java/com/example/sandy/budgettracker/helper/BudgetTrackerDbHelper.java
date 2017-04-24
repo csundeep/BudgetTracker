@@ -94,6 +94,8 @@ public class BudgetTrackerDbHelper extends SQLiteOpenHelper {
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE + " TEXT NOT NULL, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT + " DOUBLE NOT NULL DEFAULT 0, "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES + " TEXT , "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE + " DOUBLE , "
+                + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE + " DOUBLE , "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + " INTEGER NOT NULL , "
                 + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE + " DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,  " +
                 "FOREIGN KEY(" + ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + ") REFERENCES "

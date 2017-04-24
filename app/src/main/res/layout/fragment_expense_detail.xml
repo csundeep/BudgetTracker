@@ -55,6 +55,29 @@
                 android:layout_marginLeft="16dp"
                 android:textSize="18dp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/selectLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_location" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/text_location"
+                android:textSize="18dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
