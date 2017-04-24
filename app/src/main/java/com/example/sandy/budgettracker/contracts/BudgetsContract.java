@@ -22,10 +22,10 @@ public final class BudgetsContract {
 
 
         public static final String TABLE_NAME = "budgets";
-
         public static final String _Id = BaseColumns._ID;
         public static final String COLUMN_BUDGET_NAME = "name";
         public static final String COLUMN_BUDGET_AMOUNT = "amount";
+        public static final String COLUMN_BUDGET_EXPENSES = "expenses";
         public static final String COLUMN_BUDGET_START_DATE = "start_date";
         public static final String COLUMN_BUDGET_END_DATE = "end_date";
         public static final String COLUMN_BUDGET_NOTIFICATIONS = "isNotificationsRequired";

@@ -32,6 +32,17 @@
     <string name="editor_delete_expense_successful">Expense deleted</string>
 
 
+    <string name="editor_save_budget_failed">Error with creating budget</string>
+    <string name="editor_save_budget_successful">budget createed</string>
+
+    <string name="editor_update_budget_failed">Error with updating budget</string>
+    <string name="editor_update_budgete_successful">budget updated</string>
+
+
+    <string name="editor_delete_budget_failed">Error with deleting budget</string>
+    <string name="editor_delete_budget_successful">budget deleted</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="add_budget">Add New Budget</string>
     <string name="hint_budget_name">Enter Budget Name</string>

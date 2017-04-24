@@ -9,6 +9,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.example.sandy.budgettracker.activities.AddBudgetActivity;
 import com.example.sandy.budgettracker.adapters.BudgetsAdapter;
 import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.contracts.BudgetsContract;
+import com.example.sandy.budgettracker.contracts.ExpensesContract;
 import com.example.sandy.budgettracker.data.BudgetData;
 import com.example.sandy.budgettracker.util.Session;
 
@@ -33,7 +35,6 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
-
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.budgets);
@@ -91,17 +92,25 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
             int budgetId = cursor.getColumnIndex(BudgetsContract.BudgetsEntry._Id);
             int nameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
             int amountColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
+            int expensesColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES);
             int startDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE);
             int endDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE);
             int notificationColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS);
             while (cursor.moveToNext()) {
+                Log.v("@@@@@@@@@@", " " + cursor.getCount() + " " + cursor.getColumnCount());
                 int id = cursor.getInt(budgetId);
                 String name = cursor.getString(nameColumnIndex);
                 double amount = cursor.getDouble(amountColumnIndex);
+                String expenses = cursor.getString(expensesColumnIndex);
                 String startDate = cursor.getString(startDateColumnIndex);
                 String endDate = cursor.getString(endDateColumnIndex);
                 int isNotify = cursor.getInt(notificationColumnIndex);
-                budgetDatas.add(new BudgetData(id, name, amount, startDate, endDate, isNotify));
+                BudgetData budgetData = new BudgetData(id, name, amount, expenses, startDate, endDate, isNotify);
+                double totalExpense = calcualteTotalExpenses(expenses);
+                Log.v("@@@@@@@@", totalExpense + " ");
+                budgetData.setTotalExpenses(totalExpense);
+                budgetDatas.add(budgetData);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,5 +125,53 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private double calcualteTotalExpenses(String expenses) {
+        double totalexpenses = 0;
+
+        String[] projection = {
+                ExpensesContract.ExpenseEntry._Id,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
+
+        String selection = ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + "=?";
+
+        String[] selectionArgs = {
+                String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
+        };
+
+        Cursor expensesCursor = getActivity().getContentResolver().query(ExpensesContract.ExpenseEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+        if (expensesCursor != null) {
+            try {
+                int expenseNameIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+                int expenseTypeIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
+                int expenseAmountIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+
+                while (expensesCursor.moveToNext()) {
+                    String expenseName = expensesCursor.getString(expenseNameIndex);
+                    String expenseType = expensesCursor.getString(expenseTypeIndex);
+                    double expenseAmount = expensesCursor.getDouble(expenseAmountIndex);
+                    if (!expenses.equals("All Expenses")) {
+                        if (!expenseName.contains(expenses))
+                            continue;
+                    }
+                    if (expenseType.equals("Expense"))
+                        totalexpenses += expenseAmount;
+                    else
+                        totalexpenses -= expenseAmount;
+
+                }
+            } finally {
+                expensesCursor.close();
+            }
+        }
+
+        if (totalexpenses < 0)
+            return 0;
+        else
+            return totalexpenses;
     }
 }

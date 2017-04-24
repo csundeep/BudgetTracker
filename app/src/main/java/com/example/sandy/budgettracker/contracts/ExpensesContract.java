@@ -29,6 +29,7 @@ public final class ExpensesContract {
         public static final String COLUMN_EXPENSE_AMOUNT = "amount";
         public static final String COLUMN_EXPENSE_NOTES = "notes";
         public static final String COLUMN_EXPENSE_USER_ID = "user_id";
+        public static final String COLUMN_EXPENSE_ITEM_ID = "item_id";
         public static final String COLUMN_EXPENSE_CREATED_DATE = "created_date";
 
 

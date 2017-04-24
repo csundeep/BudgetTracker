@@ -1,6 +1,7 @@
 package com.example.sandy.budgettracker.adapters;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,7 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.data.BudgetData;
 import com.example.sandy.budgettracker.util.CustomProgress;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralViewHolder> {
     private ArrayList<BudgetData> budgetDatas;
@@ -25,7 +24,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
         }
     }
 
-    class CustomViewHolder extends GeneralViewHolder {
+    private class CustomViewHolder extends GeneralViewHolder {
         TextView budgetNameTextView;
         TextView totalBudgetExpenseTextView;
         CustomProgress customProgressShowProgress;
@@ -48,7 +47,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
 
     }
 
-    class AddBudgetViewHolder extends GeneralViewHolder {
+    private class AddBudgetViewHolder extends GeneralViewHolder {
 
         AddBudgetViewHolder(View view) {
             super(view);
@@ -88,22 +87,29 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
 
     @Override
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
-        if (getItemViewType(position) == -1) {
-            AddBudgetViewHolder holder1 = (AddBudgetViewHolder) holder;
-        } else {
+        if (getItemViewType(position) >= 0) {
             CustomViewHolder holder1 = (CustomViewHolder) holder;
             holder1.budgetNameTextView.setText(budgetDatas.get(position).getBudgetName());
-            holder1.totalBudgetExpenseTextView.setText("$500 out of $" + budgetDatas.get(position).getBudgetAmount());
-            holder1.customProgressShowProgress.setMaximumPercentage(0.5f);
+            holder1.totalBudgetExpenseTextView.setText("$" + budgetDatas.get(position).getTotalExpenses() + " out of $" + budgetDatas.get(position).getBudgetAmount());
+            float per = (float) budgetDatas.get(position).getTotalExpenses() / (float) budgetDatas.get(position).getBudgetAmount();
+            holder1.customProgressShowProgress.setMaximumPercentage(per);
             // customProgressShowProgress.useRoundedRectangleShape(30.0f);
-            holder1.customProgressShowProgress.setProgressColor(activity.getResources().getColor(R.color.green_500));
-            holder1.customProgressShowProgress.setProgressBackgroundColor(activity.getResources().getColor(R.color.green_200));
+            if (per * 100 > 80) {
+                holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.red_500));
+                holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.red_200));
+            } else if (per * 100 > 40) {
+                holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.Gold));
+                holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.Yellow));
+            } else {
+                holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.green_500));
+                holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.green_200));
+            }
             holder1.customProgressShowProgress.setShowingPercentage(true);
             try {
-                holder1.budgetStartDateTextView.setText((new SimpleDateFormat("MMM, yyyy", Locale.US).parse(budgetDatas.get(position).getStartDate().toString())).toString());
-                holder1.budgetEndDateTextView.setText((new SimpleDateFormat("MMM, yyyy", Locale.US).parse(budgetDatas.get(position).getEndDate().toString())).toString());
+                holder1.budgetStartDateTextView.setText(budgetDatas.get(position).getStartDate());
+                holder1.budgetEndDateTextView.setText(budgetDatas.get(position).getEndDate());
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.example.sandy.budgettracker.activities;
 
 import android.content.ContentValues;
-import android.database.Cursor;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,11 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.contracts.BudgetItemContract;
 import com.example.sandy.budgettracker.contracts.BudgetsContract;
-import com.example.sandy.budgettracker.contracts.ItemsContract;
 import com.example.sandy.budgettracker.util.Session;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -143,49 +142,23 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         ContentValues values = new ContentValues();
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, name);
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT, amount);
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES, expenses);
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE, startDate);
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE, endDate);
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS, isNotificationRequired);
         values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID, new Session(getBaseContext()).getuserId());
         Uri uri = getContentResolver().insert(BudgetsContract.BudgetsEntry.CONTENT_URI, values);
-        int budgetId = 0;
-        if (uri != null)
-            budgetId = Integer.parseInt(uri.getLastPathSegment());
 
-
-        Cursor itemsCursor;
-        String[] projection = {
-                ItemsContract.ItemsEntry._Id};
-        if (budgetId != 0) {
-            if (expenses.equals("All Expenses")) {
-                itemsCursor = getContentResolver().query(ItemsContract.ItemsEntry.CONTENT_URI, projection, null, null, null);
-            } else {
-                itemsCursor = getContentResolver().query(ItemsContract.ItemsEntry.CONTENT_URI, projection, null, null, null);
-            }
-
-
-            if (itemsCursor != null) {
-                try {
-                    int itemIdIndex = itemsCursor.getColumnIndex(ItemsContract.ItemsEntry._Id);
-                    while (itemsCursor.moveToNext()) {
-                        int itemId = itemsCursor.getInt(itemIdIndex);
-                        ContentValues BudgetItemValues = new ContentValues();
-                        values.put(BudgetItemContract.BudgetItemEntry.COLUMN_BUDGET_ITEMS_BUDGET_ID, budgetId);
-                        values.put(BudgetItemContract.BudgetItemEntry.COLUMN_BUDGET_ITEMS_ITEM_ID, itemId);
-                        values.put(BudgetItemContract.BudgetItemEntry.COLUMN_BUDGET_ITEMS_USER_ID, new Session(getBaseContext()).getuserId());
-                        Uri budgetItemUri = getContentResolver().insert(BudgetItemContract.BudgetItemEntry.CONTENT_URI, BudgetItemValues);
-                        if (budgetItemUri == null)
-                            break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    itemsCursor.close();
-                }
-            }
-
+        if (uri == null) {
+            Toast.makeText(this, R.string.editor_save_budget_failed,
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.editor_save_budget_successful,
+                    Toast.LENGTH_SHORT).show();
         }
-
+        finish();
+        Intent homepage = new Intent(this, MainActivity.class);
+        startActivity(homepage);
 
     }
 

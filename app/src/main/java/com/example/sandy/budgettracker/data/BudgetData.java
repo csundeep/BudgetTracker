@@ -1,24 +1,24 @@
 package com.example.sandy.budgettracker.data;
 
-import java.util.Date;
-
-
 public class BudgetData {
     private int id;
     private String budgetName;
     private double budgetAmount;
+    private String expenses;
     private String startDate;
     private String endDate;
     private int notify;
+    private double totalExpenses;
 
     public BudgetData() {
 
     }
 
-    public BudgetData(int id, String budgetName, double budgetAmount, String startDate, String endDate, int notify) {
+    public BudgetData(int id, String budgetName, double budgetAmount, String expenses, String startDate, String endDate, int notify) {
         this.id = id;
         this.budgetName = budgetName;
         this.budgetAmount = budgetAmount;
+        this.expenses = expenses;
         this.startDate = startDate;
         this.endDate = endDate;
         this.notify = notify;
@@ -48,6 +48,14 @@ public class BudgetData {
         this.budgetAmount = budgetAmount;
     }
 
+    public String getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(String expenses) {
+        this.expenses = expenses;
+    }
+
     public String getStartDate() {
         return startDate;
     }
@@ -70,5 +78,13 @@ public class BudgetData {
 
     public void setNotify(int notify) {
         this.notify = notify;
+    }
+
+    public double getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(double totalExpenses) {
+        this.totalExpenses = totalExpenses;
     }
 }

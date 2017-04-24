@@ -12,12 +12,14 @@ import android.view.MenuItem;
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.fragments.BudgetFragment;
 import com.example.sandy.budgettracker.fragments.OverviewFragment;
-import com.example.sandy.budgettracker.fragments.TransactionsFragment;
 import com.example.sandy.budgettracker.fragments.ProfileFragment;
+import com.example.sandy.budgettracker.fragments.TransactionsFragment;
 import com.example.sandy.budgettracker.util.BottomNavigationViewHelper;
 import com.example.sandy.budgettracker.util.Session;
 
 public class MainActivity extends AppCompatActivity {
+    private Fragment fragment = new TransactionsFragment();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,15 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, new TransactionsFragment());
+        transaction.replace(R.id.content, fragment);
         transaction.commit();
+
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
     }
 
@@ -48,23 +57,23 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
+
             switch (item.getItemId()) {
                 case R.id.action_transactions:
-                    selectedFragment = new TransactionsFragment();
+                    fragment = new TransactionsFragment();
                     break;
                 case R.id.action_overview:
-                    selectedFragment = new OverviewFragment();
+                    fragment = new OverviewFragment();
                     break;
                 case R.id.action_budget:
-                    selectedFragment = new BudgetFragment();
+                    fragment = new BudgetFragment();
                     break;
                 case R.id.action_wallet:
-                    selectedFragment = new ProfileFragment();
+                    fragment = new ProfileFragment();
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content, selectedFragment);
+            transaction.replace(R.id.content, fragment);
             transaction.commit();
             return true;
         }

@@ -48,10 +48,6 @@
             android:name=".providers.BudgetsProvider"
             android:authorities="com.example.sandy.budgettracker.budgets"
             android:exported="false" />
-        <provider
-            android:name=".providers.BudgetItemProvider"
-            android:authorities="com.example.sandy.budgettracker.budgetItems"
-            android:exported="false" />
     </application>
 
 </manifest>
