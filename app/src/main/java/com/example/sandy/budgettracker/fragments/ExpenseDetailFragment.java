@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -27,6 +28,7 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.MainActivity;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
 import com.example.sandy.budgettracker.data.ExpenseData;
+import com.example.sandy.budgettracker.util.GeoAddressUtil;
 import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 import com.example.sandy.budgettracker.util.Session;
 import com.google.android.gms.location.places.Place;
@@ -36,6 +38,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
@@ -67,8 +70,10 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
         EditText notesEditText = (EditText) view.findViewById(R.id.comments);
         ViewGroup dateViewGroup = (ViewGroup) view.findViewById(R.id.calender);
-        ImageButton storeExpenceButton = (ImageButton) getActivity().findViewById(R.id.addExpense);
+        ImageButton storeExpenseButton = (ImageButton) getActivity().findViewById(R.id.addExpense);
         ImageButton backButton = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
+        this.dateTextView = (TextView) view.findViewById(R.id.date);
+        this.locationTextView = (TextView) view.findViewById(R.id.location);
 
         if (selectedExpenseData != null && selectedExpenseData.getExpenseName() != null) {
             if (selectedExpenseData.getId() != 0)
@@ -78,6 +83,15 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
             latitude = selectedExpenseData.getLatitude();
             longitude = selectedExpenseData.getLongitude();
+            Log.v("@@@@@@@@@@ ", latitude + " " + longitude);
+            if (latitude != 0 && longitude != 0) {
+                List<Address> addresses = GeoAddressUtil.getAddress(latitude, longitude, activity);
+                if (addresses != null && addresses.size() > 0) {
+                    Address addr = addresses.get(0);
+                    locationTextView.setText(addr.getAddressLine(0) + ", " + addr.getAddressLine(1) + ", " + addr.getAddressLine(2));
+                }
+
+            }
 
             amountTextView.setText(Double.valueOf(selectedExpenseData.getExpenseAmount()).toString());
 
@@ -96,9 +110,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             );
 
             tabLayout.setBackgroundColor(ContextCompat.getColor(getContext(), ImageAndColorUtil.getColorContentId(selectedExpenseData.getExpenseName())));
-
-            this.dateTextView = (TextView) view.findViewById(R.id.date);
-            locationTextView = (TextView) view.findViewById(R.id.location);
 
             if (selectedExpenseData.getExpenseDate() != null && this.dateTextView != null)
                 this.dateTextView.setText(selectedExpenseData.getExpenseDate());
@@ -146,8 +157,8 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             });
 
 
-        if (storeExpenceButton != null)
-            storeExpenceButton.setOnClickListener(new View.OnClickListener() {
+        if (storeExpenseButton != null)
+            storeExpenseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -217,7 +228,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this.getActivity());
                 String address = place.getAddress().toString();
-                locationTextView.setText(address);
+                locationTextView.setText(place.getName() + ", " + address);
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
             }
@@ -259,6 +270,8 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE, expenseData.getExpenseType());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, expenseData.getNote());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE, expenseData.getLatitude());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE, expenseData.getLongitude());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, expenseData.getExpenseDate());
         int rowsAffected = getActivity().getContentResolver().update(currentExpenseURI, values, null, null);
 

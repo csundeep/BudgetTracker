@@ -43,6 +43,8 @@ public class ExpenseActivity extends AppCompatActivity {
                     ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
                     ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
                     ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE,
+                    ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE,
                     ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
 
             Cursor expenseCursor = this.getContentResolver().query(currentExpenseUri, projection, null, null, null);
@@ -64,8 +66,8 @@ public class ExpenseActivity extends AppCompatActivity {
                         double amount = expenseCursor.getDouble(expenseAmountIndex);
                         String note = expenseCursor.getString(expenseNoteIndex);
                         String date = expenseCursor.getString(expenseDateIndex);
-                        double latitude = expenseCursor.getDouble(expenseAmountIndex);
-                        double longitude = expenseCursor.getDouble(expenseAmountIndex);
+                        double latitude = expenseCursor.getDouble(latitudeIndex);
+                        double longitude = expenseCursor.getDouble(longitudeIndex);
                         selectedExpenceData = new ExpenseData(id, name, type, amount, date, note, latitude, longitude);
 
                     }
