@@ -83,7 +83,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
             latitude = selectedExpenseData.getLatitude();
             longitude = selectedExpenseData.getLongitude();
-            Log.v("@@@@@@@@@@ ", latitude + " " + longitude);
             if (latitude != 0 && longitude != 0) {
                 List<Address> addresses = GeoAddressUtil.getAddress(latitude, longitude, activity);
                 if (addresses != null && addresses.size() > 0) {

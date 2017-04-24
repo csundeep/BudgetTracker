@@ -1,7 +1,12 @@
 package com.example.sandy.budgettracker.activities;
 
+import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.contracts.BudgetsContract;
+import com.example.sandy.budgettracker.data.BudgetData;
 import com.example.sandy.budgettracker.util.Session;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -29,44 +34,53 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class AddBudgetActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddBudgetActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, LoaderManager.LoaderCallbacks<Cursor> {
     private TextView dateTextView;
     private DatePickerDialog datePickerDialog;
     private String period = "Month";
-    private double amount;
-    private String name;
+    private BudgetData budgetData;
+    private Uri currentBudgetUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_budget);
+
+        Intent intent = getIntent();
+        currentBudgetUri = intent.getData();
+
+        if (currentBudgetUri == null)
+            invalidateOptionsMenu();
+        else
+            getLoaderManager().initLoader(0, null, this);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.add_budget);
+            if (currentBudgetUri == null)
+                getSupportActionBar().setTitle(R.string.add_budget_title);
+            else
+                getSupportActionBar().setTitle(R.string.edit_budget_title);
         }
+
+
+        if (budgetData == null)
+            budgetData = new BudgetData();
+
+
+        ViewGroup dateViewGroup = (ViewGroup) findViewById(R.id.selectDate);
+        final TextView budgetExpensesTextView = (TextView) findViewById(R.id.budgetExpenses);
+        final EditText budgetNameEditText = (EditText) findViewById(R.id.addbudgetName);
+        final EditText budgetAmountEditText = (EditText) findViewById(R.id.addbudgetAmount);
+        final SwitchCompat notificationsSwitch = (SwitchCompat) findViewById(R.id.notificationsSwitch);
+
+
         this.dateTextView = (TextView) findViewById(R.id.dateStartBudget);
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
 
-        ViewGroup dateViewGroup = (ViewGroup) findViewById(R.id.selectDate);
-
-
-        TextView budgetExpensesTextView = (TextView) findViewById(R.id.budgetExpenses);
-        EditText budgetNameEditText = (EditText) findViewById(R.id.addbudgetName);
-        EditText budgetAmountEditText = (EditText) findViewById(R.id.addbudgetAmount);
-        SwitchCompat notificationsSwitch = (SwitchCompat) findViewById(R.id.notificationsSwitch);
-
-
-        name = budgetNameEditText.getText().toString();
-        if (!budgetAmountEditText.getText().toString().equals(""))
-            amount = Double.parseDouble(budgetAmountEditText.getText().toString());
-        name = "sandy";
-        amount = 560;
-        final String expenses = budgetExpensesTextView.getText().toString();
-        final String date = this.dateTextView.getText().toString();
-        final boolean isNotificationRequired = notificationsSwitch.isChecked();
 
         if (dateViewGroup != null)
             dateViewGroup.setOnClickListener(new View.OnClickListener() {
@@ -103,14 +117,92 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         addBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                insertBudget(name, amount, expenses, date, isNotificationRequired);
+
+                String expenses = budgetExpensesTextView.getText().toString();
+                String startDate = dateTextView.getText().toString();
+                boolean isNotificationRequired = notificationsSwitch.isChecked();
+                String name = budgetNameEditText.getText().toString();
+                double amount = 0;
+                if (!budgetAmountEditText.getText().toString().equals(""))
+                    amount = Double.parseDouble(budgetAmountEditText.getText().toString());
+                String endDate = getEndDate(startDate);
+
+
+                budgetData.setBudgetName(name);
+                budgetData.setBudgetAmount(amount);
+                budgetData.setExpenses(expenses);
+                budgetData.setStartDate(startDate);
+                budgetData.setEndDate(endDate);
+                budgetData.setNotify((isNotificationRequired) ? 1 : 0);
+
+                if (budgetData.getId() == 0) {
+                    insertBudget(budgetData);
+                } else {
+                    updateBudget(budgetData);
+                }
             }
         });
 
 
     }
 
-    private void insertBudget(String name, double amount, String expenses, String startDate, boolean isNotificationRequired) {
+    private void insertBudget(BudgetData budgetData) {
+
+        if (budgetData.getBudgetName() == null || budgetData.getBudgetName().equals("")) {
+            Toast.makeText(this, "You have to select an expense item", Toast.LENGTH_LONG).show();
+        } else if (budgetData.getBudgetAmount() == 0) {
+            Toast.makeText(this, "Amount should not be zero", Toast.LENGTH_LONG).show();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, budgetData.getBudgetName());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT, budgetData.getBudgetAmount());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES, budgetData.getExpenses());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE, budgetData.getStartDate());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE, budgetData.getEndDate());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS, budgetData.getNotify());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID, new Session(getBaseContext()).getuserId());
+        Uri uri = getContentResolver().insert(BudgetsContract.BudgetsEntry.CONTENT_URI, values);
+
+        if (uri == null) {
+            Toast.makeText(this, R.string.editor_save_budget_failed,
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.editor_save_budget_successful,
+                    Toast.LENGTH_SHORT).show();
+        }
+        finish();
+        Intent homepage = new Intent(this, MainActivity.class);
+        startActivity(homepage);
+
+    }
+
+    public void updateBudget(BudgetData budgetData) {
+        Uri currentExpenseURI = ContentUris.withAppendedId(BudgetsContract.BudgetsEntry.CONTENT_URI, budgetData.getId());
+
+
+        ContentValues values = new ContentValues();
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, budgetData.getBudgetName());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT, budgetData.getBudgetAmount());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE, budgetData.getStartDate());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE, budgetData.getEndDate());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES, budgetData.getExpenses());
+        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS, budgetData.getNotify());
+        int rowsAffected = this.getContentResolver().update(currentExpenseURI, values, null, null);
+
+        if (rowsAffected == 0) {
+            Toast.makeText(this, getString(R.string.editor_update_budget_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.editor_update_budget_successful),
+                    Toast.LENGTH_SHORT).show();
+        }
+        finish();
+        Intent homepage = new Intent(this, MainActivity.class);
+        startActivity(homepage);
+    }
+
+    private String getEndDate(String startDate) {
         String endDate;
         Calendar beginCalendar = Calendar.getInstance();
         try {
@@ -118,7 +210,6 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Log.v("@@@@@@@@@@@@@@@ ", name + " " + amount + " " + expenses + " " + period + " " + startDate + " " + isNotificationRequired);
         switch (period) {
             case "Month": {
                 beginCalendar.add(Calendar.MONTH, 1);
@@ -138,29 +229,9 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
             }
         }
         endDate = new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(beginCalendar.getTime());
-
-        ContentValues values = new ContentValues();
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME, name);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT, amount);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES, expenses);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE, startDate);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE, endDate);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS, isNotificationRequired);
-        values.put(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID, new Session(getBaseContext()).getuserId());
-        Uri uri = getContentResolver().insert(BudgetsContract.BudgetsEntry.CONTENT_URI, values);
-
-        if (uri == null) {
-            Toast.makeText(this, R.string.editor_save_budget_failed,
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, R.string.editor_save_budget_successful,
-                    Toast.LENGTH_SHORT).show();
-        }
-        finish();
-        Intent homepage = new Intent(this, MainActivity.class);
-        startActivity(homepage);
-
+        return endDate;
     }
+
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
@@ -172,4 +243,45 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(d));
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                BudgetsContract.BudgetsEntry._ID,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS};
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                currentBudgetUri,         // Query the content URI for the current pet
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+        if (cursor.moveToFirst()) {
+            int idColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry._Id);
+            int budgetNameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
+            int budgetAmountColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
+            int expensesColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES);
+            int startDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE);
+            int endDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE);
+            int notificationsColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS);
+            
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }

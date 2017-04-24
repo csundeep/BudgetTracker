@@ -21,11 +21,22 @@
 
             <TextView
                 android:id="@+id/budgetName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:gravity="start"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/budgetMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_more_vert_black_24dp"/>
 
             <TextView
                 android:id="@+id/totalBudgetExpense"
