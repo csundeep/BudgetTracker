@@ -15,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,8 +116,8 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
             int amountColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
             int noteColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES);
             int dateColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
-            int latitudeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
-            int longitudeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+            int latitudeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE);
+            int longitudeColumnIndex = cursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE);
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(expenseId);
                 String name = cursor.getString(nameColumnIndex);
@@ -252,6 +253,8 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
 
         String selection = ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + "=?";

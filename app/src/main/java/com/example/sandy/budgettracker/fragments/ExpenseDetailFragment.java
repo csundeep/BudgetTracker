@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,10 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 deleteButton.setVisibility(View.VISIBLE);
             else
                 deleteButton.setVisibility(View.GONE);
+
+            latitude = selectedExpenseData.getLatitude();
+            longitude = selectedExpenseData.getLongitude();
+
             amountTextView.setText(Double.valueOf(selectedExpenseData.getExpenseAmount()).toString());
 
             backButton.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));
@@ -159,6 +164,9 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     selectedExpenseData.setNote(notes);
                     selectedExpenseData.setExpenseDate(date);
 
+                    selectedExpenseData.setLatitude(latitude);
+                    selectedExpenseData.setLongitude(longitude);
+
                     if (selectedExpenseData.getId() != 0)
                         updateExpense(v, selectedExpenseData);
                     else
@@ -212,8 +220,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 locationTextView.setText(address);
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
-                selectedExpenseData.setLatitude(latitude);
-                selectedExpenseData.setLatitude(longitude);
             }
         }
     }
@@ -230,7 +236,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE, expenseData.getLongitude());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE, expenseData.getExpenseDate());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID, new Session(getActivity().getBaseContext()).getuserId());
-
         Uri uri = getActivity().getContentResolver().insert(ExpensesContract.ExpenseEntry.CONTENT_URI, values);
 
         if (uri == null) {
