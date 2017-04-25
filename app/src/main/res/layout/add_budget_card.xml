@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:text="@string/add_budget" />
+                android:text="@string/add_budget_title" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

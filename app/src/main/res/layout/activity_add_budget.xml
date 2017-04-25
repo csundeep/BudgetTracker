@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:contentDescription="@string/add_budget"
+                    android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_money_bag_w" />
 
                 <android.support.design.widget.TextInputLayout
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:contentDescription="@string/add_budget"
+                    android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_currency_w" />
 
                 <android.support.design.widget.TextInputLayout

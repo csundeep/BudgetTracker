@@ -87,4 +87,18 @@ public class BudgetData {
     public void setTotalExpenses(double totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
+
+    @Override
+    public String toString() {
+        return "BudgetData{" +
+                "id=" + id +
+                ", budgetName='" + budgetName + '\'' +
+                ", budgetAmount=" + budgetAmount +
+                ", expenses='" + expenses + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", notify=" + notify +
+                ", totalExpenses=" + totalExpenses +
+                '}';
+    }
 }

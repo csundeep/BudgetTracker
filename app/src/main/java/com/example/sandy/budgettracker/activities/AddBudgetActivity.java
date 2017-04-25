@@ -41,6 +41,12 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
     private BudgetData budgetData;
     private Uri currentBudgetUri;
 
+    private TextView budgetExpensesTextView;
+    private EditText budgetNameEditText;
+    private EditText budgetAmountEditText;
+    private SwitchCompat notificationsSwitch;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +55,12 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         Intent intent = getIntent();
         currentBudgetUri = intent.getData();
 
-        if (currentBudgetUri == null)
-            invalidateOptionsMenu();
-        else
+        if (currentBudgetUri != null)
             getLoaderManager().initLoader(0, null, this);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -67,20 +72,16 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         }
 
 
-        if (budgetData == null)
-            budgetData = new BudgetData();
-
-
         ViewGroup dateViewGroup = (ViewGroup) findViewById(R.id.selectDate);
-        final TextView budgetExpensesTextView = (TextView) findViewById(R.id.budgetExpenses);
-        final EditText budgetNameEditText = (EditText) findViewById(R.id.addbudgetName);
-        final EditText budgetAmountEditText = (EditText) findViewById(R.id.addbudgetAmount);
-        final SwitchCompat notificationsSwitch = (SwitchCompat) findViewById(R.id.notificationsSwitch);
-
-
+        this.budgetExpensesTextView = (TextView) findViewById(R.id.budgetExpenses);
+        this.budgetNameEditText = (EditText) findViewById(R.id.addbudgetName);
+        this.budgetAmountEditText = (EditText) findViewById(R.id.addbudgetAmount);
+        this.notificationsSwitch = (SwitchCompat) findViewById(R.id.notificationsSwitch);
         this.dateTextView = (TextView) findViewById(R.id.dateStartBudget);
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
 
+        if (budgetData == null)
+            budgetData = new BudgetData();
 
         if (dateViewGroup != null)
             dateViewGroup.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +106,6 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.spinnerPeriod);
         spinner.setItems("Month", "year", "Half Yearly", "Quarterly");
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 period = item;
@@ -245,6 +245,7 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         String[] projection = {
                 BudgetsContract.BudgetsEntry._ID,
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME,
@@ -265,10 +266,12 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
-        if (cursor.moveToFirst()) {
+        try {
+
             int idColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry._Id);
             int budgetNameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
             int budgetAmountColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
@@ -276,7 +279,27 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
             int startDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE);
             int endDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE);
             int notificationsColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS);
-            
+
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(idColumnIndex);
+                String budgetName = cursor.getString(budgetNameColumnIndex);
+                double budgetAmount = cursor.getDouble(budgetAmountColumnIndex);
+                String expenses = cursor.getString(expensesColumnIndex);
+                String startDate = cursor.getString(startDateColumnIndex);
+                String endDate = cursor.getString(endDateColumnIndex);
+                int notification = cursor.getInt(notificationsColumnIndex);
+                this.budgetData = new BudgetData(id, budgetName, budgetAmount, expenses, startDate, endDate, notification);
+            }
+
+            this.budgetNameEditText.setText(budgetData.getBudgetName());
+            this.budgetAmountEditText.setText(String.valueOf(budgetData.getBudgetAmount()));
+            this.budgetExpensesTextView.setText(budgetData.getExpenses());
+            this.dateTextView.setText(budgetData.getStartDate());
+            this.notificationsSwitch.setChecked(budgetData.getNotify() != 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
     }
 
