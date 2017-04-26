@@ -194,11 +194,7 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
             Toast.makeText(this, getString(R.string.editor_update_budget_successful),
                     Toast.LENGTH_SHORT).show();
         }
-        onBackPressed();
-//        getFragmentManager().popBackStack();
-//        Intent homepage = new Intent(this, MainActivity.class);
-//        homepage.putExtra("frag", "budget");
-//        startActivity(homepage);
+        finish();
     }
 
     private String getEndDate(String startDate) {

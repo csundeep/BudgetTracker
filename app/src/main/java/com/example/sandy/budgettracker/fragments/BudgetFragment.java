@@ -128,8 +128,6 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
         } else {
             Toast.makeText(activity, activity.getString(R.string.editor_delete_budget_successful), Toast.LENGTH_SHORT).show();
         }
-        getLoaderManager().restartLoader(0, null, this);
-//        getLoaderManager().initLoader(0, null, this);
 
     }
 
@@ -189,7 +187,7 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cursor.close();
+           // cursor.close();
         }
 
         BudgetsAdapter itemsAdapter = new BudgetsAdapter(this.getActivity(), budgetDatas);

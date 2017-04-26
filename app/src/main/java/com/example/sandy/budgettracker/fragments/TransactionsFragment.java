@@ -45,7 +45,6 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v("@@@@@@@@", "############ " );
         view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.transactionsToolbar);
@@ -141,7 +140,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cursor.close();
+//            cursor.close();
         }
         String[] projection = {
                 UserContract.UserEntry.COLUMN_USER_WALLET_AMOUNT};
@@ -274,8 +273,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.v("###########", "&&&&&&&&&&&&&");
-
+//        getLoaderManager().restartLoader(0, null, this);
         displayDatabaseInfo(cursor);
     }
 

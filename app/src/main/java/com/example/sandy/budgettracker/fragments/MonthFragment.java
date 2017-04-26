@@ -79,10 +79,9 @@ public class MonthFragment extends Fragment {
                 exp.add(exxx[i]);
             }
 
-
+            Log.v("*&^&*^&*^(*^(*^", "(87989u43434");
             recyclerView = (RecyclerView) view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            Log.v("*&*((&*","&*^&*^*^");
             itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, walletBalance, totalExpenseAmount);
             recyclerView.setAdapter(itemsAdapter);
 
