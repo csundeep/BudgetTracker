@@ -197,9 +197,11 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
             Toast.makeText(this, getString(R.string.editor_update_budget_successful),
                     Toast.LENGTH_SHORT).show();
         }
-        finish();
-        Intent homepage = new Intent(this, MainActivity.class);
-        startActivity(homepage);
+        onBackPressed();
+//        getFragmentManager().popBackStack();
+//        Intent homepage = new Intent(this, MainActivity.class);
+//        homepage.putExtra("frag", "budget");
+//        startActivity(homepage);
     }
 
     private String getEndDate(String startDate) {
@@ -256,12 +258,7 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
                 BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS};
 
         // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(this,   // Parent activity context
-                currentBudgetUri,         // Query the content URI for the current pet
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);                  // Default sort order
+        return new CursorLoader(this, currentBudgetUri, projection, null, null, null);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.sandy.budgettracker.R;
@@ -26,13 +27,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String frag = null;
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null)
+            frag = intent.getExtras().getString("frag");
+        Log.v("@@@@@@@@", "############ " + frag);
         Session session = new Session(getBaseContext());
 //        Log.v("@@@@@@@@@@@@@", "  " + session.getuserId());
 //        session.logout();
 //        Log.v("@@@@@@@@@@@@@", "  " + session.getuserId());
         if (session.getuserId() == 0) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

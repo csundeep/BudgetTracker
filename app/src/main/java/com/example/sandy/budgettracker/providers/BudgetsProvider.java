@@ -126,8 +126,9 @@ public class BudgetsProvider extends ContentProvider {
         }
 
         if (rowsDeleted != 0) {
-            if (getContext() != null && getContext().getContentResolver() != null)
+            if (getContext() != null && getContext().getContentResolver() != null) {
                 getContext().getContentResolver().notifyChange(uri, null);
+            }
         }
         return rowsDeleted;
     }

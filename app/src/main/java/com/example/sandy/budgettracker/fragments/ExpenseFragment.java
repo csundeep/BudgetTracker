@@ -81,10 +81,7 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
 //        });
         appBarImageView = (ImageView) getActivity().findViewById(R.id.appBarExpenseImage);
         recyclerView = (RecyclerView) view.findViewById(R.id.expense);
-        recyclerView.addOnItemTouchListener(
-                new
-
-                        RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
 
                 {
                     @Override
