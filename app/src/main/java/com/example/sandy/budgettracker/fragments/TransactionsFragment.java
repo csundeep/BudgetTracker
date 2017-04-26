@@ -15,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.v("@@@@@@@@", "############ " );
         view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.transactionsToolbar);
@@ -272,7 +274,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
+        Log.v("###########", "&&&&&&&&&&&&&");
 
         displayDatabaseInfo(cursor);
     }

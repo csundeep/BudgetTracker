@@ -27,15 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String frag = null;
-        Intent intent = getIntent();
-        if (intent != null && intent.getExtras() != null)
-            frag = intent.getExtras().getString("frag");
-        Log.v("@@@@@@@@", "############ " + frag);
         Session session = new Session(getBaseContext());
-//        Log.v("@@@@@@@@@@@@@", "  " + session.getuserId());
-//        session.logout();
-//        Log.v("@@@@@@@@@@@@@", "  " + session.getuserId());
         if (session.getuserId() == 0) {
             startActivity(new Intent(this, LoginActivity.class));
         }

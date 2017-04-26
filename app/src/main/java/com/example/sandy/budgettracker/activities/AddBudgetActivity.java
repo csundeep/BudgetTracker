@@ -172,9 +172,6 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
                     Toast.LENGTH_SHORT).show();
         }
         finish();
-        Intent homepage = new Intent(this, MainActivity.class);
-        startActivity(homepage);
-
     }
 
     public void updateBudget(BudgetData budgetData) {

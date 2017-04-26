@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.activities.MainActivity;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
 import com.example.sandy.budgettracker.data.ExpenseData;
 import com.example.sandy.budgettracker.util.GeoAddressUtil;
@@ -256,8 +254,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     Toast.LENGTH_SHORT).show();
         }
         getActivity().finish();
-        Intent homepage = new Intent(this.getActivity(), MainActivity.class);
-        startActivity(homepage);
+
     }
 
     public void updateExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
@@ -282,8 +279,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     Toast.LENGTH_SHORT).show();
         }
         getActivity().finish();
-        Intent homepage = new Intent(this.getActivity(), MainActivity.class);
-        startActivity(homepage);
     }
 
     public void deleteExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
@@ -299,8 +294,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         }
 
         getActivity().finish();
-        Intent homepage = new Intent(this.getActivity(), MainActivity.class);
-        startActivity(homepage);
     }
 
 
