@@ -8,15 +8,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,18 +55,64 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget_creation, container, false);
 
-        currentBudgetUri = (Uri) getArguments().getSerializable("currentBudgetUri");
+        //currentBudgetUri = (Uri) getArguments().getSerializable("currentBudgetUri");
 
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarBudgetCreate);
         ViewGroup dateViewGroup = (ViewGroup) view.findViewById(R.id.selectDate);
+        ViewGroup expensesViewGroup = (ViewGroup) view.findViewById(R.id.selectItems);
+        MaterialSpinner spinner = (MaterialSpinner) view.findViewById(R.id.spinnerPeriod);
         this.budgetExpensesTextView = (TextView) view.findViewById(R.id.budgetExpenses);
         this.budgetNameEditText = (EditText) view.findViewById(R.id.addbudgetName);
         this.budgetAmountEditText = (EditText) view.findViewById(R.id.addbudgetAmount);
         this.notificationsSwitch = (SwitchCompat) view.findViewById(R.id.notificationsSwitch);
         this.dateTextView = (TextView) view.findViewById(R.id.dateStartBudget);
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
+        ImageButton cancelIB = (ImageButton) view.findViewById(R.id.budgetClear);
+        final FloatingActionButton addBudget = (FloatingActionButton) view.findViewById(R.id.addBudget);
 
         if (budgetData == null)
             budgetData = new BudgetData();
+
+
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            if (currentBudgetUri == null)
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.add_budget_title);
+            else
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_budget_title);
+        }
+
+
+        if (cancelIB != null)
+            cancelIB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+
+        if (expensesViewGroup != null)
+            expensesViewGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+                    transaction.replace(R.id.contentBudget, new ItemSelectionFragment());
+                    transaction.commit();
+
+                }
+            });
+
+
+        spinner.setItems("Month", "year", "Half Yearly", "Quarterly");
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                period = item;
+                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+            }
+        });
+
 
         if (dateViewGroup != null)
             dateViewGroup.setOnClickListener(new View.OnClickListener() {
@@ -84,17 +134,6 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
             });
 
 
-        MaterialSpinner spinner = (MaterialSpinner) view.findViewById(R.id.spinnerPeriod);
-        spinner.setItems("Month", "year", "Half Yearly", "Quarterly");
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                period = item;
-                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
-            }
-        });
-
-        final FloatingActionButton addBudget = (FloatingActionButton) view.findViewById(R.id.addBudget);
         addBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

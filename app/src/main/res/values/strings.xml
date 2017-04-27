@@ -34,6 +34,8 @@
     <string name="add_budget_title">Add New Budget</string>
     <string name="edit_budget_title">Edit Budget</string>
 
+    <string name="select_items_title">Select Expense Items</string>
+
 
     <string name="hint_budget_name">Enter Budget Name</string>
     <string name="hint_budget_amount">Enter Budget Amount</string>

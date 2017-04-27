@@ -52,6 +52,9 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
             selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
         }
 
+        if (ExpenseFragment.selectedExpenseData == null)
+            selectedExpenseData=new ExpenseData();
+
 //
 //        final EditText editText = (EditText) getActivity().findViewById(R.id.amount);
 //        editText.addTextChangedListener(new TextWatcher() {
@@ -100,8 +103,7 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
 
                         for (ExpenseItem item : items) {
                             if (item.getName().equals(expenseItem)) {
-                                if (ExpenseFragment.selectedExpenseData == null)
-                                    ExpenseFragment.selectedExpenseData = new ExpenseData();
+                                ExpenseFragment.selectedExpenseData = new ExpenseData();
                                 ExpenseFragment.selectedExpenseData.setExpenseName(item.getName());
                                 ExpenseFragment.selectedExpenseData.setExpenseType(item.getType());
 
