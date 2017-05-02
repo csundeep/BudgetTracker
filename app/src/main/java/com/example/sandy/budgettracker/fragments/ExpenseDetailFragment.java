@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,7 +175,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
                     selectedExpenseData.setLatitude(latitude);
                     selectedExpenseData.setLongitude(longitude);
-
                     if (selectedExpenseData.getId() != 0)
                         updateExpense(v, selectedExpenseData);
                     else
@@ -295,8 +295,6 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
         getActivity().finish();
     }
-
-
 
 
     @Override

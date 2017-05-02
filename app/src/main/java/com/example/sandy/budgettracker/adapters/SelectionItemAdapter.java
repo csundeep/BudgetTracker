@@ -18,13 +18,14 @@ import com.example.sandy.budgettracker.data.ExpenseItem;
 import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class SelectionItemAdapter extends RecyclerView.Adapter<SelectionItemAdapter.CustomViewHolderList> {
     private ArrayList<ExpenseItem> expenseItems;
     private Activity context;
-    private String selectExpenseItems;
+    private HashSet<String> selectExpenseItems;
 
-    public SelectionItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems, String selectExpenseItems) {
+    public SelectionItemAdapter(Activity context, ArrayList<ExpenseItem> expenseItems, HashSet<String> selectExpenseItems) {
         this.expenseItems = expenseItems;
         this.context = context;
         this.selectExpenseItems = selectExpenseItems;
@@ -73,9 +74,9 @@ public class SelectionItemAdapter extends RecyclerView.Adapter<SelectionItemAdap
 
         if (selectExpenseItems != null) {
             if (selectExpenseItems.contains(expenseItem.getName()))
-                holder.itemSelectedImage.setVisibility(View.VISIBLE);
+                holder.itemSelectedImage.setImageResource(R.drawable.ic_action_done_green);
             else
-                holder.itemSelectedImage.setVisibility(View.GONE);
+                holder.itemSelectedImage.setImageResource(R.drawable.ic_action_not_done);
         }
 
 

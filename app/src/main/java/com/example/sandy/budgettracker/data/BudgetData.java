@@ -1,6 +1,8 @@
 package com.example.sandy.budgettracker.data;
 
-public class BudgetData {
+import java.io.Serializable;
+
+public class BudgetData implements Serializable {
     private int id;
     private String budgetName;
     private double budgetAmount;

@@ -35,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 
 
@@ -44,6 +45,7 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
     private String period = "Month";
     private BudgetData budgetData;
     private Uri currentBudgetUri;
+    private HashSet<String> expenses;
 
     private TextView budgetExpensesTextView;
     private EditText budgetNameEditText;
@@ -54,8 +56,6 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget_creation, container, false);
-
-        //currentBudgetUri = (Uri) getArguments().getSerializable("currentBudgetUri");
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarBudgetCreate);
         ViewGroup dateViewGroup = (ViewGroup) view.findViewById(R.id.selectDate);
@@ -70,8 +70,45 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
         ImageButton cancelIB = (ImageButton) view.findViewById(R.id.budgetClear);
         final FloatingActionButton addBudget = (FloatingActionButton) view.findViewById(R.id.addBudget);
 
+
+        if (getArguments() != null && getArguments().getString("currentBudgetUri") != null)
+            currentBudgetUri = Uri.parse(getArguments().getString("currentBudgetUri"));
+        //currentBudgetUri = (Uri) getArguments().getSerializable("currentBudgetUri");
+        if (getArguments() != null)
+            expenses = (HashSet<String>) getArguments().getSerializable("expenses");
+
+        if (getArguments() != null && getArguments().getSerializable("selectedBudgetData") != null)
+            budgetData = (BudgetData) getArguments().getSerializable("selectedBudgetData");
+
         if (budgetData == null)
             budgetData = new BudgetData();
+        else {
+            this.budgetNameEditText.setText(budgetData.getBudgetName());
+            this.budgetAmountEditText.setText(String.valueOf(budgetData.getBudgetAmount()));
+            this.budgetExpensesTextView.setText(budgetData.getExpenses());
+            this.dateTextView.setText(budgetData.getStartDate());
+            this.notificationsSwitch.setChecked(budgetData.getNotify() != 0);
+        }
+
+
+        if (expenses != null && expenses.size() != 0) {
+            if (expenses.size() <= 4) {
+                String value = "";
+                int i = 0;
+                for (String expense : expenses) {
+                    i++;
+                    value += expense;
+                    if (i != expenses.size())
+                        value += ", ";
+
+                }
+                budgetExpensesTextView.setText(value);
+            } else {
+                budgetExpensesTextView.setText(expenses.size() + " Categories");
+            }
+        } else if (expenses != null && expenses.size() == 0) {
+            budgetExpensesTextView.setText("All Expenses");
+        }
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -96,8 +133,12 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
                 @Override
                 public void onClick(View v) {
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-
-                    transaction.replace(R.id.contentBudget, new ItemSelectionFragment());
+                    Fragment fragment = new ItemSelectionFragment();
+                    Bundle args = new Bundle();
+                    args.putSerializable("expenses", expenses);
+                    fragment.setArguments(args);
+                    args.putSerializable("selectedBudgetData", budgetData);
+                    transaction.replace(R.id.contentBudget, fragment);
                     transaction.commit();
 
                 }
@@ -109,7 +150,6 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 period = item;
-                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -310,6 +350,11 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
             this.budgetExpensesTextView.setText(budgetData.getExpenses());
             this.dateTextView.setText(budgetData.getStartDate());
             this.notificationsSwitch.setChecked(budgetData.getNotify() != 0);
+
+
+            if (!budgetData.getExpenses().equals("All Expenses")) {
+                parseExpenses(budgetData.getExpenses());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -320,6 +365,14 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private void parseExpenses(String exp) {
+        String[] e = exp.split(",");
+        this.expenses = new HashSet<>();
+        for (String s : e) {
+            expenses.add(s.trim());
+        }
     }
 
 }

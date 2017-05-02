@@ -23,9 +23,12 @@ public class AddBudgetActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = new BudgetCreationFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("currentBudgetUri", currentBudgetUri);
-        fragment.setArguments(args);
+
+        if (currentBudgetUri != null) {
+            Bundle args = new Bundle();
+            args.putString("currentBudgetUri", currentBudgetUri.toString());
+            fragment.setArguments(args);
+        }
         transaction.replace(R.id.contentBudget, fragment);
         transaction.commit();
 

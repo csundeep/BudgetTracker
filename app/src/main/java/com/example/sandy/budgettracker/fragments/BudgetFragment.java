@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -187,7 +188,7 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-           // cursor.close();
+            // cursor.close();
         }
 
         BudgetsAdapter itemsAdapter = new BudgetsAdapter(this.getActivity(), budgetDatas);
@@ -228,7 +229,7 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                     String expenseType = expensesCursor.getString(expenseTypeIndex);
                     double expenseAmount = expensesCursor.getDouble(expenseAmountIndex);
                     if (!expenses.equals("All Expenses")) {
-                        if (!expenseName.contains(expenses))
+                        if (!expenses.contains(expenseName))
                             continue;
                     }
                     if (expenseType.equals("Expense"))

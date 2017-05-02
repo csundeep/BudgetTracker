@@ -53,7 +53,7 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
         if (ExpenseFragment.selectedExpenseData == null)
-            selectedExpenseData=new ExpenseData();
+            selectedExpenseData = new ExpenseData();
 
 //
 //        final EditText editText = (EditText) getActivity().findViewById(R.id.amount);
@@ -103,10 +103,10 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
 
                         for (ExpenseItem item : items) {
                             if (item.getName().equals(expenseItem)) {
-                                ExpenseFragment.selectedExpenseData = new ExpenseData();
+                                if (ExpenseFragment.selectedExpenseData == null)
+                                    ExpenseFragment.selectedExpenseData = new ExpenseData();
                                 ExpenseFragment.selectedExpenseData.setExpenseName(item.getName());
                                 ExpenseFragment.selectedExpenseData.setExpenseType(item.getType());
-
                                 appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
                                 Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
                                 toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));

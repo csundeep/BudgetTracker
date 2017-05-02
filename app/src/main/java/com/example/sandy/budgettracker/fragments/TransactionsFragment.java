@@ -229,6 +229,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
         if (viewPager != null) {
+            Log.v("$$$$$$","*******");
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(viewPager.getAdapter().getCount());
 
