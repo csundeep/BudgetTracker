@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -137,6 +136,11 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
                     Bundle args = new Bundle();
                     args.putSerializable("expenses", expenses);
                     fragment.setArguments(args);
+                    budgetNameEditText.setText(budgetData.getBudgetName());
+                    budgetAmountEditText.setText(String.valueOf(budgetData.getBudgetAmount()));
+                    budgetExpensesTextView.setText(budgetData.getExpenses());
+                    dateTextView.setText(budgetData.getStartDate());
+                    notificationsSwitch.setChecked(budgetData.getNotify() != 0);
                     args.putSerializable("selectedBudgetData", budgetData);
                     transaction.replace(R.id.contentBudget, fragment);
                     transaction.commit();
@@ -214,8 +218,10 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
 
         if (budgetData.getBudgetName() == null || budgetData.getBudgetName().equals("")) {
             Toast.makeText(getActivity(), "You have to select an expense item", Toast.LENGTH_LONG).show();
+            return;
         } else if (budgetData.getBudgetAmount() == 0) {
             Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
+            return;
         }
 
         ContentValues values = new ContentValues();

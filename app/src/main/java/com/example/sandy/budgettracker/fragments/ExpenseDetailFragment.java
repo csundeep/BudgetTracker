@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.location.Address;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,38 +23,47 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
+import com.example.sandy.budgettracker.activities.MainActivity;
+import com.example.sandy.budgettracker.contracts.BudgetsContract;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
 import com.example.sandy.budgettracker.data.ExpenseData;
-import com.example.sandy.budgettracker.util.GeoAddressUtil;
 import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 import com.example.sandy.budgettracker.util.Session;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private String BASE_URL = "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&maptype=roadmap&key=AIzaSyCfDC7Ns9LcgoKuEjyOsPDm_CMM0VQACRo&markers=color:red%7Clabel:C%7C";
     private DatePickerDialog datePickerDialog;
     private TextView dateTextView;
-    private TextView locationTextView;
+    private ImageView locationImageView;
     private View view;
     private ExpenseData selectedExpenseData;
     private int PLCA_PICKER_REQUEST = 1;
     Activity activity = null;
     private double latitude;
     private double longitude;
+    private String laLo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,7 +84,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         ImageButton storeExpenseButton = (ImageButton) getActivity().findViewById(R.id.addExpense);
         ImageButton backButton = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
         this.dateTextView = (TextView) view.findViewById(R.id.date);
-        this.locationTextView = (TextView) view.findViewById(R.id.location);
+        this.locationImageView = (ImageView) view.findViewById(R.id.location);
 
         if (selectedExpenseData != null && selectedExpenseData.getExpenseName() != null) {
             if (selectedExpenseData.getId() != 0)
@@ -83,15 +95,10 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             latitude = selectedExpenseData.getLatitude();
             longitude = selectedExpenseData.getLongitude();
             if (latitude != 0 && longitude != 0) {
-                List<Address> addresses = GeoAddressUtil.getAddress(latitude, longitude, activity);
-                if (addresses != null && addresses.size() > 0) {
-                    Address addr = addresses.get(0);
-                    locationTextView.setText(addr.getAddressLine(0) + ", " + addr.getAddressLine(1) + ", " + addr.getAddressLine(2));
-                }
-
+                laLo = latitude + "," + longitude;
+                loadMap();
             }
-
-            amountTextView.setText(Double.valueOf(selectedExpenseData.getExpenseAmount()).toString());
+            amountTextView.setText(String.format(Locale.US, "%1$,.2f", selectedExpenseData.getExpenseAmount()));
 
             backButton.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));
 
@@ -138,8 +145,8 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 }
             });
 
-        if (locationTextView != null)
-            locationTextView.setOnClickListener(new View.OnClickListener() {
+        if (locationImageView != null)
+            locationImageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
@@ -223,13 +230,89 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLCA_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this.getActivity());
-                String address = place.getAddress().toString();
-                locationTextView.setText(place.getName() + ", " + address);
+                Place place = PlacePicker.getPlace(getContext(), data);
+
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
+                laLo = latitude + "," + longitude;
+                loadMap();
+
             }
         }
+    }
+
+    private void loadMap() {
+        try {
+            AsyncTask<Void, Void, Bitmap> setImageFromUrl = new AsyncTask<Void, Void, Bitmap>() {
+                @Override
+                protected Bitmap doInBackground(Void... params) {
+                    Bitmap bmp = null;
+                    try {
+                        String path = BASE_URL + laLo;
+                        Log.v("Static Maps URl ", path);
+                        InputStream in = makeHttpRequest(createUrl(path));
+                        bmp = BitmapFactory.decodeStream(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return bmp;
+                }
+
+                protected void onPostExecute(Bitmap bmp) {
+                    if (bmp != null) {
+
+                        locationImageView.setImageBitmap(bmp);
+                        locationImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        laLo = "";
+                    }
+
+                }
+            };
+            setImageFromUrl.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static URL createUrl(String stringUrl) {
+        URL url = null;
+        try {
+            url = new URL(stringUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "Problem building the URL ", e);
+        }
+        return url;
+    }
+
+    private static InputStream makeHttpRequest(URL url) throws IOException {
+        InputStream inputStream = null;
+
+        // If the URL is null, then return early.
+        if (url == null) {
+            return null;
+        }
+
+
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(10000);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+            } else {
+                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inputStream;
     }
 
     public void storeExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
@@ -252,6 +335,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         } else {
             Toast.makeText(this.getActivity(), R.string.editor_save_expense_successful,
                     Toast.LENGTH_SHORT).show();
+            checkBudgets(expenseData.getExpenseName());
         }
         getActivity().finish();
 
@@ -277,6 +361,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         } else {
             Toast.makeText(this.getContext(), getString(R.string.editor_update_expense_successful),
                     Toast.LENGTH_SHORT).show();
+            checkBudgets(expenseData.getExpenseName());
         }
         getActivity().finish();
     }
@@ -305,6 +390,120 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         Date d = cal.getTime();
         dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(d));
+    }
+
+    private void checkBudgets(String presentExpense) {
+        String[] projection = {
+                BudgetsContract.BudgetsEntry._Id,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE,
+                BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS};
+
+        String selection = BudgetsContract.BudgetsEntry.COLUMN_BUDGET_USER_ID + "=?";
+
+        String[] selectionArgs = {
+                String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
+        };
+        Cursor cursor = getActivity().getContentResolver().query(BudgetsContract.BudgetsEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+        if (cursor != null) {
+            try {
+                int nameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
+                int amountColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_AMOUNT);
+                int expensesColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_EXPENSES);
+                int startDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_START_DATE);
+                int endDateColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_END_DATE);
+                int notificationColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NOTIFICATIONS);
+                while (cursor.moveToNext()) {
+                    double amount = cursor.getDouble(amountColumnIndex);
+                    String name = cursor.getString(nameColumnIndex);
+                    String expenses = cursor.getString(expensesColumnIndex);
+                    String startDate = cursor.getString(startDateColumnIndex);
+                    String endDate = cursor.getString(endDateColumnIndex);
+                    int isNotify = cursor.getInt(notificationColumnIndex);
+                    double totalExpense = calculateTotalExpenses(expenses, startDate, endDate);
+                    if (!expenses.contains(presentExpense))
+                        return;
+                    if (totalExpense >= amount) {
+                        if (isNotify == 1)
+                            Toast.makeText(this.getActivity(), "Budget with name " + name + " exceeding", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(this.getActivity(), "Budget with name " + name + " not exceeding", Toast.LENGTH_SHORT).show();
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                cursor.close();
+            }
+        }
+
+    }
+
+
+    private double calculateTotalExpenses(String expenses, String startDate, String endDate) {
+        double totalExpenses = 0;
+        String[] projection = {
+                ExpensesContract.ExpenseEntry._Id,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
+                ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
+
+        String selection = ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + "=? ";
+
+
+        String[] selectionArgs = {
+                String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
+        };
+
+        Cursor expensesCursor = getActivity().getContentResolver().query(ExpensesContract.ExpenseEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+        if (expensesCursor != null) {
+            try {
+                int expenseNameIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
+                int expenseTypeIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
+                int expenseAmountIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
+                int dateIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
+                while (expensesCursor.moveToNext()) {
+                    String expenseName = expensesCursor.getString(expenseNameIndex);
+                    String expenseType = expensesCursor.getString(expenseTypeIndex);
+                    double expenseAmount = expensesCursor.getDouble(expenseAmountIndex);
+                    String date = expensesCursor.getString(dateIndex);
+                    Date expenseDate = null, start = null, end = null;
+                    try {
+                        expenseDate = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date);
+                        start = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(startDate);
+                        end = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(endDate);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (expenseDate == null || start == null || end == null)
+                        continue;
+                    if (!(expenseDate.compareTo(start) >= 0 && expenseDate.compareTo(end) <= 0))
+                        continue;
+
+                    if (!expenses.equals("All Expenses")) {
+                        if (!expenses.contains(expenseName))
+                            continue;
+                    }
+                    if (expenseType.equals("Expense"))
+                        totalExpenses += expenseAmount;
+                    else
+                        totalExpenses -= expenseAmount;
+
+                }
+            } finally {
+                expensesCursor.close();
+            }
+        }
+
+        if (totalExpenses < 0)
+            return 0;
+        else
+            return totalExpenses;
     }
 
 }

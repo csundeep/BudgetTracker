@@ -45,5 +45,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="dollar">$ </string>
+    <string name="negative_dollar">- $ </string>
+
 
 </resources>

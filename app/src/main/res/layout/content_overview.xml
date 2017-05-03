@@ -13,6 +13,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="To be continued" />
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="Coming Soon" />
 
 </LinearLayout>

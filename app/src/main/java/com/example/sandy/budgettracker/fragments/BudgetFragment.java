@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.AddBudgetActivity;
-import com.example.sandy.budgettracker.activities.MainActivity;
 import com.example.sandy.budgettracker.adapters.BudgetsAdapter;
 import com.example.sandy.budgettracker.adapters.RecyclerItemClickListener;
 import com.example.sandy.budgettracker.contracts.BudgetsContract;
@@ -34,7 +33,10 @@ import com.example.sandy.budgettracker.contracts.ExpensesContract;
 import com.example.sandy.budgettracker.data.BudgetData;
 import com.example.sandy.budgettracker.util.Session;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class BudgetFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -180,15 +182,13 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                 String endDate = cursor.getString(endDateColumnIndex);
                 int isNotify = cursor.getInt(notificationColumnIndex);
                 BudgetData budgetData = new BudgetData(id, name, amount, expenses, startDate, endDate, isNotify);
-                double totalExpense = calcualteTotalExpenses(expenses);
+                double totalExpense = calculateTotalExpenses(expenses, startDate, endDate);
                 budgetData.setTotalExpenses(totalExpense);
                 budgetDatas.add(budgetData);
 
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // cursor.close();
         }
 
         BudgetsAdapter itemsAdapter = new BudgetsAdapter(this.getActivity(), budgetDatas);
@@ -201,9 +201,8 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
 
     }
 
-    private double calcualteTotalExpenses(String expenses) {
-        double totalexpenses = 0;
-
+    private double calculateTotalExpenses(String expenses, String startDate, String endDate) {
+        double totalExpenses = 0;
         String[] projection = {
                 ExpensesContract.ExpenseEntry._Id,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME,
@@ -211,10 +210,11 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT,
                 ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE};
 
-        String selection = ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + "=?";
+        String selection = ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_USER_ID + "=? ";
+
 
         String[] selectionArgs = {
-                String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
+                String.valueOf(new Session(getActivity().getBaseContext()).getuserId()),
         };
 
         Cursor expensesCursor = getActivity().getContentResolver().query(ExpensesContract.ExpenseEntry.CONTENT_URI, projection, selection, selectionArgs, null);
@@ -223,19 +223,33 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                 int expenseNameIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME);
                 int expenseTypeIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE);
                 int expenseAmountIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT);
-
+                int dateIndex = expensesCursor.getColumnIndex(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_CREATED_DATE);
                 while (expensesCursor.moveToNext()) {
                     String expenseName = expensesCursor.getString(expenseNameIndex);
                     String expenseType = expensesCursor.getString(expenseTypeIndex);
                     double expenseAmount = expensesCursor.getDouble(expenseAmountIndex);
+                    String date = expensesCursor.getString(dateIndex);
+                    Date expenseDate = null, start = null, end = null;
+                    try {
+                        expenseDate = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date);
+                        start = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(startDate);
+                        end = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(endDate);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (expenseDate == null || start == null || end == null)
+                        continue;
+                    if (!(expenseDate.compareTo(start) >= 0 && expenseDate.compareTo(end) <= 0))
+                        continue;
+
                     if (!expenses.equals("All Expenses")) {
                         if (!expenses.contains(expenseName))
                             continue;
                     }
                     if (expenseType.equals("Expense"))
-                        totalexpenses += expenseAmount;
+                        totalExpenses += expenseAmount;
                     else
-                        totalexpenses -= expenseAmount;
+                        totalExpenses -= expenseAmount;
 
                 }
             } finally {
@@ -243,9 +257,9 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }
 
-        if (totalexpenses < 0)
+        if (totalExpenses < 0)
             return 0;
         else
-            return totalexpenses;
+            return totalExpenses;
     }
 }
