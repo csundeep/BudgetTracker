@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/deleteBudget"
+        android:enabled="true"
+        android:title="@string/delete_budget"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/editBudget"
+        android:enabled="true"
+        android:title="@string/edit_budget"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/listBudgetTrans"
+        android:enabled="true"
+        android:title="@string/list_transactions"
+        app:showAsAction="ifRoom" />
+</menu>

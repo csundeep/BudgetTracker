@@ -1,11 +1,52 @@
 <resources>
     <string name="app_name">BudgetTracker</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="transactions">Transactions</string>
+    <string name="overview">Overview</string>
+    <string name="budgets">Budgets</string>
+    <string name="profile">Profile</string>
 
-    <string name="action_settings">Settings</string>
+
+    <string name="delete_budget">delete</string>
+    <string name="edit_budget">edit</string>
+    <string name="list_transactions">list transactions</string>
+
+    <string name="editor_save_expense_failed">Error with creating Expense</string>
+    <string name="editor_save_expense_successful">Expense created</string>
+    <string name="editor_update_expense_failed">Error with updating Expense</string>
+    <string name="editor_update_expense_successful">Expense updated</string>
+    <string name="editor_delete_expense_failed">Error with deleting Expense</string>
+    <string name="editor_delete_expense_successful">Expense deleted</string>
+
+
+    <string name="editor_save_budget_failed">Error with creating budget</string>
+    <string name="editor_save_budget_successful">budget created</string>
+    <string name="editor_update_budget_failed">Error with updating budget</string>
+    <string name="editor_update_budget_successful">budget updated</string>
+    <string name="editor_delete_budget_failed">Error with deleting budget</string>
+    <string name="editor_delete_budget_successful">budget deleted</string>
+
+
+    <string name="currency">USD</string>
+    <string name="text_location">select location</string>
+
+
+    <string name="add_budget_title">Add New Budget</string>
+    <string name="edit_budget_title">Edit Budget</string>
+
+    <string name="select_items_title">Select Expense Items</string>
+
+
+    <string name="hint_budget_name">Enter Budget Name</string>
+    <string name="hint_budget_amount">Enter Budget Amount</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDZCr3n_Iy5Hdx4w_lbOxKsEpW-ch9MIc4</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="dollar">$ </string>
+    <string name="negative_dollar">- $ </string>
+
+
 </resources>
