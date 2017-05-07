@@ -41,8 +41,10 @@ public class MonthFragment extends Fragment {
 
         double walletBalance = getArguments().getDouble("walletBalance");
         double totalExpenseAmount = getArguments().getDouble("totalExpenseAmount");
-
-
+//        if (expenseDatas != null)
+//            Log.v("*&^&*^&*^(*^(*^", "Month Fragment1 " + expenseDatas.size());
+//        else
+//            Log.v("*&^&*^&*^(*^(*^", "Month Fragment1 " + expenseDatas+" "+walletBalance);
         if (expenseDatas != null && expenseDatas.size() != 0) {
 
             ArrayList<ArrayList<ExpenseData>> exp = new ArrayList<>();
@@ -78,8 +80,7 @@ public class MonthFragment extends Fragment {
             for (int i = 0; i < exxx.length; i++) {
                 exp.add(exxx[i]);
             }
-
-            Log.v("*&^&*^&*^(*^(*^", "(87989u43434");
+//            Log.v("*&^&*^&*^(*^(*^", "Month Fragment2");
             recyclerView = (RecyclerView) view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, walletBalance, totalExpenseAmount);

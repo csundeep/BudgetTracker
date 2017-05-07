@@ -1,10 +1,7 @@
 package com.example.sandy.budgettracker.fragments;
 
-import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -12,17 +9,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.AddBudgetActivity;
@@ -42,7 +33,6 @@ import java.util.Locale;
 public class BudgetFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ArrayList<BudgetData> budgetDatas = null;
     private RecyclerView recyclerView;
-    private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +40,6 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
 
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
-        activity = this.getActivity();
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.budgetToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -65,47 +54,7 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
                     public void onItemClick(View view, int position) {
                         if (position == budgetDatas.size() - 1) {
                             openExpenseActivity();
-                        } else {
-                            View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
-                            final ImageButton menuButton = (ImageButton) viewItem.findViewById(R.id.budgetMenu);
-                            final TextView budgetNameTextView = (TextView) view.findViewById(R.id.budgetName);
-
-                            menuButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    PopupMenu popup = new PopupMenu(activity, menuButton);
-                                    popup.getMenuInflater().inflate(R.menu.budget_card_menu, popup.getMenu());
-
-                                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                        public boolean onMenuItemClick(MenuItem item) {
-                                            int id;
-                                            switch (item.getItemId()) {
-                                                case R.id.deleteBudget:
-                                                    id = (Integer) budgetNameTextView.getTag();
-                                                    deleteExpense(id);
-                                                    break;
-                                                case R.id.editBudget:
-                                                    id = (Integer) budgetNameTextView.getTag();
-                                                    Intent intent = new Intent(activity, AddBudgetActivity.class);
-                                                    Uri currentExpenseUri = ContentUris.withAppendedId(BudgetsContract.BudgetsEntry.CONTENT_URI, id);
-                                                    intent.setData(currentExpenseUri);
-                                                    activity.startActivity(intent);
-                                                    activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                                    break;
-                                                case R.id.listBudgetTrans:
-//                                                    id = (Integer) budgetNameTextView.getTag();
-                                                    break;
-                                            }
-
-                                            return true;
-                                        }
-                                    });
-                                    popup.show();
-                                }
-                            });
-
                         }
-
                     }
                 })
         );
@@ -119,19 +68,6 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
         Intent intent = new Intent(this.getActivity(), AddBudgetActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
-
-    private void deleteExpense(int budgetId) {
-
-        Uri currentExpenseURI = ContentUris.withAppendedId(BudgetsContract.BudgetsEntry.CONTENT_URI, budgetId);
-
-        int rowsDeleted = activity.getContentResolver().delete(currentExpenseURI, null, null);
-        if (rowsDeleted == 0) {
-            Toast.makeText(activity, activity.getString(R.string.editor_delete_budget_failed), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(activity, activity.getString(R.string.editor_delete_budget_successful), Toast.LENGTH_SHORT).show();
-        }
-
     }
 
 

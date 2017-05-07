@@ -339,6 +339,9 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         }
         getActivity().finish();
 
+        Intent intent = new Intent(this.getActivity(), MainActivity.class); //remove this after fix
+        startActivity(intent);//remove this after fix
+
     }
 
     public void updateExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
@@ -364,6 +367,9 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             checkBudgets(expenseData.getExpenseName());
         }
         getActivity().finish();
+
+        Intent intent = new Intent(this.getActivity(), MainActivity.class); //remove this after fix
+        startActivity(intent);//remove this after fix
     }
 
     public void deleteExpense(@SuppressWarnings("unused") View view, ExpenseData expenseData) {
@@ -379,6 +385,9 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         }
 
         getActivity().finish();
+
+        Intent intent = new Intent(this.getActivity(), MainActivity.class); //remove this after fix
+        startActivity(intent);//remove this after fix
     }
 
 

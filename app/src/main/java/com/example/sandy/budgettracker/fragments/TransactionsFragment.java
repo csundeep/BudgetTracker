@@ -15,7 +15,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +81,11 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     private boolean containsDate(Map<Date, ArrayList<ExpenseData>> expenses, Date date) {
         boolean isThere = false;
         for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
-            if (entry.getKey().getYear() == date.getYear() && entry.getKey().getMonth() == date.getMonth()) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(entry.getKey());
+            Calendar dateCal = Calendar.getInstance();
+            dateCal.setTime(date);
+            if (cal.get(Calendar.YEAR) == dateCal.get(Calendar.YEAR) && cal.get(Calendar.MONTH) == dateCal.get(Calendar.MONTH)) {
                 isThere = true;
                 break;
             }
@@ -94,7 +97,12 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     private ArrayList<ExpenseData> getExistentKey(Map<Date, ArrayList<ExpenseData>> expenses, Date date) {
         ArrayList<ExpenseData> result = null;
         for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
-            if (entry.getKey().getYear() == date.getYear() && entry.getKey().getMonth() == date.getMonth()) {
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(entry.getKey());
+            Calendar dateCal = Calendar.getInstance();
+            dateCal.setTime(date);
+            if (cal.get(Calendar.YEAR) == dateCal.get(Calendar.YEAR) && cal.get(Calendar.MONTH) == dateCal.get(Calendar.MONTH)) {
                 result = entry.getValue();
                 break;
             }
@@ -139,8 +147,6 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-//            cursor.close();
         }
         String[] projection = {
                 UserContract.UserEntry.COLUMN_USER_WALLET_AMOUNT};
@@ -176,6 +182,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
 
             while (beginCalendar.before(finishCalendar) || flag) {
+
                 String date = new SimpleDateFormat("MMM-yyyy", Locale.US).format(beginCalendar.getTime()).toUpperCase();
 
                 if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(finishCalendar.getTime()).toUpperCase()))
@@ -186,6 +193,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                 Bundle monthBundle = new Bundle();
                 for (Map.Entry<Date, ArrayList<ExpenseData>> entry : expenses.entrySet()) {
                     if (date.equalsIgnoreCase(new SimpleDateFormat("MMM-yyyy", Locale.US).format(entry.getKey()))) {
+
 //                        Log.v("@@@@@@@@@@@@@@@ ", date + " " + entry.getKey());
 //                        for (ExpenseData expenseData : entry.getValue()) {
 //                            Log.v("    !!!!!!!!!!!", expenseData.toString());
@@ -203,14 +211,15 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
                         monthBundle.putDouble("totalExpenseAmount", totalExpenseAmount);
                         monthBundle.putDouble("walletBalance", amount);
-
                         monthBundle.putParcelableArrayList("expensedatas", entry.getValue());
                         break;
                     }
 
                 }
+
                 monthFragment.setArguments(monthBundle);
                 fragments.add(monthFragment);
+
                 beginCalendar.add(Calendar.MONTH, 1);
             }
         } else {
@@ -221,15 +230,12 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
             fragments.add(monthFragment);
 
         }
-
-
         // Create an adapter that knows which fragment should be shown on each page
-        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(this.getChildFragmentManager(), fragments, tabs);
+        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(this.getChildFragmentManager()/* fix it*/, fragments, tabs);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
         if (viewPager != null) {
-            Log.v("$$$$$$","*******");
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(viewPager.getAdapter().getCount());
 
@@ -237,7 +243,6 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
 
-        // PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         if (tabLayout != null && viewPager != null) {
             tabLayout.setupWithViewPager(viewPager);
@@ -274,7 +279,6 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-//        getLoaderManager().restartLoader(0, null, this);
         displayDatabaseInfo(cursor);
     }
 

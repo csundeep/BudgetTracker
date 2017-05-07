@@ -135,13 +135,25 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
                     Fragment fragment = new ItemSelectionFragment();
                     Bundle args = new Bundle();
                     args.putSerializable("expenses", expenses);
-                    fragment.setArguments(args);
-                    budgetNameEditText.setText(budgetData.getBudgetName());
-                    budgetAmountEditText.setText(String.valueOf(budgetData.getBudgetAmount()));
-                    budgetExpensesTextView.setText(budgetData.getExpenses());
-                    dateTextView.setText(budgetData.getStartDate());
-                    notificationsSwitch.setChecked(budgetData.getNotify() != 0);
+
+                    String expenses = budgetExpensesTextView.getText().toString();
+                    String startDate = dateTextView.getText().toString();
+                    boolean isNotificationRequired = notificationsSwitch.isChecked();
+                    String name = budgetNameEditText.getText().toString();
+                    double amount = 0;
+                    if (!budgetAmountEditText.getText().toString().equals(""))
+                        amount = Double.parseDouble(budgetAmountEditText.getText().toString());
+                    String endDate = getEndDate(startDate);
+
+                    budgetData.setBudgetName(name);
+                    budgetData.setBudgetAmount(amount);
+                    budgetData.setExpenses(expenses);
+                    budgetData.setStartDate(startDate);
+                    budgetData.setEndDate(endDate);
+                    budgetData.setNotify((isNotificationRequired) ? 1 : 0);
+
                     args.putSerializable("selectedBudgetData", budgetData);
+                    fragment.setArguments(args);
                     transaction.replace(R.id.contentBudget, fragment);
                     transaction.commit();
 
