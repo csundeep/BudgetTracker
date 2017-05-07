@@ -40,7 +40,11 @@
         <activity
             android:name=".activities.BudgetDetailsActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BudgetTransactionsActivity"
+            android:parentActivityName=".activities.BudgetDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name=".providers.ExpensesProvider"

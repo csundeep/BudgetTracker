@@ -58,8 +58,8 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
                 public void onClick(View v) {
                     int id = (Integer) budgetNameTextView.getTag();
                     Intent intent = new Intent(activity, BudgetDetailsActivity.class);
-                    Uri currentExpenseUri = ContentUris.withAppendedId(BudgetsContract.BudgetsEntry.CONTENT_URI, id);
-                    intent.setData(currentExpenseUri);
+                    Uri currentBudgetUri = ContentUris.withAppendedId(BudgetsContract.BudgetsEntry.CONTENT_URI, id);
+                    intent.setData(currentBudgetUri);
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 }

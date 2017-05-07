@@ -1,5 +1,7 @@
 package com.example.sandy.budgettracker.activities;
 
+import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,14 +28,18 @@ import java.util.concurrent.TimeUnit;
 public class BudgetDetailsActivity extends AppCompatActivity {
     private BudgetData selectedBudgetData;
     private double totalExpenseCount;
+    private Activity activity;
+    private Uri currentBudgetUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_details);
 
+        activity = this;
+
         Intent intent = getIntent();
-        Uri currentBudgetUri = intent.getData();
+        currentBudgetUri = intent.getData();
 
         ImageButton backIB = (ImageButton) findViewById(R.id.backToBudgetList);
         TextView budgetTitleTV = (TextView) findViewById(R.id.budgetTitle);
@@ -101,19 +107,21 @@ public class BudgetDetailsActivity extends AppCompatActivity {
                     }
                 });
             budgetTitleTV.setText(selectedBudgetData.getBudgetName());
-
             budgetPeriodTV.setText("Month");
-
             if (transListIB != null)
                 transListIB.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        
+                        Intent intent = new Intent(activity, BudgetTransactionsActivity.class);
+                        intent.putExtra("selectedBudgetData", selectedBudgetData);
+                        intent.putExtra("totalExpenses", totalExpenseCount);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     }
                 });
 
-            float per = (float) totalExpenseCount / (float) selectedBudgetData.getBudgetAmount();
 
+            float per = (float) totalExpenseCount / (float) selectedBudgetData.getBudgetAmount();
             long diff = 31;
             try {
                 diff = new Date().getTime() - new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(selectedBudgetData.getStartDate()).getTime();
