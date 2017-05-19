@@ -115,6 +115,21 @@ public class BudgetTransactionsFragment extends Fragment implements LoaderManage
                 String date = cursor.getString(dateColumnIndex);
                 double latitude = cursor.getDouble(latitudeColumnIndex);
                 double longitude = cursor.getDouble(longitudeColumnIndex);
+
+                Date expenseDate = null, start = null, end = null;
+                try {
+                    expenseDate = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(date);
+                    start = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(selectedBudgetData.getStartDate());
+                    end = new SimpleDateFormat("MMM dd, yyyy", Locale.US).parse(selectedBudgetData.getEndDate());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (expenseDate == null || start == null || end == null)
+                    continue;
+                if (!(expenseDate.compareTo(start) >= 0 && expenseDate.compareTo(end) <= 0))
+                    continue;
+
                 ExpenseData expenseData = new ExpenseData(id, name, type, amount, date, note, latitude, longitude);
                 if (!selectedBudgetData.getExpenses().equals("All Expenses")) {
                     if (!selectedBudgetData.getExpenses().contains(name))

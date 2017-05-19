@@ -8,7 +8,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.location.Address;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,17 +77,10 @@ class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter
         if (expenseDatas.get(position).getLatitude() != 0 && expenseDatas.get(position).getLongitude() != 0) {
             holder.ll.setVisibility(View.VISIBLE);
             List<Address> addresses = GeoAddressUtil.getAddress(expenseDatas.get(position).getLatitude(), expenseDatas.get(position).getLongitude(), activity);
-            Address obj = addresses.get(0);
-            String add = obj.getAddressLine(0);
-            add = add + "\n" + obj.getCountryName();
-            add = add + "\n" + obj.getCountryCode();
-            add = add + "\n" + obj.getAdminArea();
-            add = add + "\n" + obj.getPostalCode();
-            add = add + "\n" + obj.getSubAdminArea();
-            add = add + "\n" + obj.getLocality();
-            add = add + "\n" + obj.getSubThoroughfare();
-//            Log.v("@@@@@@@@!!!!!!! ", add);
-            holder.expenseLocation.setText(obj.getAddressLine(0));
+            if (addresses != null && addresses.size() > 0) {
+                Address obj = addresses.get(0);
+                holder.expenseLocation.setText(obj.getAddressLine(0));
+            }
         } else {
             holder.ll.setVisibility(View.GONE);
         }

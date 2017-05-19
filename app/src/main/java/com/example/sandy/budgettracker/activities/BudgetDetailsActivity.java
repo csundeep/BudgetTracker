@@ -132,7 +132,7 @@ public class BudgetDetailsActivity extends AppCompatActivity {
 
             long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
             double averageAmount = (selectedBudgetData.getBudgetAmount() - totalExpenseCount) / (31 - days);
-
+            Log.v("######## ", selectedBudgetData.getBudgetAmount() + " "+totalExpenseCount);
             if (per * 100 < 100) {
                 line1TV.setText("Keep spending. You cab spend");
                 averageAmountTV.setVisibility(View.VISIBLE);
@@ -149,8 +149,8 @@ public class BudgetDetailsActivity extends AppCompatActivity {
                 customProgressShowProgress.setProgressColor(ContextCompat.getColor(this, R.color.red_500));
                 customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(this, R.color.red_200));
             } else if (per * 100 > 40) {
-                customProgressShowProgress.setProgressColor(ContextCompat.getColor(this, R.color.Gold));
-                customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(this, R.color.Yellow));
+                customProgressShowProgress.setProgressColor(ContextCompat.getColor(this, R.color.orange_500));
+                customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(this, R.color.orange_200));
             } else {
                 customProgressShowProgress.setProgressColor(ContextCompat.getColor(this, R.color.green_500));
                 customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(this, R.color.green_200));

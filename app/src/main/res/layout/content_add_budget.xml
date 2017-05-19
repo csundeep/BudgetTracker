@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16sp"
-                android:src="@drawable/ic_menu_camera" />
+                android:src="@drawable/ic_categories" />
 
             <LinearLayout
                 android:id="@+id/selectItems"
@@ -56,6 +56,7 @@
             android:layout_height="1dp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="50sp"
+            android:layout_marginEnd="20sp"
             android:layout_marginTop="16dp"
             android:background="@android:color/darker_gray" />
 
@@ -93,6 +94,7 @@
                     <com.jaredrummler.materialspinner.MaterialSpinner
                         android:id="@+id/spinnerPeriod"
                         android:layout_width="match_parent"
+                        android:backgroundTint="@color/shade"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -127,6 +129,7 @@
             android:layout_height="1dp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="50sp"
+            android:layout_marginEnd="20sp"
             android:layout_marginTop="16dp"
             android:background="@android:color/darker_gray" />
 
@@ -139,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16sp"
-                android:src="@drawable/ic_menu_camera" />
+                android:src="@drawable/ic_notification" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,6 +172,7 @@
             android:layout_height="1dp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="50sp"
+            android:layout_marginEnd="20sp"
             android:background="@android:color/darker_gray" />
 
     </LinearLayout>

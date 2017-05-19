@@ -115,7 +115,7 @@ public class BudgetTrackerDbHelper extends SQLiteOpenHelper {
         items.add(new ExpenseItem("Food", "Expense", R.drawable.ic_cutlery, R.color.Brown));
         items.add(new ExpenseItem("Family", "Expense", R.drawable.ic_user, R.color.DarkRed));
         items.add(new ExpenseItem("Bills", "Expense", R.drawable.ic_payment_method, R.color.DarkGreen));
-        items.add(new ExpenseItem("Entertainment", "Expense", R.drawable.ic_video_camera, R.color.Yellow));
+        items.add(new ExpenseItem("Entertainment", "Expense", R.drawable.ic_video_camera, R.color.orange_500));
         items.add(new ExpenseItem("Home", "Expense", R.drawable.ic_house, R.color.Tomato));
         items.add(new ExpenseItem("Utilities", "Expense", R.drawable.ic_light_bulb, R.color.DarkGray));
         items.add(new ExpenseItem("Shopping", "Expense", R.drawable.ic_shopping_cart, R.color.LightGreen));

@@ -149,7 +149,7 @@ public final class ImageAndColorUtil {
         } else if (expenseName.equalsIgnoreCase("Bills")) {
             return R.color.DarkGreen;
         } else if (expenseName.equalsIgnoreCase("Entertainment")) {
-            return R.color.Yellow;
+            return R.color.orange_500;
         } else if (expenseName.equalsIgnoreCase("Home")) {
             return R.color.Tomato;
         } else if (expenseName.equalsIgnoreCase("Utilities")) {

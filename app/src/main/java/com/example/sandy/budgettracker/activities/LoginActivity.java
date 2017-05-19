@@ -133,6 +133,8 @@ public class LoginActivity extends AppCompatActivity {
         loginBT.setEnabled(true);
         new Session(getBaseContext()).setuserId(userId);
         finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void onLoginFailed() {

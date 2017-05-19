@@ -30,8 +30,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_margin="16dp"
-                    android:textStyle="bold" />
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
 
                 <ImageButton
                     android:id="@+id/budgetMenu"
@@ -39,7 +42,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_margin="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_more_vert_black_24dp" />
             </RelativeLayout>
@@ -49,21 +54,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/totalBudgetExpense"
+                <LinearLayout
+                    android:id="@+id/text1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_margin="16dp"
                     android:gravity="start"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/totalBudgetSpent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/totalBudgetExpense"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <com.example.sandy.budgettracker.util.CustomProgress
                     android:id="@+id/customProgressShowProgress"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/custom_progress_height"
-                    android:layout_below="@+id/totalBudgetExpense"
+                    android:layout_below="@+id/text1"
                     android:layout_margin="16dp" />
 
                 <TextView

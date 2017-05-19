@@ -1,6 +1,7 @@
 package com.example.sandy.budgettracker.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,6 +86,18 @@ public class MonthFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, walletBalance, totalExpenseAmount);
             recyclerView.setAdapter(itemsAdapter);
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+                    if (dy > 0)
+                        fab.hide();
+                    else if (dy < 0)
+                        fab.show();
+                }
+            });
 
 
         }

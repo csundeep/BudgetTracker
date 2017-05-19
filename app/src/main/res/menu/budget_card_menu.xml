@@ -11,9 +11,4 @@
         android:enabled="true"
         android:title="@string/edit_budget"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/listBudgetTrans"
-        android:enabled="true"
-        android:title="@string/list_transactions"
-        app:showAsAction="ifRoom" />
 </menu>

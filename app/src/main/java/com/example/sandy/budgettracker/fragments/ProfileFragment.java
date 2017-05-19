@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -15,12 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.LoginActivity;
-import com.example.sandy.budgettracker.util.Session;
 import com.example.sandy.budgettracker.contracts.UserContract;
+import com.example.sandy.budgettracker.util.Session;
 
 
 public class ProfileFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -38,10 +38,10 @@ public class ProfileFragment extends Fragment implements LoaderManager.LoaderCal
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.profile);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabWallet);
+        ImageButton logoutBT = (ImageButton) view.findViewById(R.id.logout);
 
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        logoutBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new Session(getActivity().getBaseContext()).logout();

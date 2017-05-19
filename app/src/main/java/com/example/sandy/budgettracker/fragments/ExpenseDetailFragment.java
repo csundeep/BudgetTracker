@@ -98,7 +98,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 laLo = latitude + "," + longitude;
                 loadMap();
             }
-            amountTextView.setText(String.format(Locale.US, "%1$,.2f", selectedExpenseData.getExpenseAmount()));
+            amountTextView.setText(Double.toString(selectedExpenseData.getExpenseAmount()));
 
             backButton.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));
 
@@ -264,6 +264,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
                         locationImageView.setImageBitmap(bmp);
                         locationImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        locationImageView.setPadding(0,0,0,0);
                         laLo = "";
                     }
 
@@ -417,6 +418,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
         };
         Cursor cursor = getActivity().getContentResolver().query(BudgetsContract.BudgetsEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+        Log.v("@@@@@@@@@@@@ ",cursor.getCount()+"");
         if (cursor != null) {
             try {
                 int nameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);
@@ -433,14 +435,13 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     String endDate = cursor.getString(endDateColumnIndex);
                     int isNotify = cursor.getInt(notificationColumnIndex);
                     double totalExpense = calculateTotalExpenses(expenses, startDate, endDate);
+                    Log.v("!!!!!!!!!!!!!!!!!!",totalExpense+" "+amount);
                     if (!expenses.contains(presentExpense))
-                        return;
+                        continue;
                     if (totalExpense >= amount) {
                         if (isNotify == 1)
                             Toast.makeText(this.getActivity(), "Budget with name " + name + " exceeding", Toast.LENGTH_SHORT).show();
-                    } else
-                        Toast.makeText(this.getActivity(), "Budget with name " + name + " not exceeding", Toast.LENGTH_SHORT).show();
-
+                    }
 
                 }
             } catch (Exception e) {

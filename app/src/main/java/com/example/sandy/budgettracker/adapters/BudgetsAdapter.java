@@ -37,6 +37,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
 
     private class CustomViewHolder extends GeneralViewHolder {
         TextView budgetNameTextView;
+        TextView totalBudgetSpentTextView;
         TextView totalBudgetExpenseTextView;
         CustomProgress customProgressShowProgress;
         TextView budgetStartDateTextView;
@@ -47,6 +48,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
         CustomViewHolder(View view) {
             super(view);
             budgetNameTextView = (TextView) view.findViewById(R.id.budgetName);
+            totalBudgetSpentTextView = (TextView) view.findViewById(R.id.totalBudgetSpent);
             totalBudgetExpenseTextView = (TextView) view.findViewById(R.id.totalBudgetExpense);
             customProgressShowProgress = (CustomProgress) view.findViewById(R.id.customProgressShowProgress);
             budgetStartDateTextView = (TextView) view.findViewById(R.id.budgetStartDate);
@@ -87,9 +89,6 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
                                     intent.setData(currentExpenseUri);
                                     activity.startActivity(intent);
                                     activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                    break;
-                                case R.id.listBudgetTrans:
-//                                                    id = (Integer) budgetNameTextView.getTag();
                                     break;
                             }
 
@@ -162,17 +161,21 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
             CustomViewHolder holder1 = (CustomViewHolder) holder;
             holder1.budgetNameTextView.setText(budgetDatas.get(position).getBudgetName());
             holder1.budgetNameTextView.setTag(budgetDatas.get(position).getId());
-            holder1.totalBudgetExpenseTextView.setText("Spent $" + budgetDatas.get(position).getTotalExpenses() + " out of $" + budgetDatas.get(position).getBudgetAmount());
+            holder1.totalBudgetSpentTextView.setText("$" + budgetDatas.get(position).getTotalExpenses());
+            holder1.totalBudgetExpenseTextView.setText(" from $" + budgetDatas.get(position).getBudgetAmount());
             float per = (float) budgetDatas.get(position).getTotalExpenses() / (float) budgetDatas.get(position).getBudgetAmount();
             holder1.customProgressShowProgress.setMaximumPercentage(per);
             // customProgressShowProgress.useRoundedRectangleShape(30.0f);
             if (per * 100 > 80) {
+                holder1.totalBudgetSpentTextView.setTextColor(ContextCompat.getColor(activity, R.color.red_500));
                 holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.red_500));
                 holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.red_200));
             } else if (per * 100 > 40) {
-                holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.Gold));
-                holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.Yellow));
+                holder1.totalBudgetSpentTextView.setTextColor(ContextCompat.getColor(activity, R.color.orange_500));
+                holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.orange_500));
+                holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.orange_200));
             } else {
+                holder1.totalBudgetSpentTextView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
                 holder1.customProgressShowProgress.setProgressColor(ContextCompat.getColor(activity, R.color.green_500));
                 holder1.customProgressShowProgress.setProgressBackgroundColor(ContextCompat.getColor(activity, R.color.green_200));
             }

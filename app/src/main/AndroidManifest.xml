@@ -26,6 +26,7 @@
         <activity
             android:name=".activities.ExpenseActivity"
             android:parentActivityName=".activities.MainActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"
