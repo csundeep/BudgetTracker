@@ -82,7 +82,7 @@ public class MonthFragment extends Fragment {
                 exp.add(exxx[i]);
             }
 //            Log.v("*&^&*^&*^(*^(*^", "Month Fragment2");
-            recyclerView = (RecyclerView) view.findViewById(R.id.months);
+            recyclerView =  view.findViewById(R.id.months);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, walletBalance, totalExpenseAmount);
             recyclerView.setAdapter(itemsAdapter);
@@ -90,7 +90,7 @@ public class MonthFragment extends Fragment {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                    FloatingActionButton fab =  getActivity().findViewById(R.id.fab);
 
                     if (dy > 0)
                         fab.hide();

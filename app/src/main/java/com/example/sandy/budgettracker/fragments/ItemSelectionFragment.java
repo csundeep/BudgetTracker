@@ -48,8 +48,8 @@ public class ItemSelectionFragment extends Fragment implements LoaderManager.Loa
         }
 
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.itemsSelectionToolbar);
-        ImageButton cancelIB = (ImageButton) view.findViewById(R.id.itemSelectionSubmit);
+        Toolbar toolbar =  view.findViewById(R.id.itemsSelectionToolbar);
+        ImageButton cancelIB =  view.findViewById(R.id.itemSelectionSubmit);
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
@@ -72,15 +72,15 @@ public class ItemSelectionFragment extends Fragment implements LoaderManager.Loa
                 }
             });
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.items);
+        recyclerView =  view.findViewById(R.id.items);
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
 
-                        TextView itemNameTV = (TextView) viewItem.findViewById(R.id.itemName);
-                        ImageView checkedImageView = (ImageView) viewItem.findViewById(R.id.itemSelectionImage);
+                        TextView itemNameTV =  viewItem.findViewById(R.id.itemName);
+                        ImageView checkedImageView =  viewItem.findViewById(R.id.itemSelectionImage);
                         if (selectedItems.contains(itemNameTV.getText().toString())) {
                             selectedItems.remove(itemNameTV.getText().toString());
                             checkedImageView.setImageResource(R.drawable.ic_action_not_done);

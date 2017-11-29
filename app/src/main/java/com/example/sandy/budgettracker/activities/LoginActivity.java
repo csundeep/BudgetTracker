@@ -16,26 +16,24 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.util.Session;
 import com.example.sandy.budgettracker.contracts.UserContract;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
-    @Bind(R.id.email)
     EditText emailET;
-    @Bind(R.id.password)
     EditText passwordET;
-    @Bind(R.id.login)
     Button loginBT;
-    @Bind(R.id.signup)
     TextView signupLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+
+        emailET=findViewById(R.id.email);
+        passwordET=findViewById(R.id.password);
+        loginBT=findViewById(R.id.login);
+        signupLink=findViewById(R.id.signup);
 
         loginBT.setOnClickListener(new View.OnClickListener() {
 

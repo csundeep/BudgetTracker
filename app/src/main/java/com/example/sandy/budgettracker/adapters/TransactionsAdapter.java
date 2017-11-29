@@ -47,9 +47,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         CustomViewHolder(View view) {
             super(view);
 
-            this.transListView = (RecyclerView) view.findViewById(R.id.recyclerviewList);
-            this.totalExpenseDateView = (TextView) view.findViewById(R.id.totalExpenseDate);
-            this.totalExpenseAmountView = (TextView) view.findViewById(R.id.totalExpenseAmount);
+            this.transListView =  view.findViewById(R.id.recyclerviewList);
+            this.totalExpenseDateView =  view.findViewById(R.id.totalExpenseDate);
+            this.totalExpenseAmountView =  view.findViewById(R.id.totalExpenseAmount);
 
         }
 
@@ -72,9 +72,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
         MonthSummaryCard(View view) {
             super(view);
-            this.walletAmountView = (TextView) view.findViewById(R.id.walletAmount);
+            this.walletAmountView =  view.findViewById(R.id.walletAmount);
             this.walletAmountView.setTextColor(ContextCompat.getColor(activity, R.color.green_500));
-            this.totalExpensesPerMonth = (TextView) view.findViewById(R.id.totalExpensesPerMonth);
+            this.totalExpensesPerMonth = view.findViewById(R.id.totalExpensesPerMonth);
             this.totalExpensesPerMonth.setTextColor(ContextCompat.getColor(activity, R.color.red_500));
         }
 

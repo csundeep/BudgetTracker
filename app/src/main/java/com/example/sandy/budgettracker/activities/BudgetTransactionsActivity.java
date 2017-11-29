@@ -21,7 +21,7 @@ public class BudgetTransactionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_budget_transactions);
 
         Intent intent = getIntent();
-        if (getIntent() != null) {
+        if (getIntent() != null && intent.getExtras() != null) {
             selectedBudgetData = (BudgetData) intent.getExtras().get("selectedBudgetData");
             totalExpenseCount = (double) intent.getExtras().get("totalExpenses");
         }

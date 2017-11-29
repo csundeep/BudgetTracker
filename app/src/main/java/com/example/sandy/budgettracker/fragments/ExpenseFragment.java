@@ -82,8 +82,8 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
 //
 //
 //        });
-        appBarImageView = (ImageView) getActivity().findViewById(R.id.appBarExpenseImage);
-        recyclerView = (RecyclerView) view.findViewById(R.id.expense);
+        appBarImageView =  getActivity().findViewById(R.id.appBarExpenseImage);
+        recyclerView =  view.findViewById(R.id.expense);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
 
                 {
@@ -97,7 +97,7 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
                         }
 
                         viewItem.setAlpha(.5f);
-                        TextView textView = (TextView) viewItem.findViewById(R.id.expense_name);
+                        TextView textView =  viewItem.findViewById(R.id.expense_name);
                         String expenseItem = textView.getText().toString();
                         selectedPosition = position;
 
@@ -108,12 +108,12 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
                                 ExpenseFragment.selectedExpenseData.setExpenseName(item.getName());
                                 ExpenseFragment.selectedExpenseData.setExpenseType(item.getType());
                                 appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
-                                Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
+                                Toolbar toolbar =  getActivity().findViewById(R.id.expenseToolbar);
                                 toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
                                 ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-                                LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.expenseInfoLayout);
+                                LinearLayout linearLayout =  getActivity().findViewById(R.id.expenseInfoLayout);
                                 linearLayout.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
-                                TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
+                                TabLayout tabLayout =  getActivity().findViewById(R.id.tabs1);
                                 tabLayout.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
                             }
                         }
@@ -122,13 +122,13 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         );
 
 
-        b = (ImageButton) getActivity().findViewById(R.id.addExpense);
+        b =  getActivity().findViewById(R.id.addExpense);
         b.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View v) {
-                TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
+                TextView amountTextView =  getActivity().findViewById(R.id.amount);
                 double amount = 0;
                 if (amountTextView.getText() != null)
                     try {
@@ -141,7 +141,7 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         });
 
 
-        ImageButton b1 = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
+        ImageButton b1 = getActivity().findViewById(R.id.appBarExpenseImage);
         if (b1 != null)
             b1.setOnClickListener(new View.OnClickListener() {
                 @Override

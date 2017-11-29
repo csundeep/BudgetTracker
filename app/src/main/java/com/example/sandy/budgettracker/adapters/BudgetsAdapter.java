@@ -47,13 +47,13 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
 
         CustomViewHolder(View view) {
             super(view);
-            budgetNameTextView = (TextView) view.findViewById(R.id.budgetName);
-            totalBudgetSpentTextView = (TextView) view.findViewById(R.id.totalBudgetSpent);
-            totalBudgetExpenseTextView = (TextView) view.findViewById(R.id.totalBudgetExpense);
-            customProgressShowProgress = (CustomProgress) view.findViewById(R.id.customProgressShowProgress);
-            budgetStartDateTextView = (TextView) view.findViewById(R.id.budgetStartDate);
-            budgetEndDateTextView = (TextView) view.findViewById(R.id.budgetEndDate);
-            rl = (RelativeLayout) view.findViewById(R.id.budgetDetails);
+            budgetNameTextView =  view.findViewById(R.id.budgetName);
+            totalBudgetSpentTextView =  view.findViewById(R.id.totalBudgetSpent);
+            totalBudgetExpenseTextView =  view.findViewById(R.id.totalBudgetExpense);
+            customProgressShowProgress =  view.findViewById(R.id.customProgressShowProgress);
+            budgetStartDateTextView =  view.findViewById(R.id.budgetStartDate);
+            budgetEndDateTextView =  view.findViewById(R.id.budgetEndDate);
+            rl =  view.findViewById(R.id.budgetDetails);
 
             rl.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,7 +66,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.GeneralV
                     activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 }
             });
-            menuButton = (ImageButton) view.findViewById(R.id.budgetMenu);
+            menuButton = view.findViewById(R.id.budgetMenu);
 
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -21,7 +21,7 @@ public class ExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expence);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.expenseToolbar);
+        Toolbar toolbar = findViewById(R.id.expenseToolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);

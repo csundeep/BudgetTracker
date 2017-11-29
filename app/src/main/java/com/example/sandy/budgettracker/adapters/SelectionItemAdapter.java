@@ -39,9 +39,9 @@ public class SelectionItemAdapter extends RecyclerView.Adapter<SelectionItemAdap
         CustomViewHolderList(View view) {
             super(view);
 
-            this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
-            this.itemName = (TextView) view.findViewById(R.id.itemName);
-            this.itemSelectedImage = (ImageView) view.findViewById(R.id.itemSelectionImage);
+            this.itemImage =  view.findViewById(R.id.itemImage);
+            this.itemName =  view.findViewById(R.id.itemName);
+            this.itemSelectedImage =  view.findViewById(R.id.itemSelectionImage);
 
         }
     }

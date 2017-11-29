@@ -56,18 +56,18 @@ public class BudgetCreationFragment extends Fragment implements DatePickerDialog
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget_creation, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarBudgetCreate);
-        ViewGroup dateViewGroup = (ViewGroup) view.findViewById(R.id.selectDate);
-        ViewGroup expensesViewGroup = (ViewGroup) view.findViewById(R.id.selectItems);
-        MaterialSpinner spinner = (MaterialSpinner) view.findViewById(R.id.spinnerPeriod);
-        this.budgetExpensesTextView = (TextView) view.findViewById(R.id.budgetExpenses);
-        this.budgetNameEditText = (EditText) view.findViewById(R.id.addbudgetName);
-        this.budgetAmountEditText = (EditText) view.findViewById(R.id.addbudgetAmount);
-        this.notificationsSwitch = (SwitchCompat) view.findViewById(R.id.notificationsSwitch);
-        this.dateTextView = (TextView) view.findViewById(R.id.dateStartBudget);
+        Toolbar toolbar =  view.findViewById(R.id.toolbarBudgetCreate);
+        ViewGroup dateViewGroup =  view.findViewById(R.id.selectDate);
+        ViewGroup expensesViewGroup =  view.findViewById(R.id.selectItems);
+        MaterialSpinner spinner =  view.findViewById(R.id.spinnerPeriod);
+        this.budgetExpensesTextView =  view.findViewById(R.id.budgetExpenses);
+        this.budgetNameEditText =  view.findViewById(R.id.addbudgetName);
+        this.budgetAmountEditText =  view.findViewById(R.id.addbudgetAmount);
+        this.notificationsSwitch =  view.findViewById(R.id.notificationsSwitch);
+        this.dateTextView =  view.findViewById(R.id.dateStartBudget);
         this.dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.US).format(new Date()));
-        ImageButton cancelIB = (ImageButton) view.findViewById(R.id.budgetClear);
-        final FloatingActionButton addBudget = (FloatingActionButton) view.findViewById(R.id.addBudget);
+        ImageButton cancelIB =  view.findViewById(R.id.budgetClear);
+        final FloatingActionButton addBudget =  view.findViewById(R.id.addBudget);
 
 
         if (getArguments() != null && getArguments().getString("currentBudgetUri") != null)

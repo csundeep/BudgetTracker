@@ -18,7 +18,7 @@ public class OverviewFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.overviewToolbar);
+        Toolbar toolbar =  view.findViewById(R.id.overviewToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.overview);

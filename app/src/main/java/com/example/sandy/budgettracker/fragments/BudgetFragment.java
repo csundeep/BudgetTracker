@@ -41,13 +41,13 @@ public class BudgetFragment extends Fragment implements LoaderManager.LoaderCall
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.budgetToolbar);
+        Toolbar toolbar =  view.findViewById(R.id.budgetToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.budgets);
 
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.budgets);
+        recyclerView =  view.findViewById(R.id.budgets);
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override

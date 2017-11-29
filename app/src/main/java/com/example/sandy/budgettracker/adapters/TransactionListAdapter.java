@@ -38,11 +38,11 @@ class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter
             super(view);
 
             view.setOnClickListener(new ExpenseItemOnClickListener(activity));
-            this.expenseImage = (ImageView) view.findViewById(R.id.trans_expense_image);
-            this.expenseName = (TextView) view.findViewById(R.id.trans_expense_name);
-            this.expenseAmount = (TextView) view.findViewById(R.id.trans_expense_amount);
-            this.expenseLocation = (TextView) view.findViewById(R.id.trans_expense_location);
-            this.ll = (LinearLayout) view.findViewById(R.id.expenseLocation);
+            this.expenseImage =  view.findViewById(R.id.trans_expense_image);
+            this.expenseName =  view.findViewById(R.id.trans_expense_name);
+            this.expenseAmount =  view.findViewById(R.id.trans_expense_amount);
+            this.expenseLocation =  view.findViewById(R.id.trans_expense_location);
+            this.ll =  view.findViewById(R.id.expenseLocation);
 
         }
     }

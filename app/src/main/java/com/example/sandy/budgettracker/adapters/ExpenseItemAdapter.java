@@ -33,8 +33,8 @@ public class ExpenseItemAdapter extends RecyclerView.Adapter<ExpenseItemAdapter.
         CustomViewHolderList(View view) {
             super(view);
 
-            this.expenseImage = (ImageView) view.findViewById(R.id.expense_image);
-            this.expenseName = (TextView) view.findViewById(R.id.expense_name);
+            this.expenseImage =  view.findViewById(R.id.expense_image);
+            this.expenseName =  view.findViewById(R.id.expense_name);
 
         }
     }

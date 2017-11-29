@@ -20,7 +20,7 @@ class ExpenseItemOnClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        TextView textView = (TextView) v.findViewById(R.id.trans_expense_name);
+        TextView textView =  v.findViewById(R.id.trans_expense_name);
         int id = (Integer) textView.getTag();
         Intent intent = new Intent(activity, ExpenseActivity.class);
         Uri currentExpenseUri = ContentUris.withAppendedId(ExpensesContract.ExpenseEntry.CONTENT_URI, id);

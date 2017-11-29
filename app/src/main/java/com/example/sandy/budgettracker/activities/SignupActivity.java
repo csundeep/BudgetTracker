@@ -14,39 +14,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sandy.budgettracker.R;
-import com.example.sandy.budgettracker.util.Session;
 import com.example.sandy.budgettracker.contracts.UserContract;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import com.example.sandy.budgettracker.util.Session;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    @Bind(R.id.firstName)
     EditText firstNameET;
-    @Bind(R.id.lastName)
     EditText lastNameET;
-    @Bind(R.id.email)
     EditText emailET;
-    @Bind(R.id.mobile)
     EditText mobileET;
-    @Bind(R.id.password)
     EditText passwordET;
-    @Bind(R.id.reEnterPassword)
     EditText rePasswordET;
-    @Bind(R.id.initialAmount)
     EditText initialAmountET;
-    @Bind(R.id.signup)
     Button signUpBT;
-    @Bind(R.id.login)
     TextView loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        ButterKnife.bind(this);
+        firstNameET=findViewById(R.id.firstName);
+        lastNameET=findViewById(R.id.lastName);
+        emailET=findViewById(R.id.email);
+        mobileET=findViewById(R.id.mobile);
+        passwordET=findViewById(R.id.password);
+        rePasswordET=findViewById(R.id.reEnterPassword);
+        initialAmountET=findViewById(R.id.initialAmount);
+        signUpBT=findViewById(R.id.signup);
+        loginLink=findViewById(R.id.login);
 
         signUpBT.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -44,9 +44,9 @@ public class BudgetTransactionsFragment extends Fragment implements LoaderManage
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_budget_transactions, container, false);
 
-        ImageButton backIB = (ImageButton) view.findViewById(R.id.backToBudget);
-        TextView budgetTitleTV = (TextView) view.findViewById(R.id.budgetTransTitle);
-        TextView budgetPeriodTV = (TextView) view.findViewById(R.id.timeIntervel);
+        ImageButton backIB =  view.findViewById(R.id.backToBudget);
+        TextView budgetTitleTV =  view.findViewById(R.id.budgetTransTitle);
+        TextView budgetPeriodTV =  view.findViewById(R.id.timeIntervel);
 
         if (getArguments() != null && getArguments().getSerializable("selectedBudgetData") != null) {
             selectedBudgetData = (BudgetData) getArguments().getSerializable("selectedBudgetData");
@@ -178,7 +178,7 @@ public class BudgetTransactionsFragment extends Fragment implements LoaderManage
             for (int i = 0; i < exxx.length; i++) {
                 exp.add(exxx[i]);
             }
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.budgetTransactions);
+            RecyclerView recyclerView =  view.findViewById(R.id.budgetTransactions);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             TransactionsAdapter itemsAdapter = new TransactionsAdapter(this.getActivity(), exp, selectedBudgetData.getBudgetAmount(), totalExpenseCount);
             recyclerView.setAdapter(itemsAdapter);

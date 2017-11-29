@@ -33,12 +33,12 @@ public class ProfileFragment extends Fragment implements LoaderManager.LoaderCal
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.walletToolbar);
+        Toolbar toolbar =  view.findViewById(R.id.walletToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.profile);
 
-        ImageButton logoutBT = (ImageButton) view.findViewById(R.id.logout);
+        ImageButton logoutBT =  view.findViewById(R.id.logout);
 
 
         logoutBT.setOnClickListener(new View.OnClickListener() {
@@ -89,11 +89,11 @@ public class ProfileFragment extends Fragment implements LoaderManager.LoaderCal
             String mobile = cursor.getString(mobileColumnIndex);
             String walletAmount = cursor.getString(walletAmountIndex);
 
-            TextView profileFirstName = (TextView) view.findViewById(R.id.profileFirstName);
-            TextView profileLastName = (TextView) view.findViewById(R.id.profilelastName);
-            TextView profileEmail = (TextView) view.findViewById(R.id.profileEmail);
-            TextView profilePhone = (TextView) view.findViewById(R.id.profilePhone);
-            TextView profileWallet = (TextView) view.findViewById(R.id.profileInitalWalletAmount);
+            TextView profileFirstName =  view.findViewById(R.id.profileFirstName);
+            TextView profileLastName =  view.findViewById(R.id.profilelastName);
+            TextView profileEmail =  view.findViewById(R.id.profileEmail);
+            TextView profilePhone =  view.findViewById(R.id.profilePhone);
+            TextView profileWallet =  view.findViewById(R.id.profileInitalWalletAmount);
 
 
             profileFirstName.setText(firstName);

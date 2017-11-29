@@ -46,12 +46,12 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.transactionsToolbar);
+        Toolbar toolbar =  view.findViewById(R.id.transactionsToolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.transactions);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab =  view.findViewById(R.id.fab);
         if (fab != null)
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -233,7 +233,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         // Create an adapter that knows which fragment should be shown on each page
         SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(this.getChildFragmentManager()/* fix it*/, fragments, tabs);
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        ViewPager viewPager =  view.findViewById(R.id.viewpager);
         // Set the adapter onto the view pager
         if (viewPager != null) {
             viewPager.setAdapter(adapter);
@@ -241,7 +241,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
 
         }
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabLayout =  view.findViewById(R.id.tabs);
 
         // Attach the view pager to the tab strip
         if (tabLayout != null && viewPager != null) {

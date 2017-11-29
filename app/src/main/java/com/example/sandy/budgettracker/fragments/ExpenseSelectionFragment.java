@@ -24,7 +24,7 @@ public class ExpenseSelectionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expense_selection, container, false);
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager1);
+        ViewPager viewPager =  view.findViewById(R.id.viewpager1);
         List<String> tabs = new ArrayList<>();
         tabs.add("EXPENSES");
         tabs.add("INCOME");
@@ -34,7 +34,7 @@ public class ExpenseSelectionFragment extends Fragment {
             selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
 
 
-        ImageButton b = (ImageButton) getActivity().findViewById(R.id.addExpense);
+        ImageButton b =  getActivity().findViewById(R.id.addExpense);
         b.setImageResource(R.drawable.ic_action_forward);
 
         Fragment f1 = new ExpenseFragment();
@@ -59,7 +59,7 @@ public class ExpenseSelectionFragment extends Fragment {
         SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getChildFragmentManager(), fragments, tabs);
         if (viewPager != null)
             viewPager.setAdapter(adapter);
-        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
+        TabLayout tabLayout =  getActivity().findViewById(R.id.tabs1);
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(getContext(), R.color.grey_200),

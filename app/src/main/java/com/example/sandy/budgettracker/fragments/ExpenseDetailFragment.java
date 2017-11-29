@@ -74,17 +74,17 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
         selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
 
-        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
-        TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.expenseToolbar);
-        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.expenseInfoLayout);
-        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs1);
-        EditText notesEditText = (EditText) view.findViewById(R.id.comments);
-        ViewGroup dateViewGroup = (ViewGroup) view.findViewById(R.id.calender);
-        ImageButton storeExpenseButton = (ImageButton) getActivity().findViewById(R.id.addExpense);
-        ImageButton backButton = (ImageButton) getActivity().findViewById(R.id.appBarExpenseImage);
-        this.dateTextView = (TextView) view.findViewById(R.id.date);
-        this.locationImageView = (ImageView) view.findViewById(R.id.location);
+        Button deleteButton =  view.findViewById(R.id.deleteButton);
+        TextView amountTextView =  getActivity().findViewById(R.id.amount);
+        Toolbar toolbar =  getActivity().findViewById(R.id.expenseToolbar);
+        LinearLayout linearLayout =  getActivity().findViewById(R.id.expenseInfoLayout);
+        TabLayout tabLayout =  getActivity().findViewById(R.id.tabs1);
+        EditText notesEditText =  view.findViewById(R.id.comments);
+        ViewGroup dateViewGroup =  view.findViewById(R.id.calender);
+        ImageButton storeExpenseButton =  getActivity().findViewById(R.id.addExpense);
+        ImageButton backButton =  getActivity().findViewById(R.id.appBarExpenseImage);
+        this.dateTextView =  view.findViewById(R.id.date);
+        this.locationImageView =  view.findViewById(R.id.location);
 
         if (selectedExpenseData != null && selectedExpenseData.getExpenseName() != null) {
             if (selectedExpenseData.getId() != 0)
@@ -167,13 +167,13 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 @Override
                 public void onClick(View v) {
 
-                    EditText notesEditText = (EditText) view.findViewById(R.id.comments);
+                    EditText notesEditText =  view.findViewById(R.id.comments);
                     String notes = notesEditText.getText().toString();
 
-                    TextView calenderTextView = (TextView) view.findViewById(R.id.date);
+                    TextView calenderTextView =  view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
 
-                    TextView amountTextView = (TextView) getActivity().findViewById(R.id.amount);
+                    TextView amountTextView =  getActivity().findViewById(R.id.amount);
                     double amount = Double.valueOf(amountTextView.getText().toString());
 
                     selectedExpenseData.setExpenseAmount(amount);
@@ -195,9 +195,9 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 @Override
                 public void onClick(View v) {
                     Bundle args = new Bundle();
-                    EditText notesEditText = (EditText) view.findViewById(R.id.comments);
+                    EditText notesEditText =  view.findViewById(R.id.comments);
                     String notes = notesEditText.getText().toString();
-                    TextView calenderTextView = (TextView) view.findViewById(R.id.date);
+                    TextView calenderTextView =  view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
 
                     selectedExpenseData.setNote(notes);
@@ -418,7 +418,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 String.valueOf(new Session(getActivity().getBaseContext()).getuserId())
         };
         Cursor cursor = getActivity().getContentResolver().query(BudgetsContract.BudgetsEntry.CONTENT_URI, projection, selection, selectionArgs, null);
-        Log.v("@@@@@@@@@@@@ ",cursor.getCount()+"");
+        //Log.v("@@@@@@@@@@@@ ",cursor.getCount()+"");
         if (cursor != null) {
             try {
                 int nameColumnIndex = cursor.getColumnIndex(BudgetsContract.BudgetsEntry.COLUMN_BUDGET_NAME);

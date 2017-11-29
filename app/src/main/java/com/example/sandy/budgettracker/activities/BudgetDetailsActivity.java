@@ -1,7 +1,6 @@
 package com.example.sandy.budgettracker.activities;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,7 +28,6 @@ public class BudgetDetailsActivity extends AppCompatActivity {
     private BudgetData selectedBudgetData;
     private double totalExpenseCount;
     private Activity activity;
-    private Uri currentBudgetUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,22 +37,22 @@ public class BudgetDetailsActivity extends AppCompatActivity {
         activity = this;
 
         Intent intent = getIntent();
-        currentBudgetUri = intent.getData();
+        Uri currentBudgetUri = intent.getData();
 
-        ImageButton backIB = (ImageButton) findViewById(R.id.backToBudgetList);
-        TextView budgetTitleTV = (TextView) findViewById(R.id.budgetTitle);
-        TextView budgetPeriodTV = (TextView) findViewById(R.id.budgetPeriod);
-        ImageButton transListIB = (ImageButton) findViewById(R.id.listBudgetTransactions);
+        ImageButton backIB =  findViewById(R.id.backToBudgetList);
+        TextView budgetTitleTV =  findViewById(R.id.budgetTitle);
+        TextView budgetPeriodTV =  findViewById(R.id.budgetPeriod);
+        ImageButton transListIB =  findViewById(R.id.listBudgetTransactions);
 
-        TextView line1TV = (TextView) findViewById(R.id.line1);
-        TextView averageAmountTV = (TextView) findViewById(R.id.averageAmount);
-        TextView line3TV = (TextView) findViewById(R.id.line3);
-        CustomProgress customProgressShowProgress = (CustomProgress) findViewById(R.id.totalBudgetProgress);
-        TextView startDateTV = (TextView) findViewById(R.id.budgetDetailStartDate);
-        TextView endDateTV = (TextView) findViewById(R.id.budgetDetailEndDate);
+        TextView line1TV =  findViewById(R.id.line1);
+        TextView averageAmountTV =  findViewById(R.id.averageAmount);
+        TextView line3TV =  findViewById(R.id.line3);
+        CustomProgress customProgressShowProgress = findViewById(R.id.totalBudgetProgress);
+        TextView startDateTV =  findViewById(R.id.budgetDetailStartDate);
+        TextView endDateTV =  findViewById(R.id.budgetDetailEndDate);
 
-        TextView spentTV = (TextView) findViewById(R.id.spent);
-        TextView totalTV = (TextView) findViewById(R.id.totalBudget);
+        TextView spentTV =  findViewById(R.id.spent);
+        TextView totalTV =  findViewById(R.id.totalBudget);
 
         if (currentBudgetUri != null) {
             String[] projection = {
@@ -134,7 +132,7 @@ public class BudgetDetailsActivity extends AppCompatActivity {
             double averageAmount = (selectedBudgetData.getBudgetAmount() - totalExpenseCount) / (31 - days);
             Log.v("######## ", selectedBudgetData.getBudgetAmount() + " "+totalExpenseCount);
             if (per * 100 < 100) {
-                line1TV.setText("Keep spending. You cab spend");
+                line1TV.setText("Keep spending. You can spend");
                 averageAmountTV.setVisibility(View.VISIBLE);
                 averageAmountTV.setText("$ " + String.format(Locale.US, "%1$,.2f", averageAmount));
                 line3TV.setVisibility(View.VISIBLE);
