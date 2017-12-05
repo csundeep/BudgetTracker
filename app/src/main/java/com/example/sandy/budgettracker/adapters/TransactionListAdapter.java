@@ -23,7 +23,7 @@ import com.example.sandy.budgettracker.util.ImageAndColorUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.CustomViewHolderList> {
+public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.CustomViewHolderList> {
     private ArrayList<ExpenseData> expenseDatas;
     private Activity activity;
 

@@ -11,8 +11,8 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="6dp"
         android:layout_marginBottom="16dp"
+        android:elevation="6dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -27,52 +27,65 @@
                 android:id="@+id/addExpense"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_gravity="end"
                 android:layout_marginTop="2dp"
-                android:layout_gravity="right"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Next Arrow Image"
                 android:src="@drawable/ic_action_forward" />
 
         </android.support.v7.widget.Toolbar>
 
         <LinearLayout
+            android:id="@+id/expenseInfoLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
+            android:orientation="horizontal"
             android:paddingBottom="8dp"
-            android:id="@+id/expenseInfoLayout"
-            android:orientation="horizontal">
+            android:paddingTop="8dp">
 
             <ImageButton
                 android:id="@+id/appBarExpenseImage"
-                android:layout_width="32dp"
+                android:layout_width="wrap_content"
                 android:layout_height="32dp"
+                android:layout_marginStart="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginLeft="36dp" />
+                android:contentDescription="Expense Image" />
 
-            <EditText
-                android:id="@+id/amount"
-                android:layout_width="220dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:gravity="right"
-                android:hint="0"
-                android:inputType="numberDecimal|numberSigned"
-                android:textColorHint="@android:color/white"
-                android:textSize="28dp" />
-
-            <TextView
-                android:id="@+id/value"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:text="USD"
-                android:textColor="@android:color/white"
-                android:textSize="28dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <EditText
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:gravity="end"
+                    android:hint="0"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/value"
+                    android:layout_width="64sp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+
+                    android:text="USD"
+                    android:textColor="@android:color/white"
+                    android:textSize="28sp" />
+            </LinearLayout>
         </LinearLayout>
+
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabs1"
+            android:id="@+id/expense_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"

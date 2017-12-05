@@ -59,7 +59,7 @@ public class ExpenseSelectionFragment extends Fragment {
         SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getChildFragmentManager(), fragments, tabs);
         if (viewPager != null)
             viewPager.setAdapter(adapter);
-        TabLayout tabLayout =  getActivity().findViewById(R.id.tabs1);
+        TabLayout tabLayout =  getActivity().findViewById(R.id.expense_tabs);
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(getContext(), R.color.grey_200),

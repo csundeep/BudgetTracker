@@ -11,7 +11,7 @@ import com.example.sandy.budgettracker.R;
 import com.example.sandy.budgettracker.activities.ExpenseActivity;
 import com.example.sandy.budgettracker.contracts.ExpensesContract;
 
-class ExpenseItemOnClickListener implements View.OnClickListener {
+public class ExpenseItemOnClickListener implements View.OnClickListener {
     private Activity activity;
 
     ExpenseItemOnClickListener(Activity activity) {

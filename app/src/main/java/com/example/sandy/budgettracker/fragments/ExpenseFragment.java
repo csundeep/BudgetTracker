@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private RecyclerView recyclerView;
-    private int selectedPosition = -1;
+    private int previousSelectedPosition = -1;
     ExpenseItemAdapter itemsAdapter;
     private ArrayList<ExpenseItem> items;
     ImageView appBarImageView;
@@ -82,24 +82,23 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
 //
 //
 //        });
-        appBarImageView =  getActivity().findViewById(R.id.appBarExpenseImage);
-        recyclerView =  view.findViewById(R.id.expense);
+        appBarImageView = getActivity().findViewById(R.id.appBarExpenseImage);
+        recyclerView = view.findViewById(R.id.expense);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
-
                 {
                     @Override
                     public void onItemClick(View view, int position) {
 
                         View viewItem = recyclerView.getLayoutManager().findViewByPosition(position);
 
-                        if (selectedPosition != -1) {
-                            recyclerView.getLayoutManager().findViewByPosition(selectedPosition).setAlpha(1f);
-                        }
+                        if (previousSelectedPosition != -1 && recyclerView.getLayoutManager().findViewByPosition(previousSelectedPosition) != null)
+                            recyclerView.getLayoutManager().findViewByPosition(previousSelectedPosition).setAlpha(1f);
+
 
                         viewItem.setAlpha(.5f);
-                        TextView textView =  viewItem.findViewById(R.id.expense_name);
+                        TextView textView = viewItem.findViewById(R.id.expense_name);
                         String expenseItem = textView.getText().toString();
-                        selectedPosition = position;
+                        previousSelectedPosition = position;
 
                         for (ExpenseItem item : items) {
                             if (item.getName().equals(expenseItem)) {
@@ -108,12 +107,12 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
                                 ExpenseFragment.selectedExpenseData.setExpenseName(item.getName());
                                 ExpenseFragment.selectedExpenseData.setExpenseType(item.getType());
                                 appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
-                                Toolbar toolbar =  getActivity().findViewById(R.id.expenseToolbar);
+                                Toolbar toolbar = getActivity().findViewById(R.id.expenseToolbar);
                                 toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
                                 ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-                                LinearLayout linearLayout =  getActivity().findViewById(R.id.expenseInfoLayout);
+                                LinearLayout linearLayout = getActivity().findViewById(R.id.expenseInfoLayout);
                                 linearLayout.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
-                                TabLayout tabLayout =  getActivity().findViewById(R.id.tabs1);
+                                TabLayout tabLayout = getActivity().findViewById(R.id.expense_tabs);
                                 tabLayout.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
                             }
                         }
@@ -122,13 +121,13 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         );
 
 
-        b =  getActivity().findViewById(R.id.addExpense);
+        b = getActivity().findViewById(R.id.addExpense);
         b.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View v) {
-                TextView amountTextView =  getActivity().findViewById(R.id.amount);
+                TextView amountTextView = getActivity().findViewById(R.id.amount);
                 double amount = 0;
                 if (amountTextView.getText() != null)
                     try {

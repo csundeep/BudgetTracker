@@ -78,7 +78,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         TextView amountTextView =  getActivity().findViewById(R.id.amount);
         Toolbar toolbar =  getActivity().findViewById(R.id.expenseToolbar);
         LinearLayout linearLayout =  getActivity().findViewById(R.id.expenseInfoLayout);
-        TabLayout tabLayout =  getActivity().findViewById(R.id.tabs1);
+        TabLayout tabLayout =  getActivity().findViewById(R.id.expense_tabs);
         EditText notesEditText =  view.findViewById(R.id.comments);
         ViewGroup dateViewGroup =  view.findViewById(R.id.calender);
         ImageButton storeExpenseButton =  getActivity().findViewById(R.id.addExpense);
