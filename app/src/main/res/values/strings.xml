@@ -26,6 +26,8 @@
     <string name="editor_delete_budget_failed">Error with deleting budget</string>
     <string name="editor_delete_budget_successful">budget deleted</string>
 
+    <string name="zero_expense">0</string>
+
 
     <string name="currency">USD</string>
     <string name="text_location">select location</string>
@@ -49,4 +51,5 @@
     <string name="negative_dollar">- $ </string>
 
 
+    <string name="image_desc">Image Description</string>
 </resources>

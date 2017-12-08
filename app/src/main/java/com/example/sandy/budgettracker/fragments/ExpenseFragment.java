@@ -13,9 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,7 +44,8 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
     private ArrayList<ExpenseItem> items;
     ImageView appBarImageView;
     public static ExpenseData selectedExpenseData;
-    private ImageButton b;
+    private ImageButton addExpenseIB;
+    private String expenseType = "Expense";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,37 +60,38 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         if (ExpenseFragment.selectedExpenseData == null)
             selectedExpenseData = new ExpenseData();
 
-//
-//        final EditText editText = (EditText) getActivity().findViewById(R.id.amount);
-//        editText.addTextChangedListener(new TextWatcher() {
-//            int len = 0;
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                String str = editText.getText().toString();
-//                if (str.length() == 1 && len < str.length()) {//len check for backspace
-//                    editText.setText("-" + str);
-//                    editText.setSelection(str.length() + 1);
-//                }
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//
-//                String str = editText.getText().toString();
-//                len = str.length();
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            }
-//
-//
-//        });
+
+        final EditText editText = getActivity().findViewById(R.id.amount);
+
+        editText.addTextChangedListener(new TextWatcher() {
+            int len = 0;
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = editText.getText().toString();
+                if (str.length() == 1 && len < str.length()) {//len check for backspace
+                    String s_n_ve = "-" + str;
+                    editText.setText(s_n_ve);
+                    editText.setSelection(s_n_ve.length());
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+                String str = editText.getText().toString();
+                len = str.length();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+
+        });
         appBarImageView = getActivity().findViewById(R.id.appBarExpenseImage);
         recyclerView = view.findViewById(R.id.expense);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener()
-                {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
@@ -106,6 +112,24 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
                                     ExpenseFragment.selectedExpenseData = new ExpenseData();
                                 ExpenseFragment.selectedExpenseData.setExpenseName(item.getName());
                                 ExpenseFragment.selectedExpenseData.setExpenseType(item.getType());
+                                expenseType = item.getType();
+                                TextView amountTextView = getActivity().findViewById(R.id.amount);
+                                if (amountTextView.getText() != null && !amountTextView.getText().toString().equals("")) {
+                                    double amount = Double.parseDouble(amountTextView.getText().toString());
+                                    if (expenseType.equals("Income") && amount < 0) {
+                                        amount = amount * (-1);
+                                        String strAmount = Double.toString(amount);
+                                        amountTextView.setText(strAmount);
+                                        editText.setSelection(strAmount.length());
+                                    }
+
+                                    if (expenseType.equals("Expense") && amount >= 0) {
+                                        amount = amount * (-1);
+                                        String strAmount = Double.toString(amount);
+                                        amountTextView.setText(strAmount);
+                                        editText.setSelection(strAmount.length());
+                                    }
+                                }
                                 appBarImageView.setImageResource(ImageAndColorUtil.getWhiteImageContentId(item.getName()));
                                 Toolbar toolbar = getActivity().findViewById(R.id.expenseToolbar);
                                 toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), item.getColorContentId()));
@@ -121,8 +145,8 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
         );
 
 
-        b = getActivity().findViewById(R.id.addExpense);
-        b.setOnClickListener(new View.OnClickListener()
+        addExpenseIB = getActivity().findViewById(R.id.addExpense);
+        addExpenseIB.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
@@ -162,7 +186,7 @@ public class ExpenseFragment extends Fragment implements LoaderManager.LoaderCal
             Toast.makeText(getActivity(), "Amount should not be zero", Toast.LENGTH_LONG).show();
         } else {
             selectedExpenseData.setExpenseAmount(amount);
-            b.setImageResource(R.drawable.ic_action_done);
+            addExpenseIB.setImageResource(R.drawable.ic_action_done);
             Bundle args = new Bundle();
             args.putSerializable("selectedExpenseData", selectedExpenseData);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

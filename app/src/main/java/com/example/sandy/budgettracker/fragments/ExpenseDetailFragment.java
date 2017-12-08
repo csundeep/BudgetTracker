@@ -74,17 +74,18 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
         selectedExpenseData = (ExpenseData) getArguments().getSerializable("selectedExpenseData");
 
-        Button deleteButton =  view.findViewById(R.id.deleteButton);
-        TextView amountTextView =  getActivity().findViewById(R.id.amount);
-        Toolbar toolbar =  getActivity().findViewById(R.id.expenseToolbar);
-        LinearLayout linearLayout =  getActivity().findViewById(R.id.expenseInfoLayout);
-        TabLayout tabLayout =  getActivity().findViewById(R.id.expense_tabs);
-        EditText notesEditText =  view.findViewById(R.id.comments);
-        ViewGroup dateViewGroup =  view.findViewById(R.id.calender);
-        ImageButton storeExpenseButton =  getActivity().findViewById(R.id.addExpense);
-        ImageButton backButton =  getActivity().findViewById(R.id.appBarExpenseImage);
-        this.dateTextView =  view.findViewById(R.id.date);
-        this.locationImageView =  view.findViewById(R.id.location);
+        Button deleteButton = view.findViewById(R.id.deleteButton);
+        TextView amountTextView = getActivity().findViewById(R.id.amount);
+        Toolbar toolbar = getActivity().findViewById(R.id.expenseToolbar);
+        LinearLayout linearLayout = getActivity().findViewById(R.id.expenseInfoLayout);
+        TabLayout tabLayout = getActivity().findViewById(R.id.expense_tabs);
+        EditText notesEditText = view.findViewById(R.id.comments);
+        ViewGroup dateViewGroup = view.findViewById(R.id.calender);
+        ImageButton storeExpenseButton = getActivity().findViewById(R.id.addExpense);
+        ImageButton backButton = getActivity().findViewById(R.id.appBarExpenseImage);
+        this.dateTextView = view.findViewById(R.id.date);
+        this.locationImageView = view.findViewById(R.id.location);
+        storeExpenseButton.setImageResource(R.drawable.ic_action_done);
 
         if (selectedExpenseData != null && selectedExpenseData.getExpenseName() != null) {
             if (selectedExpenseData.getId() != 0)
@@ -98,7 +99,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 laLo = latitude + "," + longitude;
                 loadMap();
             }
-            amountTextView.setText(Double.toString(selectedExpenseData.getExpenseAmount()));
+            amountTextView.setText(String.format(Locale.US, "%1$,.2f", selectedExpenseData.getExpenseAmount()));
 
             backButton.setImageResource(ImageAndColorUtil.getWhiteImageContentId(selectedExpenseData.getExpenseName()));
 
@@ -162,32 +163,42 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
             });
 
 
-        if (storeExpenseButton != null)
-            storeExpenseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        storeExpenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    EditText notesEditText =  view.findViewById(R.id.comments);
-                    String notes = notesEditText.getText().toString();
+                EditText notesEditText = view.findViewById(R.id.comments);
+                String notes = notesEditText.getText().toString();
 
-                    TextView calenderTextView =  view.findViewById(R.id.date);
-                    String date = calenderTextView.getText().toString();
+                TextView calenderTextView = view.findViewById(R.id.date);
+                String date = calenderTextView.getText().toString();
 
-                    TextView amountTextView =  getActivity().findViewById(R.id.amount);
-                    double amount = Double.valueOf(amountTextView.getText().toString());
+                TextView amountTextView = getActivity().findViewById(R.id.amount);
+                double amount = Double.valueOf(amountTextView.getText().toString());
 
-                    selectedExpenseData.setExpenseAmount(amount);
-                    selectedExpenseData.setNote(notes);
-                    selectedExpenseData.setExpenseDate(date);
+                selectedExpenseData.setExpenseAmount(amount);
+                selectedExpenseData.setNote(notes);
+                selectedExpenseData.setExpenseDate(date);
 
-                    selectedExpenseData.setLatitude(latitude);
-                    selectedExpenseData.setLongitude(longitude);
-                    if (selectedExpenseData.getId() != 0)
-                        updateExpense(v, selectedExpenseData);
-                    else
-                        storeExpense(v, selectedExpenseData);
-                }
-            });
+                selectedExpenseData.setLatitude(latitude);
+                selectedExpenseData.setLongitude(longitude);
+                if (selectedExpenseData.getId() != 0)
+                    updateExpense(v, selectedExpenseData);
+                else
+                    storeExpense(v, selectedExpenseData);
+            }
+        });
+
+
+        EditText amountET = getActivity().findViewById(R.id.amount);
+        amountET.setSelection(amountET.getText().length());
+        amountET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText et = (EditText) v;
+                et.setSelection(et.getText().length());
+            }
+        });
 
 
         if (backButton != null)
@@ -195,9 +206,9 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                 @Override
                 public void onClick(View v) {
                     Bundle args = new Bundle();
-                    EditText notesEditText =  view.findViewById(R.id.comments);
+                    EditText notesEditText = view.findViewById(R.id.comments);
                     String notes = notesEditText.getText().toString();
-                    TextView calenderTextView =  view.findViewById(R.id.date);
+                    TextView calenderTextView = view.findViewById(R.id.date);
                     String date = calenderTextView.getText().toString();
 
                     selectedExpenseData.setNote(notes);
@@ -231,10 +242,10 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         if (requestCode == PLCA_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getContext(), data);
-
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
                 laLo = latitude + "," + longitude;
+
                 loadMap();
 
             }
@@ -264,7 +275,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
 
                         locationImageView.setImageBitmap(bmp);
                         locationImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        locationImageView.setPadding(0,0,0,0);
+                        locationImageView.setPadding(0, 0, 0, 0);
                         laLo = "";
                     }
 
@@ -322,7 +333,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         ContentValues values = new ContentValues();
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME, expenseData.getExpenseName());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE, expenseData.getExpenseType());
-        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount() < 0 ? expenseData.getExpenseAmount() * -1 : expenseData.getExpenseAmount());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, expenseData.getNote());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE, expenseData.getLatitude());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE, expenseData.getLongitude());
@@ -352,7 +363,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
         ContentValues values = new ContentValues();
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NAME, expenseData.getExpenseName());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_TYPE, expenseData.getExpenseType());
-        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount());
+        values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_AMOUNT, expenseData.getExpenseAmount() < 0 ? expenseData.getExpenseAmount() * -1 : expenseData.getExpenseAmount());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_NOTES, expenseData.getNote());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LATITUDE, expenseData.getLatitude());
         values.put(ExpensesContract.ExpenseEntry.COLUMN_EXPENSE_LONGITUDE, expenseData.getLongitude());
@@ -435,7 +446,7 @@ public class ExpenseDetailFragment extends Fragment implements DatePickerDialog.
                     String endDate = cursor.getString(endDateColumnIndex);
                     int isNotify = cursor.getInt(notificationColumnIndex);
                     double totalExpense = calculateTotalExpenses(expenses, startDate, endDate);
-                    Log.v("!!!!!!!!!!!!!!!!!!",totalExpense+" "+amount);
+                    Log.v("!!!!!!!!!!!!!!!!!!", totalExpense + " " + amount);
                     if (!expenses.contains(presentExpense))
                         continue;
                     if (totalExpense >= amount) {

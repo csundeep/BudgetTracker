@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.sandy.budgettracker.R;
@@ -24,7 +25,7 @@ public class ExpenseSelectionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expense_selection, container, false);
 
-        ViewPager viewPager =  view.findViewById(R.id.viewpager1);
+        ViewPager viewPager =  view.findViewById(R.id.expense_view_pager);
         List<String> tabs = new ArrayList<>();
         tabs.add("EXPENSES");
         tabs.add("INCOME");
@@ -66,38 +67,25 @@ public class ExpenseSelectionFragment extends Fragment {
                 ContextCompat.getColor(getContext(), R.color.white)
         );
 
+        EditText amountET = getActivity().findViewById(R.id.amount);
+        amountET.setSelection(amountET.getText().length());
+        amountET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                EditText et=(EditText) view;
+                et.setSelection(et.getText().length());
+            }
+        });
+
         // Attach the view pager to the tab strip
         if (viewPager != null) {
             tabLayout.setupWithViewPager(viewPager);
 
-//            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//                public void onPageScrollStateChanged(int state) {
-//                }
-//
-//                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//
-//                }
-//
-//                public void onPageSelected(int position) {
-//                    double d = 0d;
-//                    EditText editText = (EditText) getActivity().findViewById(R.id.amount);
-//                    if (!editText.getText().toString().equals(""))
-//                        d = Double.parseDouble(editText.getText().toString());
-//                    if (position == 0) {
-//                        if (d > 0) {
-//                            d = d * -1;
-//                        }
-//                    } else {
-//                        if (d < 0) {
-//                            d = d * -1;
-//                        }
-//                    }
-//                    editText.setText(Double.valueOf(d).toString());
-//                }
-//            });
+
         }
         return view;
     }
+
+
 
 }
